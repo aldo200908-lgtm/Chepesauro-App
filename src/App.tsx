@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Bike, ShieldCheck, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Bike, Info, ArrowRight, Check } from 'lucide-react';
 import {
   UserRole,
   AppTab,
@@ -14,19 +14,30 @@ import {
   skipToProfileSelection,
   selectRole,
   confirmRoleSelection,
-  verifyMotorizadoAccess,
+  activateDemoMotorizadoSession,
   resetOnboardingSelection,
   switchTab,
-  advanceOrderStatus,
-  createQuickOrder,
 } from './utils/onboarding';
+import {
+  DEMO_DRIVERS,
+  INITIAL_DEMO_ORDERS,
+  ORDERS_STORAGE_KEY,
+  AssignedDriverInfo,
+  CreateCustomOrderInput,
+  createDemoOrder,
+  assignOrderToDriver,
+  advanceDriverOrderStatus,
+  cancelClientOrder,
+  savePersistedOrders,
+  loadPersistedOrders,
+} from './utils/ordersStore';
 import { OnboardingLayout } from './components/OnboardingLayout';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { ServicesIntroScreen } from './components/ServicesIntroScreen';
 import { ProfileSelectionScreen } from './components/ProfileSelectionScreen';
 import { MainAppLayout } from './components/MainAppLayout';
 
-const STORAGE_KEY = 'verdego_onboarding_v2';
+const ONBOARDING_STORAGE_KEY = 'verdego_onboarding_v2';
 
 export default function App() {
   const [state, setState] = useState(() => {
@@ -34,18 +45,17 @@ export default function App() {
     const params = new URLSearchParams(search);
     if (params.get('reset') === '1' && typeof window !== 'undefined') {
       try {
-        window.localStorage.removeItem(STORAGE_KEY);
+        window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+        window.localStorage.removeItem(ORDERS_STORAGE_KEY);
       } catch {
         // Ignore storage errors
       }
     }
+
     const initial = createInitialOnboardingState(search);
-    if (
-      typeof window !== 'undefined' &&
-      !search
-    ) {
+    if (typeof window !== 'undefined' && !search) {
       try {
-        const saved = window.localStorage.getItem(STORAGE_KEY);
+        const saved = window.localStorage.getItem(ONBOARDING_STORAGE_KEY);
         if (saved) {
           const parsed = JSON.parse(saved);
           if (parsed && parsed.onboardingCompleted === true) {
@@ -67,33 +77,53 @@ export default function App() {
     return initial;
   });
 
-  const [driverCode, setDriverCode] = useState('MOTO-2026');
-  const [authError, setAuthError] = useState('');
+  const [selectedDemoDriver, setSelectedDemoDriver] =
+    useState<AssignedDriverInfo>(DEMO_DRIVERS[0]);
 
+  // Persist onboarding completion state
   useEffect(() => {
     try {
       if (state.onboardingCompleted && state.selectedRole === 'usuario') {
         window.localStorage.setItem(
-          STORAGE_KEY,
+          ONBOARDING_STORAGE_KEY,
           JSON.stringify({
             onboardingCompleted: true,
             selectedRole: 'usuario',
           })
         );
       } else if (!state.onboardingCompleted) {
-        window.localStorage.removeItem(STORAGE_KEY);
+        window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
       }
     } catch {
       // Ignore storage errors
     }
   }, [state.onboardingCompleted, state.selectedRole]);
 
+  // Persist orders to localStorage whenever they change
+  useEffect(() => {
+    savePersistedOrders(state.orders);
+  }, [state.orders]);
+
+  // Synchronize orders across tabs of the same browser via storage event
+  useEffect(() => {
+    const handleStorageSync = (event: StorageEvent) => {
+      if (event.key === ORDERS_STORAGE_KEY) {
+        const syncedOrders = loadPersistedOrders();
+        setState((prev) => ({
+          ...prev,
+          orders: syncedOrders,
+        }));
+      }
+    };
+    window.addEventListener('storage', handleStorageSync);
+    return () => window.removeEventListener('storage', handleStorageSync);
+  }, []);
+
   const handleNextStep = () => {
     setState((prev) => goToNextOnboardingStep(prev));
   };
 
   const handlePrevStep = () => {
-    setAuthError('');
     setState((prev) => goToPrevOnboardingStep(prev));
   };
 
@@ -109,19 +139,14 @@ export default function App() {
     setState((prev) => confirmRoleSelection(prev));
   };
 
-  const handleVerifyMotorizado = (e: React.FormEvent) => {
+  const handleEnterDemoMotorizado = (e: React.FormEvent) => {
     e.preventDefault();
-    if (driverCode.trim().length < 4) {
-      setAuthError('Ingresa tu código de motorizado (mínimo 4 caracteres).');
-      return;
-    }
-    setAuthError('');
-    setState((prev) => verifyMotorizadoAccess(prev, driverCode));
+    setState((prev) => activateDemoMotorizadoSession(prev, selectedDemoDriver));
   };
 
   const handleLogout = () => {
     try {
-      window.localStorage.removeItem(STORAGE_KEY);
+      window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
     } catch {
       // Ignore
     }
@@ -141,6 +166,75 @@ export default function App() {
       ...prev,
       selectedRole: role,
       viewMode: 'main_app',
+      activeTab: 'pedidos',
+    }));
+  };
+
+  const handleCreateOrder = (input: CreateCustomOrderInput) => {
+    const res = createDemoOrder(state.orders, input);
+    if (!res.createdOrder) {
+      return { success: false, error: res.error };
+    }
+    setState((prev) => ({
+      ...prev,
+      orders: res.orders,
+      activeOrderId: res.createdOrder!.id,
+    }));
+    return { success: true };
+  };
+
+  const handleCancelOrder = (orderId: string) => {
+    const res = cancelClientOrder(state.orders, orderId);
+    if (!res.success) {
+      return { success: false, error: res.error };
+    }
+    setState((prev) => ({
+      ...prev,
+      orders: res.orders,
+    }));
+    return { success: true };
+  };
+
+  const handleAcceptOrder = (orderId: string) => {
+    const res = assignOrderToDriver(
+      state.orders,
+      orderId,
+      state.activeDriver
+    );
+    if (!res.success) {
+      return { success: false, error: res.error };
+    }
+    setState((prev) => ({
+      ...prev,
+      orders: res.orders,
+      activeOrderId: orderId,
+    }));
+    return { success: true };
+  };
+
+  const handleAdvanceOrder = (orderId: string) => {
+    const res = advanceDriverOrderStatus(
+      state.orders,
+      orderId,
+      state.activeDriver.id
+    );
+    if (!res.success) {
+      return { success: false, error: res.error };
+    }
+    setState((prev) => ({
+      ...prev,
+      orders: res.orders,
+      activeOrderId: orderId,
+    }));
+    return { success: true };
+  };
+
+  const handleResetDemoOrders = () => {
+    savePersistedOrders(INITIAL_DEMO_ORDERS);
+    setState((prev) => ({
+      ...prev,
+      orders: INITIAL_DEMO_ORDERS,
+      activeOrderId: INITIAL_DEMO_ORDERS[0].id,
     }));
   };
 
@@ -173,7 +267,7 @@ export default function App() {
     );
   }
 
-  // 2. MOTORIZADO ACCESS GATE (Never grant motorizado permissions automatically)
+  // 2. DEMO MOTORIZADO ACCESS GATE (Clearly labeled as simulation mode, separate from future server auth)
   if (state.viewMode === 'motorizado_auth') {
     return (
       <div
@@ -191,7 +285,7 @@ export default function App() {
               <ArrowLeft className="w-5 h-5" aria-hidden="true" />
             </button>
             <span className="text-xs font-semibold text-[#078F68]">
-              Acceso de Motorizado
+              Simulación de Motorizado (Demo)
             </span>
             <div className="w-10" />
           </div>
@@ -205,46 +299,71 @@ export default function App() {
 
             <div className="space-y-2">
               <h1 className="font-display text-2xl font-bold text-[#102F27] tracking-tight">
-                Acceso para motorizados
+                Acceso de demostración para motorizado
               </h1>
               <p className="text-sm text-[#64877C] leading-relaxed">
-                Verifica tu código de repartidor autorizado para consultar y
-                gestionar tus pedidos asignados.
+                Selecciona un perfil de motorizado de prueba para simular la
+                recepción, asignación exclusiva y entrega de pedidos.
               </p>
             </div>
 
             <form
               id="motorizado-auth-form"
-              onSubmit={handleVerifyMotorizado}
-              className="space-y-4 rounded-3xl bg-[#EAF8F2]/60 border border-[#DCECE5] p-5"
+              onSubmit={handleEnterDemoMotorizado}
+              className="space-y-3 rounded-3xl bg-[#EAF8F2]/60 border border-[#DCECE5] p-5"
             >
-              <div>
-                <label
-                  htmlFor="driver-code-input"
-                  className="block text-xs font-semibold text-[#102F27] mb-1.5"
-                >
-                  Código de motorizado asignado
-                </label>
-                <input
-                  id="driver-code-input"
-                  type="text"
-                  value={driverCode}
-                  onChange={(e) => setDriverCode(e.target.value)}
-                  placeholder="Ej. MOTO-2026"
-                  className="w-full h-12 px-4 rounded-2xl bg-white border border-[#DCECE5] text-sm font-semibold text-[#102F27] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
-                />
+              <p className="text-xs font-semibold text-[#102F27]">
+                Elige el motorizado de prueba:
+              </p>
+
+              <div className="space-y-2.5">
+                {DEMO_DRIVERS.map((drv) => {
+                  const isSelected = drv.id === selectedDemoDriver.id;
+                  return (
+                    <button
+                      key={drv.id}
+                      type="button"
+                      onClick={() => setSelectedDemoDriver(drv)}
+                      className={`w-full text-left p-3.5 rounded-2xl border transition-colors flex items-center justify-between gap-3 cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#078F68] text-white border-[#078F68]'
+                          : 'bg-white text-[#102F27] border-[#DCECE5] hover:bg-[#EAF8F2]'
+                      }`}
+                    >
+                      <div>
+                        <p
+                          className={`text-xs font-bold ${
+                            isSelected ? 'text-white' : 'text-[#102F27]'
+                          }`}
+                        >
+                          {drv.name}
+                        </p>
+                        <p
+                          className={`text-[11px] ${
+                            isSelected ? 'text-[#EAF8F2]' : 'text-[#64877C]'
+                          }`}
+                        >
+                          ID: {drv.id} · Placa: {drv.vehiclePlate}
+                        </p>
+                      </div>
+                      {isSelected && (
+                        <Check className="w-4 h-4 shrink-0" aria-hidden="true" />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
 
-              {authError && (
-                <p className="text-xs font-medium text-red-600">{authError}</p>
-              )}
-
-              <div className="flex items-center gap-2 text-xs text-[#64877C]">
-                <ShieldCheck
-                  className="w-4 h-4 text-[#078F68] shrink-0"
+              <div className="flex items-start gap-2 text-xs text-[#64877C] pt-1">
+                <Info
+                  className="w-4 h-4 text-[#078F68] shrink-0 mt-0.5"
                   aria-hidden="true"
                 />
-                <span>Verificación requerida antes de habilitar entregas</span>
+                <span>
+                  Modo de demostración local: esta selección simula la sesión del
+                  repartidor en el navegador y no sustituye la autenticación del
+                  servidor en producción.
+                </span>
               </div>
             </form>
           </div>
@@ -255,7 +374,7 @@ export default function App() {
               form="motorizado-auth-form"
               className="w-full h-14 px-6 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white font-display text-base font-semibold inline-flex items-center justify-center gap-2.5 shadow-md shadow-[#078F68]/20 transition-all cursor-pointer"
             >
-              <span>Ingresar como motorizado</span>
+              <span>Entrar al panel de motorizado (Demo)</span>
               <ArrowRight className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
@@ -264,21 +383,23 @@ export default function App() {
     );
   }
 
-  // 3. MAIN APPLICATION LAYOUT (Only after completing onboarding)
+  // 3. MAIN APPLICATION LAYOUT
   return (
     <MainAppLayout
       state={state}
       onSelectTab={(tab: AppTab) => setState((prev) => switchTab(prev, tab))}
       onSelectRole={handleSwitchRoleInApp}
-      onAdvanceOrder={(orderId: string) =>
-        setState((prev) => advanceOrderStatus(prev, orderId))
+      onSelectDemoDriver={(drv: AssignedDriverInfo) =>
+        setState((prev) => ({ ...prev, activeDriver: drv }))
       }
-      onCreateOrder={(pickup: string, dropoff: string) =>
-        setState((prev) => createQuickOrder(prev, pickup, dropoff))
-      }
+      onCreateOrder={handleCreateOrder}
+      onCancelOrder={handleCancelOrder}
+      onAcceptOrder={handleAcceptOrder}
+      onAdvanceOrder={handleAdvanceOrder}
       onSelectMapOrder={(orderId: string) =>
         setState((prev) => ({ ...prev, activeOrderId: orderId }))
       }
+      onResetDemoOrders={handleResetDemoOrders}
       onLogout={handleLogout}
     />
   );

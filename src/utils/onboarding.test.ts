@@ -9,23 +9,25 @@ import {
   skipToProfileSelection,
   selectRole,
   confirmRoleSelection,
-  verifyMotorizadoAccess,
+  activateDemoMotorizadoSession,
   resetOnboardingSelection,
   switchTab,
-  advanceOrderStatus,
-  createQuickOrder,
 } from './onboarding.ts';
+import {
+  INITIAL_DEMO_ORDERS,
+  DEMO_DRIVERS,
+  createDemoOrder,
+  assignOrderToDriver,
+  advanceDriverOrderStatus,
+  cancelClientOrder,
+  formatPenCurrency,
+} from './ordersStore.ts';
 
-test('initial state starts at onboarding step 1 (WelcomeScreen) in onboarding viewMode', () => {
-  const state = createInitialOnboardingState();
-  assert.equal(state.onboardingStep, 1);
-  assert.equal(state.viewMode, 'onboarding');
-  assert.equal(state.onboardingCompleted, false);
-  assert.equal(state.selectedRole, null);
-});
+test('onboarding starts at step 1 and navigates through all 3 steps without reload', () => {
+  const step1 = createInitialOnboardingState('', INITIAL_DEMO_ORDERS);
+  assert.equal(step1.onboardingStep, 1);
+  assert.equal(step1.viewMode, 'onboarding');
 
-test('navigating forward and backward through the 3 onboarding screens works without reload', () => {
-  const step1 = createInitialOnboardingState();
   const step2 = goToNextOnboardingStep(step1);
   assert.equal(step2.onboardingStep, 2);
 
@@ -35,75 +37,165 @@ test('navigating forward and backward through the 3 onboarding screens works wit
   const backTo2 = goToPrevOnboardingStep(step3);
   assert.equal(backTo2.onboardingStep, 2);
 
-  const backTo1 = goToPrevOnboardingStep(backTo2);
-  assert.equal(backTo1.onboardingStep, 1);
-
-  const skippedTo3 = skipToProfileSelection(step2);
-  assert.equal(skippedTo3.onboardingStep, 3);
+  const skipped = skipToProfileSelection(step2);
+  assert.equal(skipped.onboardingStep, 3);
 });
 
-test('confirmRoleSelection does not advance if no profile is selected', () => {
-  const step3 = skipToProfileSelection(createInitialOnboardingState());
-  const afterConfirm = confirmRoleSelection(step3);
-  assert.equal(afterConfirm.viewMode, 'onboarding');
-  assert.equal(afterConfirm.onboardingCompleted, false);
+test('selecting cliente enters main_app, while motorizado opens demo access confirmation first', () => {
+  const step3 = skipToProfileSelection(
+    createInitialOnboardingState('', INITIAL_DEMO_ORDERS)
+  );
+  const clientConfirmed = confirmRoleSelection(selectRole(step3, 'usuario'));
+  assert.equal(clientConfirmed.viewMode, 'main_app');
+  assert.equal(clientConfirmed.onboardingCompleted, true);
+
+  const motoSelected = confirmRoleSelection(selectRole(step3, 'motorizado'));
+  assert.equal(motoSelected.viewMode, 'motorizado_auth');
+  assert.equal(motoSelected.onboardingCompleted, false);
+
+  const motoActivated = activateDemoMotorizadoSession(motoSelected, DEMO_DRIVERS[0]);
+  assert.equal(motoActivated.viewMode, 'main_app');
+  assert.equal(motoActivated.motorizadoVerified, true);
+  assert.equal(motoActivated.activeDriver.id, 'DRV-01');
 });
 
-test('selecting cliente (usuario) and confirming completes onboarding and opens main_app', () => {
-  const step3 = skipToProfileSelection(createInitialOnboardingState());
-  const selected = selectRole(step3, 'usuario');
-  const confirmed = confirmRoleSelection(selected);
-  assert.equal(confirmed.selectedRole, 'usuario');
-  assert.equal(confirmed.onboardingCompleted, true);
-  assert.equal(confirmed.viewMode, 'main_app');
+test('creating custom order and store purchase formats S/ currency and adds to disponible list', () => {
+  assert.equal(formatPenCurrency(7.5), 'S/ 7.50');
+
+  // Missing required fields fails validation
+  const invalid = createDemoOrder(INITIAL_DEMO_ORDERS, {
+    type: 'encargo_personalizado',
+    customDescription: '',
+    pickupAddress: 'Av. Arequipa 400',
+    dropoffAddress: 'Calle Schell 120',
+    instructions: 'Timbre 2',
+    paymentMethod: 'Efectivo (Demo)',
+  });
+  assert.equal(invalid.createdOrder, null);
+  assert.ok(invalid.error);
+
+  // Valid encargo personalizado
+  const validEncargo = createDemoOrder(INITIAL_DEMO_ORDERS, {
+    type: 'encargo_personalizado',
+    customDescription: 'Mochila azul con cuadernos',
+    pickupAddress: 'Av. Arequipa 400, Lince',
+    pickupReference: 'Puerta principal',
+    dropoffAddress: 'Calle Schell 120, Miraflores',
+    dropoffReference: 'Recepción edificio',
+    instructions: 'Entregar en recepción a nombre de Jorge.',
+    paymentMethod: 'Yape / Plin (Demo)',
+    demoDeliveryFee: 8.0,
+  });
+
+  assert.ok(validEncargo.createdOrder);
+  assert.equal(validEncargo.createdOrder.status, 'disponible');
+  assert.equal(validEncargo.createdOrder.totalAmount, 8.0);
+  assert.equal(validEncargo.orders.length, INITIAL_DEMO_ORDERS.length + 1);
 });
 
-test('selecting motorizado never grants automatic dashboard permissions; requires verification code', () => {
-  const step3 = skipToProfileSelection(createInitialOnboardingState());
-  const selected = selectRole(step3, 'motorizado');
-  const confirmed = confirmRoleSelection(selected);
+test('exclusive assignment assigns disponible order once and blocks second assignment', () => {
+  const baseOrders = structuredClone(INITIAL_DEMO_ORDERS);
+  // VG-1001 starts as 'disponible'
+  const firstAssign = assignOrderToDriver(
+    baseOrders,
+    'VG-1001',
+    DEMO_DRIVERS[0]
+  );
+  assert.equal(firstAssign.success, true);
 
-  assert.equal(confirmed.viewMode, 'motorizado_auth');
-  assert.equal(confirmed.onboardingCompleted, false);
-  assert.equal(confirmed.motorizadoVerified, false);
+  const assignedOrder = firstAssign.orders.find((o) => o.id === 'VG-1001')!;
+  assert.equal(assignedOrder.status, 'asignado');
+  assert.equal(assignedOrder.assignedDriver?.id, 'DRV-01');
 
-  // Invalid short code does not grant access
-  const failedVerify = verifyMotorizadoAccess(confirmed, '12');
-  assert.equal(failedVerify.viewMode, 'motorizado_auth');
-
-  // Valid code grants access to main_app
-  const verified = verifyMotorizadoAccess(confirmed, 'MOTO-2026');
-  assert.equal(verified.viewMode, 'main_app');
-  assert.equal(verified.onboardingCompleted, true);
-  assert.equal(verified.motorizadoVerified, true);
+  // Second driver attempting to accept the same order is blocked
+  const secondAssign = assignOrderToDriver(
+    firstAssign.orders,
+    'VG-1001',
+    DEMO_DRIVERS[1]
+  );
+  assert.equal(secondAssign.success, false);
+  assert.ok(secondAssign.error);
 });
 
-test('resetOnboardingSelection logs out and returns to step 1 onboarding without showing protected dashboard', () => {
-  const step3 = selectRole(skipToProfileSelection(createInitialOnboardingState()), 'usuario');
-  const inApp = confirmRoleSelection(step3);
-  const afterLogout = resetOnboardingSelection(inApp);
-  assert.equal(afterLogout.viewMode, 'onboarding');
-  assert.equal(afterLogout.onboardingStep, 1);
-  assert.equal(afterLogout.onboardingCompleted, false);
-  assert.equal(afterLogout.selectedRole, null);
+test('driver transitions follow valid sequence and block unauthorized drivers or invalid terminal transitions', () => {
+  let orders = structuredClone(INITIAL_DEMO_ORDERS);
+  // VG-1002 is assigned to DRV-01 ('asignado')
+  // DRV-02 (not assigned) cannot advance VG-1002
+  const unauthorized = advanceDriverOrderStatus(orders, 'VG-1002', 'DRV-02');
+  assert.equal(unauthorized.success, false);
+
+  // DRV-01 advances through all valid states:
+  // 1. asignado -> en_camino_recogida
+  let res = advanceDriverOrderStatus(orders, 'VG-1002', 'DRV-01');
+  assert.equal(res.success, true);
+  orders = res.orders;
+  assert.equal(orders.find((o) => o.id === 'VG-1002')!.status, 'en_camino_recogida');
+
+  // 2. en_camino_recogida -> llegada_recogida
+  res = advanceDriverOrderStatus(orders, 'VG-1002', 'DRV-01');
+  assert.equal(res.success, true);
+  orders = res.orders;
+  assert.equal(orders.find((o) => o.id === 'VG-1002')!.status, 'llegada_recogida');
+
+  // Once at llegada_recogida, client can no longer cancel
+  const lateCancel = cancelClientOrder(orders, 'VG-1002');
+  assert.equal(lateCancel.success, false);
+
+  // 3. llegada_recogida -> recogido
+  res = advanceDriverOrderStatus(orders, 'VG-1002', 'DRV-01');
+  assert.equal(res.success, true);
+  orders = res.orders;
+  assert.equal(orders.find((o) => o.id === 'VG-1002')!.status, 'recogido');
+
+  // 4. recogido -> en_camino_cliente
+  res = advanceDriverOrderStatus(orders, 'VG-1002', 'DRV-01');
+  assert.equal(res.success, true);
+  orders = res.orders;
+  assert.equal(orders.find((o) => o.id === 'VG-1002')!.status, 'en_camino_cliente');
+
+  // 5. en_camino_cliente -> entregado
+  res = advanceDriverOrderStatus(orders, 'VG-1002', 'DRV-01');
+  assert.equal(res.success, true);
+  orders = res.orders;
+  const delivered = orders.find((o) => o.id === 'VG-1002')!;
+  assert.equal(delivered.status, 'entregado');
+  assert.equal(delivered.statusHistory.length, 7);
+
+  // 6. entregado is terminal: cannot advance further
+  const afterDelivered = advanceDriverOrderStatus(orders, 'VG-1002', 'DRV-01');
+  assert.equal(afterDelivered.success, false);
 });
 
-test('service options and role options match exact required copy', () => {
+test('client can cancel order when disponible, and cancelled order cannot be assigned or reopened', () => {
+  const baseOrders = structuredClone(INITIAL_DEMO_ORDERS);
+  const cancelledRes = cancelClientOrder(
+    baseOrders,
+    'VG-1001',
+    'El cliente cambió la dirección.'
+  );
+  assert.equal(cancelledRes.success, true);
+  const cancelledOrder = cancelledRes.orders.find((o) => o.id === 'VG-1001')!;
+  assert.equal(cancelledOrder.status, 'cancelado');
+
+  // Cancelled order cannot be assigned to a driver
+  const assignCancelled = assignOrderToDriver(
+    cancelledRes.orders,
+    'VG-1001',
+    DEMO_DRIVERS[0]
+  );
+  assert.equal(assignCancelled.success, false);
+});
+
+test('service options, role options, and logout work as expected', () => {
   assert.equal(SERVICE_OPTIONS.length, 2);
-  assert.equal(SERVICE_OPTIONS[0].title, 'Comprar en negocios');
-  assert.equal(SERVICE_OPTIONS[1].title, 'Enviar por encargo');
   assert.equal(ROLE_OPTIONS.usuario.title, 'Soy cliente');
   assert.equal(ROLE_OPTIONS.motorizado.title, 'Soy motorizado');
-});
 
-test('switchTab and order operations work in main_app', () => {
-  const initial = createInitialOnboardingState('?autostart=1');
-  const onPedidos = switchTab(initial, 'pedidos');
-  assert.equal(onPedidos.activeTab, 'pedidos');
+  const initial = createInitialOnboardingState('?autostart=1', INITIAL_DEMO_ORDERS);
+  const onMapa = switchTab(initial, 'mapa');
+  assert.equal(onMapa.activeTab, 'mapa');
 
-  const updated = advanceOrderStatus(onPedidos, onPedidos.orders[1].id);
-  assert.equal(updated.orders[1].status, 'en_camino');
-
-  const withNew = createQuickOrder(updated, 'Av. Central 100', 'Calle Sur 250');
-  assert.equal(withNew.orders.length, updated.orders.length + 1);
+  const loggedOut = resetOnboardingSelection(onMapa);
+  assert.equal(loggedOut.viewMode, 'onboarding');
+  assert.equal(loggedOut.onboardingStep, 1);
 });

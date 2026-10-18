@@ -1,8 +1,17 @@
+import type {
+  DemoOrder,
+  AssignedDriverInfo,
+} from './ordersStore.ts';
+import {
+  DEMO_DRIVERS,
+  INITIAL_DEMO_ORDERS,
+  loadPersistedOrders,
+} from './ordersStore.ts';
+
 export type UserRole = 'usuario' | 'motorizado';
 export type OnboardingStepNumber = 1 | 2 | 3;
 export type AppViewMode = 'onboarding' | 'motorizado_auth' | 'main_app';
 export type AppTab = 'inicio' | 'pedidos' | 'mapa' | 'perfil';
-export type OrderStatus = 'pendiente' | 'en_camino' | 'entregado';
 
 export interface RoleOption {
   id: UserRole;
@@ -21,27 +30,16 @@ export interface ServiceOption {
   badge: string;
 }
 
-export interface DeliveryOrder {
-  id: string;
-  title: string;
-  pickup: string;
-  dropoff: string;
-  distanceKm: number;
-  etaMinutes: number;
-  priceFormatted: string;
-  status: OrderStatus;
-  roleOwner: UserRole;
-}
-
 export interface OnboardingState {
   onboardingStep: OnboardingStepNumber;
   onboardingCompleted: boolean;
   viewMode: AppViewMode;
   selectedRole: UserRole | null;
   motorizadoVerified: boolean;
+  activeDriver: AssignedDriverInfo;
   step: 'selection' | 'confirmed';
   activeTab: AppTab;
-  orders: DeliveryOrder[];
+  orders: DemoOrder[];
   activeOrderId: string;
 }
 
@@ -73,7 +71,7 @@ export const ROLE_OPTIONS: Record<UserRole, RoleOption> = {
     ],
     ctaLabel: 'Continuar',
     summaryText:
-      'Has ingresado como Cliente. Puedes comprar en negocios, solicitar envíos por encargo y seguir tus pedidos en tiempo real.',
+      'Has ingresado como Cliente (Modo Demostración). Crea encargos personalizados o compras en negocios y consulta el estado de tus envíos en tiempo real.',
   },
   motorizado: {
     id: 'motorizado',
@@ -81,53 +79,20 @@ export const ROLE_OPTIONS: Record<UserRole, RoleOption> = {
     subtitle: 'Gestión de entregas asignadas',
     description: 'Accede a tus entregas y gestiona tus pedidos asignados.',
     highlights: [
-      'Órdenes asignadas por zona',
-      'Rutas optimizadas en ciudad',
-      'Control de entregas en curso',
+      'Órdenes disponibles por zona',
+      'Asignación y ruta de recogida',
+      'Control de entregas paso a paso',
     ],
     ctaLabel: 'Continuar',
     summaryText:
-      'Has ingresado como Motorizado verificado. Puedes gestionar tus pedidos asignados y consultar las rutas activas.',
+      'Has ingresado como Motorizado (Modo Demostración). Acepta pedidos disponibles y actualiza cada etapa de recogida y entrega.',
   },
 };
 
-export const INITIAL_ORDERS: DeliveryOrder[] = [
-  {
-    id: 'VG-104',
-    title: 'Envío por encargo · Paquete y documentos',
-    pickup: 'Av. Principal 420, Centro',
-    dropoff: 'Calle Los Pinos 185, Miraflores',
-    distanceKm: 3.4,
-    etaMinutes: 14,
-    priceFormatted: '$4.50',
-    status: 'en_camino',
-    roleOwner: 'usuario',
-  },
-  {
-    id: 'VG-105',
-    title: 'Compra en negocio · Mercado Verde',
-    pickup: 'Av. Las Palmas 890, San Isidro',
-    dropoff: 'Jr. Alcanfores 240, Surco',
-    distanceKm: 2.1,
-    etaMinutes: 11,
-    priceFormatted: '$3.80',
-    status: 'pendiente',
-    roleOwner: 'motorizado',
-  },
-  {
-    id: 'VG-102',
-    title: 'Compra en negocio · Farmacia Central',
-    pickup: 'Av. Arequipa 1120, Lince',
-    dropoff: 'Calle Las Begonias 310, San Borja',
-    distanceKm: 4.0,
-    etaMinutes: 18,
-    priceFormatted: '$5.20',
-    status: 'entregado',
-    roleOwner: 'usuario',
-  },
-];
-
-export function createInitialOnboardingState(searchParams?: string): OnboardingState {
+export function createInitialOnboardingState(
+  searchParams?: string,
+  preloadedOrders?: DemoOrder[]
+): OnboardingState {
   let onboardingStep: OnboardingStepNumber = 1;
   let onboardingCompleted = false;
   let viewMode: AppViewMode = 'onboarding';
@@ -135,6 +100,8 @@ export function createInitialOnboardingState(searchParams?: string): OnboardingS
   let motorizadoVerified = false;
   let step: 'selection' | 'confirmed' = 'selection';
   let activeTab: AppTab = 'inicio';
+
+  const orders = preloadedOrders || loadPersistedOrders() || INITIAL_DEMO_ORDERS;
 
   if (searchParams) {
     const params = new URLSearchParams(searchParams);
@@ -156,7 +123,6 @@ export function createInitialOnboardingState(searchParams?: string): OnboardingS
           viewMode = 'main_app';
           step = 'confirmed';
         } else {
-          // Motorizado never gets automatic dashboard access without verification unless verified
           viewMode = 'motorizado_auth';
           step = 'confirmed';
         }
@@ -178,6 +144,9 @@ export function createInitialOnboardingState(searchParams?: string): OnboardingS
       if (!selectedRole) {
         selectedRole = 'usuario';
       }
+      if (selectedRole === 'motorizado') {
+        motorizadoVerified = true;
+      }
       onboardingCompleted = true;
       viewMode = 'main_app';
       step = 'confirmed';
@@ -190,10 +159,11 @@ export function createInitialOnboardingState(searchParams?: string): OnboardingS
     viewMode,
     selectedRole,
     motorizadoVerified,
+    activeDriver: DEMO_DRIVERS[0],
     step,
     activeTab,
-    orders: INITIAL_ORDERS,
-    activeOrderId: INITIAL_ORDERS[0].id,
+    orders,
+    activeOrderId: orders[0]?.id || 'VG-1001',
   };
 }
 
@@ -250,10 +220,9 @@ export function confirmRoleSelection(state: OnboardingState): OnboardingState {
       step: 'confirmed',
       onboardingCompleted: true,
       viewMode: 'main_app',
-      activeTab: 'inicio',
+      activeTab: 'pedidos',
     };
   }
-  // Never grant motorizado permissions automatically: require motorizado access step
   return {
     ...state,
     step: 'confirmed',
@@ -261,21 +230,19 @@ export function confirmRoleSelection(state: OnboardingState): OnboardingState {
   };
 }
 
-export function verifyMotorizadoAccess(
+export function activateDemoMotorizadoSession(
   state: OnboardingState,
-  driverCode: string
+  driver: AssignedDriverInfo = DEMO_DRIVERS[0]
 ): OnboardingState {
-  if (driverCode.trim().length < 4) {
-    return state;
-  }
   return {
     ...state,
     selectedRole: 'motorizado',
     motorizadoVerified: true,
+    activeDriver: driver,
     onboardingCompleted: true,
     viewMode: 'main_app',
     step: 'confirmed',
-    activeTab: 'inicio',
+    activeTab: 'pedidos',
   };
 }
 
@@ -296,59 +263,6 @@ export function switchTab(state: OnboardingState, tab: AppTab): OnboardingState 
   return {
     ...state,
     activeTab: tab,
-  };
-}
-
-export function advanceOrderStatus(
-  state: OnboardingState,
-  orderId: string
-): OnboardingState {
-  const nextOrders = state.orders.map((order) => {
-    if (order.id !== orderId) return order;
-    const nextStatus: OrderStatus =
-      order.status === 'pendiente'
-        ? 'en_camino'
-        : order.status === 'en_camino'
-        ? 'entregado'
-        : 'pendiente';
-    return {
-      ...order,
-      status: nextStatus,
-    };
-  });
-  return {
-    ...state,
-    orders: nextOrders,
-    activeOrderId: orderId,
-  };
-}
-
-export function createQuickOrder(
-  state: OnboardingState,
-  pickup: string,
-  dropoff: string
-): OnboardingState {
-  const cleanPickup = pickup.trim();
-  const cleanDropoff = dropoff.trim();
-  if (!cleanPickup || !cleanDropoff) {
-    return state;
-  }
-  const nextNumber = 106 + state.orders.length;
-  const newOrder: DeliveryOrder = {
-    id: `VG-${nextNumber}`,
-    title: `Envío por encargo · ${cleanDropoff}`,
-    pickup: cleanPickup,
-    dropoff: cleanDropoff,
-    distanceKm: 2.8,
-    etaMinutes: 12,
-    priceFormatted: '$4.20',
-    status: 'pendiente',
-    roleOwner: state.selectedRole || 'usuario',
-  };
-  return {
-    ...state,
-    orders: [newOrder, ...state.orders],
-    activeOrderId: newOrder.id,
   };
 }
 

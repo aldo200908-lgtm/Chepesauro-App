@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ArrowRight,
   CheckCircle2,
@@ -6,11 +6,10 @@ import {
   ShoppingBag,
   MapPin,
   Navigation,
-  Clock,
-  Plus,
   Store,
   Package,
   LogOut,
+  RotateCcw,
 } from 'lucide-react';
 import {
   ROLE_OPTIONS,
@@ -19,16 +18,31 @@ import {
   AppTab,
   OnboardingState,
 } from '../utils/onboarding';
+import {
+  AssignedDriverInfo,
+  CreateCustomOrderInput,
+  ORDER_STATUS_LABELS,
+  formatPenCurrency,
+} from '../utils/ordersStore';
 import { MainBottomNavigation } from './MainBottomNavigation';
 import { PWAInstallButton } from './PWAInstallButton';
+import { ClientOrdersView } from './ClientOrdersView';
+import { DriverOrdersView } from './DriverOrdersView';
 
 interface MainAppLayoutProps {
   state: OnboardingState;
   onSelectTab: (tab: AppTab) => void;
   onSelectRole: (role: UserRole) => void;
-  onAdvanceOrder: (orderId: string) => void;
-  onCreateOrder: (pickup: string, dropoff: string) => void;
+  onSelectDemoDriver: (driver: AssignedDriverInfo) => void;
+  onCreateOrder: (input: CreateCustomOrderInput) => {
+    success: boolean;
+    error?: string;
+  };
+  onCancelOrder: (orderId: string) => { success: boolean; error?: string };
+  onAcceptOrder: (orderId: string) => { success: boolean; error?: string };
+  onAdvanceOrder: (orderId: string) => { success: boolean; error?: string };
   onSelectMapOrder: (orderId: string) => void;
+  onResetDemoOrders: () => void;
   onLogout: () => void;
 }
 
@@ -36,43 +50,34 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
   state,
   onSelectTab,
   onSelectRole,
-  onAdvanceOrder,
+  onSelectDemoDriver,
   onCreateOrder,
+  onCancelOrder,
+  onAcceptOrder,
+  onAdvanceOrder,
   onSelectMapOrder,
+  onResetDemoOrders,
   onLogout,
 }) => {
-  const [pickupInput, setPickupInput] = useState('');
-  const [dropoffInput, setDropoffInput] = useState('');
-  const [formError, setFormError] = useState('');
-
   const activeRoleOption = state.selectedRole
     ? ROLE_OPTIONS[state.selectedRole]
     : ROLE_OPTIONS.usuario;
 
   const activeOrdersCount = state.orders.filter(
-    (o) => o.status !== 'entregado'
+    (o) => o.status !== 'entregado' && o.status !== 'cancelado'
   ).length;
 
   const currentMapOrder =
     state.orders.find((o) => o.id === state.activeOrderId) || state.orders[0];
 
   const headerSubtitle: Record<AppTab, string> = {
-    inicio: `Modo ${activeRoleOption.title}`,
-    pedidos: 'Gestión de envíos en tiempo real',
-    mapa: 'Cobertura y ruta activa en ciudad',
-    perfil: 'Configuración de perfil y aplicación',
-  };
-
-  const handleCreateSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!pickupInput.trim() || !dropoffInput.trim()) {
-      setFormError('Ingresa la dirección de recogida y de entrega.');
-      return;
-    }
-    setFormError('');
-    onCreateOrder(pickupInput, dropoffInput);
-    setPickupInput('');
-    setDropoffInput('');
+    inicio: `Modo ${activeRoleOption.title} (Demo)`,
+    pedidos:
+      state.selectedRole === 'motorizado'
+        ? `Entregas · ${state.activeDriver.name}`
+        : 'Tus compras y encargos (Demo)',
+    mapa: 'Ruta de recogida y destino',
+    perfil: 'Cambio de rol y configuración',
   };
 
   return (
@@ -82,7 +87,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
     >
       {/* FIXED TOP APP HEADER */}
       <header className="shrink-0 z-30 bg-[#078F68] text-white px-4 pt-3 pb-3.5 shadow-xs">
-        <div className="max-w-lg mx-auto flex items-center justify-between gap-3">
+        <div className="max-w-lg mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-9 h-9 rounded-2xl bg-white text-[#078F68] flex items-center justify-center font-display font-bold text-base shadow-xs shrink-0">
               V
@@ -93,7 +98,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                 <span className="font-display text-base font-bold tracking-tight text-white whitespace-nowrap shrink-0">
                   VerdeGo
                 </span>
-                <span className="text-xs font-medium text-[#EAF8F2] whitespace-nowrap shrink-0">
+                <span className="hidden sm:inline text-[11px] font-medium text-[#EAF8F2] whitespace-nowrap shrink-0">
                   · {state.selectedRole === 'motorizado' ? 'Motorizado' : 'Cliente'}
                 </span>
               </div>
@@ -103,7 +108,20 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={() =>
+                onSelectRole(
+                  state.selectedRole === 'motorizado' ? 'usuario' : 'motorizado'
+                )
+              }
+              className="px-2.5 py-1.5 rounded-full bg-[#064B3C] hover:bg-[#064B3C]/90 text-white text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 min-h-[34px] cursor-pointer"
+            >
+              {state.selectedRole === 'motorizado'
+                ? 'Modo Cliente'
+                : 'Modo Motorizado'}
+            </button>
             <PWAInstallButton compact />
           </div>
         </div>
@@ -127,12 +145,12 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                   <div className="min-w-0">
                     <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#078F68]">
                       <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" />
-                      <span>Sesión activa</span>
+                      <span>Modo Demostración Local</span>
                     </div>
                     <h1 className="font-display text-xl font-bold text-[#102F27]">
                       {state.selectedRole === 'motorizado'
-                        ? 'Panel de Motorizado'
-                        : 'Hola, Cliente'}
+                        ? `Motorizado: ${state.activeDriver.name}`
+                        : 'Panel de Cliente'}
                     </h1>
                   </div>
                 </div>
@@ -147,7 +165,11 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                     onClick={() => onSelectTab('pedidos')}
                     className="h-11 px-4 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
                   >
-                    <span>Ver Pedidos</span>
+                    <span>
+                      {state.selectedRole === 'motorizado'
+                        ? 'Gestionar Entregas'
+                        : 'Mis Pedidos'}
+                    </span>
                     <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </button>
 
@@ -165,7 +187,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
               {/* Services Quick Access */}
               <div className="space-y-2.5">
                 <h2 className="font-display text-sm font-bold text-[#102F27]">
-                  Servicios disponibles
+                  Operaciones de demostración
                 </h2>
                 <div className="grid grid-cols-1 gap-2.5">
                   {SERVICE_OPTIONS.map((service) => {
@@ -202,183 +224,50 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
             </div>
           )}
 
-          {/* TAB 2: PEDIDOS */}
+          {/* TAB 2: PEDIDOS (ClientOrdersView vs DriverOrdersView) */}
           {state.activeTab === 'pedidos' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="font-display text-xl font-bold text-[#102F27]">
-                    Mis Pedidos
-                  </h1>
-                  <p className="text-xs text-[#64877C]">
-                    {state.selectedRole === 'motorizado'
-                      ? 'Órdenes asignadas y disponibles en tu zona'
-                      : 'Solicita y sigue tus envíos en curso'}
-                  </p>
-                </div>
-                <span className="text-xs font-semibold text-[#078F68] tabular-nums">
-                  {activeOrdersCount} activos
-                </span>
-              </div>
-
-              <form
-                onSubmit={handleCreateSubmit}
-                className="rounded-3xl bg-[#EAF8F2] border border-[#DCECE5] p-4 space-y-3"
-              >
-                <p className="text-xs font-bold text-[#102F27]">
-                  Nuevo envío rápido
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <div>
-                    <label
-                      htmlFor="pickup-input"
-                      className="block text-[11px] font-medium text-[#064B3C] mb-1"
-                    >
-                      Punto de recogida
-                    </label>
-                    <input
-                      id="pickup-input"
-                      type="text"
-                      value={pickupInput}
-                      onChange={(e) => setPickupInput(e.target.value)}
-                      placeholder="Ej. Av. Central 320"
-                      className="w-full h-10 px-3.5 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] placeholder:text-[#64877C] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="dropoff-input"
-                      className="block text-[11px] font-medium text-[#064B3C] mb-1"
-                    >
-                      Punto de entrega
-                    </label>
-                    <input
-                      id="dropoff-input"
-                      type="text"
-                      value={dropoffInput}
-                      onChange={(e) => setDropoffInput(e.target.value)}
-                      placeholder="Ej. Calle Norte 140"
-                      className="w-full h-10 px-3.5 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] placeholder:text-[#64877C] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
-                    />
-                  </div>
-                </div>
-                {formError && (
-                  <p className="text-xs font-medium text-red-600">{formError}</p>
-                )}
-                <button
-                  type="submit"
-                  className="w-full h-11 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" aria-hidden="true" />
-                  <span>Crear pedido ahora</span>
-                </button>
-              </form>
-
-              <div className="space-y-3">
-                {state.orders.map((order) => {
-                  const statusLabel =
-                    order.status === 'pendiente'
-                      ? 'Pendiente de recogida'
-                      : order.status === 'en_camino'
-                      ? 'En camino'
-                      : 'Entregado';
-
-                  const actionText =
-                    order.status === 'pendiente'
-                      ? state.selectedRole === 'motorizado'
-                        ? 'Iniciar ruta'
-                        : 'Confirmar recogida'
-                      : order.status === 'en_camino'
-                      ? 'Marcar entregado'
-                      : 'Reactivar envío';
-
-                  return (
-                    <div
-                      key={order.id}
-                      className="rounded-3xl bg-white border border-[#DCECE5] p-4 space-y-3"
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <div className="text-xs font-semibold text-[#078F68] flex items-center gap-1.5 tabular-nums">
-                            <span>{order.id}</span>
-                            <span aria-hidden="true">·</span>
-                            <span>{statusLabel}</span>
-                          </div>
-                          <h2 className="font-display text-sm font-bold text-[#102F27] mt-0.5">
-                            {order.title}
-                          </h2>
-                        </div>
-                        <span className="font-display text-sm font-bold text-[#078F68] tabular-nums">
-                          {order.priceFormatted}
-                        </span>
-                      </div>
-
-                      <div className="text-xs text-[#64877C] space-y-1">
-                        <p className="truncate">
-                          <strong className="font-semibold text-[#102F27]">
-                            Origen:
-                          </strong>{' '}
-                          {order.pickup}
-                        </p>
-                        <p className="truncate">
-                          <strong className="font-semibold text-[#102F27]">
-                            Destino:
-                          </strong>{' '}
-                          {order.dropoff}
-                        </p>
-                      </div>
-
-                      <div className="pt-2 border-t border-[#DCECE5] flex items-center justify-between gap-2">
-                        <div className="text-[11px] text-[#64877C] tabular-nums flex items-center gap-1 whitespace-nowrap shrink-0">
-                          <Clock className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                          <span>{order.etaMinutes} min</span>
-                          <span aria-hidden="true">·</span>
-                          <span>{order.distanceKm} km</span>
-                        </div>
-
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              onSelectMapOrder(order.id);
-                              onSelectTab('mapa');
-                            }}
-                            className="h-9 px-3 rounded-full bg-[#EAF8F2] hover:bg-[#DCECE5] text-[#064B3C] text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-                          >
-                            Mapa
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => onAdvanceOrder(order.id)}
-                            className="h-9 px-3.5 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-                          >
-                            {actionText}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <>
+              {state.selectedRole === 'motorizado' ? (
+                <DriverOrdersView
+                  orders={state.orders}
+                  activeDriver={state.activeDriver}
+                  onSelectDemoDriver={onSelectDemoDriver}
+                  onAcceptOrder={onAcceptOrder}
+                  onAdvanceOrder={onAdvanceOrder}
+                  onOpenOrderInMap={(orderId) => {
+                    onSelectMapOrder(orderId);
+                    onSelectTab('mapa');
+                  }}
+                />
+              ) : (
+                <ClientOrdersView
+                  orders={state.orders}
+                  onCreateOrder={onCreateOrder}
+                  onCancelOrder={onCancelOrder}
+                  onOpenOrderInMap={(orderId) => {
+                    onSelectMapOrder(orderId);
+                    onSelectTab('mapa');
+                  }}
+                />
+              )}
+            </>
           )}
 
           {/* TAB 3: MAPA */}
-          {state.activeTab === 'mapa' && (
+          {state.activeTab === 'mapa' && currentMapOrder && (
             <div className="space-y-3.5">
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="font-display text-xl font-bold text-[#102F27]">
-                    Mapa de Ruta
+                    Mapa de Ruta (Demo)
                   </h1>
                   <p className="text-xs text-[#64877C]">
-                    Seguimiento activo del envío {currentMapOrder.id}
+                    Pedido {currentMapOrder.id} ·{' '}
+                    {ORDER_STATUS_LABELS[currentMapOrder.status]}
                   </p>
                 </div>
                 <span className="text-xs font-semibold text-[#078F68] tabular-nums">
-                  {currentMapOrder.etaMinutes} min · {currentMapOrder.distanceKm}{' '}
-                  km
+                  {formatPenCurrency(currentMapOrder.totalAmount)}
                 </span>
               </div>
 
@@ -386,7 +275,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                 <svg
                   viewBox="0 0 400 220"
                   className="absolute inset-0 w-full h-full object-cover"
-                  aria-label="Mapa de ruta entre origen y destino"
+                  aria-label="Mapa esquemático de ruta entre recogida y destino"
                 >
                   <g stroke="#078F68" strokeOpacity="0.12" strokeWidth="2">
                     <line x1="0" y1="45" x2="400" y2="45" />
@@ -418,7 +307,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
 
                 <div className="relative z-10 flex items-center justify-between text-xs font-semibold text-[#102F27] bg-white/95 backdrop-blur-xs px-3.5 py-2 rounded-2xl border border-[#DCECE5]">
                   <span className="truncate">
-                    Origen: {currentMapOrder.pickup}
+                    Recogida: {currentMapOrder.pickup.address}
                   </span>
                   <Navigation
                     className="w-4 h-4 text-[#078F68] shrink-0"
@@ -428,10 +317,10 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
 
                 <div className="relative z-10 flex items-center justify-between text-xs font-semibold text-[#102F27] bg-white/95 backdrop-blur-xs px-3.5 py-2 rounded-2xl border border-[#DCECE5]">
                   <span className="truncate">
-                    Destino: {currentMapOrder.dropoff}
+                    Destino: {currentMapOrder.dropoff.address}
                   </span>
                   <span className="text-[#078F68] font-bold tabular-nums shrink-0 ml-2">
-                    {currentMapOrder.priceFormatted}
+                    {formatPenCurrency(currentMapOrder.demoDeliveryFee)}
                   </span>
                 </div>
               </div>
@@ -460,14 +349,14 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                               isSelected ? 'text-white' : 'text-[#102F27]'
                             }`}
                           >
-                            {order.id} · {order.title}
+                            {order.id} · {ORDER_STATUS_LABELS[order.status]}
                           </p>
                           <p
                             className={`text-[11px] truncate mt-0.5 ${
                               isSelected ? 'text-[#EAF8F2]' : 'text-[#64877C]'
                             }`}
                           >
-                            {order.pickup} → {order.dropoff}
+                            {order.pickup.address} → {order.dropoff.address}
                           </p>
                         </div>
                         <span
@@ -475,7 +364,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                             isSelected ? 'text-white' : 'text-[#078F68]'
                           }`}
                         >
-                          {order.etaMinutes} min
+                          {formatPenCurrency(order.totalAmount)}
                         </span>
                       </button>
                     );
@@ -490,10 +379,11 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
             <div className="space-y-4">
               <div>
                 <h1 className="font-display text-xl font-bold text-[#102F27]">
-                  Mi Perfil
+                  Mi Perfil (Modo Demo)
                 </h1>
                 <p className="text-xs text-[#64877C]">
-                  Configuración de cuenta y bienvenida
+                  Alterna entre la vista de Cliente y de Motorizado para probar el
+                  flujo completo
                 </p>
               </div>
 
@@ -508,7 +398,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-[#078F68]">
-                      Perfil actual
+                      Vista activa
                     </p>
                     <h2 className="font-display text-lg font-bold text-[#102F27]">
                       {activeRoleOption.title}
@@ -557,20 +447,31 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                 <PWAInstallButton />
               </div>
 
-              <button
-                type="button"
-                onClick={onLogout}
-                className="w-full h-12 px-5 rounded-full bg-white border border-[#DCECE5] hover:bg-[#EAF8F2] text-[#064B3C] text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
-              >
-                <LogOut className="w-4 h-4" aria-hidden="true" />
-                <span>Cerrar sesión y volver al onboarding</span>
-              </button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <button
+                  type="button"
+                  onClick={onResetDemoOrders}
+                  className="w-full h-11 px-4 rounded-full bg-[#EAF8F2] hover:bg-[#DCECE5] text-[#064B3C] text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>Restaurar pedidos demo</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={onLogout}
+                  className="w-full h-11 px-4 rounded-full bg-white border border-[#DCECE5] hover:bg-[#EAF8F2] text-[#064B3C] text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                >
+                  <LogOut className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>Volver al onboarding</span>
+                </button>
+              </div>
             </div>
           )}
         </div>
       </main>
 
-      {/* FIXED BOTTOM NAVIGATION BAR (Only rendered in MainAppLayout!) */}
+      {/* FIXED BOTTOM NAVIGATION BAR */}
       <MainBottomNavigation
         activeTab={state.activeTab}
         onSelectTab={onSelectTab}
