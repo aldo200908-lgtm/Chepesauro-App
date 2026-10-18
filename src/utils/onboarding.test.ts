@@ -7,12 +7,16 @@ import {
   confirmRoleSelection,
   resetOnboardingSelection,
   getPrimaryActionLabel,
+  switchTab,
+  advanceOrderStatus,
+  createQuickOrder,
 } from './onboarding.ts';
 
-test('initial state starts with no role selected on selection step', () => {
+test('initial state starts with no role selected on selection step and inicio tab', () => {
   const state = createInitialOnboardingState();
   assert.equal(state.selectedRole, null);
   assert.equal(state.step, 'selection');
+  assert.equal(state.activeTab, 'inicio');
   assert.equal(getPrimaryActionLabel(state.selectedRole), 'Selecciona un perfil para continuar');
 });
 
@@ -48,6 +52,31 @@ test('confirmRoleSelection transitions to confirmed step when role is chosen, an
   const backToSelection = resetOnboardingSelection(confirmed);
   assert.equal(backToSelection.step, 'selection');
   assert.equal(backToSelection.selectedRole, 'motorizado');
+});
+
+test('switchTab changes activeTab without losing selectedRole or orders', () => {
+  const selected = selectRole(createInitialOnboardingState(), 'usuario');
+  const onPedidos = switchTab(selected, 'pedidos');
+  assert.equal(onPedidos.activeTab, 'pedidos');
+  assert.equal(onPedidos.selectedRole, 'usuario');
+  assert.equal(onPedidos.orders.length, selected.orders.length);
+});
+
+test('advanceOrderStatus updates order status and createQuickOrder validates inputs', () => {
+  const initial = createInitialOnboardingState();
+  const targetId = initial.orders[1].id; // 'pendiente'
+  const updated = advanceOrderStatus(initial, targetId);
+  assert.equal(updated.orders[1].status, 'en_camino');
+
+  // Empty inputs should not add an order
+  const unchanged = createQuickOrder(updated, '   ', '');
+  assert.equal(unchanged.orders.length, updated.orders.length);
+
+  // Valid inputs prepend a new order
+  const withNew = createQuickOrder(updated, 'Av. Central 100', 'Calle Sur 250');
+  assert.equal(withNew.orders.length, updated.orders.length + 1);
+  assert.equal(withNew.orders[0].pickup, 'Av. Central 100');
+  assert.equal(withNew.orders[0].dropoff, 'Calle Sur 250');
 });
 
 test('role options define both usuario and motorizado with complete Spanish copy', () => {
