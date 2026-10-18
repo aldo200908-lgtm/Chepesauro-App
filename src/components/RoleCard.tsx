@@ -20,18 +20,18 @@ export const RoleCard: React.FC<RoleCardProps> = ({
       type="button"
       onClick={onSelect}
       aria-pressed={isSelected}
-      className={`group relative w-full text-left rounded-3xl p-4.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 active:scale-[0.98] cursor-pointer ${
+      className={`group relative w-full text-left rounded-3xl p-5 sm:p-6 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#078F68] focus-visible:ring-offset-2 active:scale-[0.99] cursor-pointer ${
         isSelected
-          ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-700/20 ring-2 ring-emerald-600'
-          : 'bg-emerald-50/50 text-emerald-950 border border-emerald-900/10 hover:border-emerald-600/40 hover:bg-emerald-50'
+          ? 'bg-[#078F68] text-white border-2 border-[#078F68] shadow-md shadow-[#078F68]/15'
+          : 'bg-[#FFFFFF] text-[#102F27] border-2 border-[#DCECE5] hover:border-[#078F68]/50 hover:bg-[#EAF8F2]/50'
       }`}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-start gap-4">
         <div
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-colors duration-200 ${
+          className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-colors duration-150 ${
             isSelected
-              ? 'bg-white text-emerald-600 shadow-sm'
-              : 'bg-white text-emerald-600 border border-emerald-900/8'
+              ? 'bg-white text-[#078F68]'
+              : 'bg-[#EAF8F2] text-[#078F68]'
           }`}
         >
           <Icon className="w-7 h-7 stroke-[2]" aria-hidden="true" />
@@ -40,19 +40,19 @@ export const RoleCard: React.FC<RoleCardProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
             <h2
-              className={`font-display text-lg font-bold tracking-tight truncate ${
-                isSelected ? 'text-white' : 'text-emerald-950'
+              className={`font-display text-lg sm:text-xl font-bold tracking-tight ${
+                isSelected ? 'text-white' : 'text-[#102F27]'
               }`}
             >
               {option.title}
             </h2>
 
-            {/* Mobile radio check circle */}
+            {/* Visible selection indicator */}
             <div
-              className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors duration-200 ${
+              className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors duration-150 ${
                 isSelected
-                  ? 'bg-white text-emerald-600'
-                  : 'border-2 border-emerald-900/20 bg-white'
+                  ? 'bg-white text-[#078F68]'
+                  : 'border-2 border-[#DCECE5] bg-white group-hover:border-[#078F68]/60'
               }`}
               aria-hidden="true"
             >
@@ -61,37 +61,13 @@ export const RoleCard: React.FC<RoleCardProps> = ({
           </div>
 
           <p
-            className={`text-xs font-medium mt-0.5 ${
-              isSelected ? 'text-emerald-100' : 'text-emerald-800/80'
-            }`}
-          >
-            {option.subtitle}
-          </p>
-
-          <p
-            className={`mt-2 text-xs leading-relaxed ${
-              isSelected ? 'text-emerald-50/95' : 'text-emerald-900/65'
+            className={`mt-1.5 text-sm leading-relaxed ${
+              isSelected ? 'text-[#EAF8F2]' : 'text-[#64877C]'
             }`}
           >
             {option.description}
           </p>
         </div>
-      </div>
-
-      {/* Unboxed subtle benefits row */}
-      <div
-        className={`mt-3.5 pt-3 border-t text-[11px] font-medium flex flex-wrap items-center gap-x-1.5 gap-y-1 ${
-          isSelected
-            ? 'border-white/20 text-emerald-50'
-            : 'border-emerald-900/8 text-emerald-800/70'
-        }`}
-      >
-        {option.highlights.map((item, idx) => (
-          <React.Fragment key={item}>
-            {idx > 0 && <span aria-hidden="true">·</span>}
-            <span>{item}</span>
-          </React.Fragment>
-        ))}
       </div>
     </button>
   );
