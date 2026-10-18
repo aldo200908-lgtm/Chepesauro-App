@@ -1,0 +1,6 @@
+{
+  "name": "VerdeGo — Onboarding de Usuario y Motorizado",
+  "description": "Experiencia de bienvenida minimalista en verde y blanco para elegir tu perfil como Usuario o Motorizado.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
