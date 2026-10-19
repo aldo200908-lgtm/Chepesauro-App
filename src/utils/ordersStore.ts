@@ -228,6 +228,81 @@ export const INITIAL_DEMO_ORDERS: DemoOrder[] = [
   },
 ];
 
+const ORDER_ID_PATTERN = /^VG-(\d+)$/;
+
+function maxOrderNumber(orders: DemoOrder[]): number {
+  return orders.reduce((max, order) => {
+    const match = ORDER_ID_PATTERN.exec(order.id);
+    const value = match ? Number(match[1]) : 0;
+    return value > max ? value : max;
+  }, 1000);
+}
+
+/**
+ * Genera un id único: toma el mayor número usado y suma 1. También revisa lo
+ * guardado en localStorage para que dos pestañas del mismo navegador no creen
+ * pedidos con el mismo id al mismo tiempo.
+ */
+export function getNextOrderId(orders: DemoOrder[]): string {
+  let highest = maxOrderNumber(orders);
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = window.localStorage.getItem(ORDERS_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          highest = Math.max(highest, maxOrderNumber(parsed.filter(isValidOrder)));
+        }
+      }
+    } catch {
+      // Ignore storage read errors
+    }
+  }
+  return `VG-${highest + 1}`;
+}
+
+const VALID_STATUSES: ReadonlySet<string> = new Set(
+  Object.keys(ORDER_STATUS_LABELS)
+);
+
+function isLocationPoint(value: unknown): value is OrderLocationPoint {
+  const point = value as OrderLocationPoint | null;
+  return (
+    !!point &&
+    typeof point.address === 'string' &&
+    typeof point.referencePoint === 'string'
+  );
+}
+
+/**
+ * Comprueba que un valor leído de localStorage tenga la forma de un pedido.
+ * Evita que datos corruptos o de una versión anterior rompan la app.
+ */
+export function isValidOrder(value: unknown): value is DemoOrder {
+  const order = value as DemoOrder | null;
+  if (!order || typeof order !== 'object') return false;
+  return (
+    typeof order.id === 'string' &&
+    (order.type === 'compra_negocio' || order.type === 'encargo_personalizado') &&
+    typeof order.status === 'string' &&
+    VALID_STATUSES.has(order.status) &&
+    isLocationPoint(order.pickup) &&
+    isLocationPoint(order.dropoff) &&
+    typeof order.instructions === 'string' &&
+    Number.isFinite(order.productsCost) &&
+    Number.isFinite(order.demoDeliveryFee) &&
+    Number.isFinite(order.totalAmount) &&
+    typeof order.paymentMethod === 'string' &&
+    typeof order.createdAt === 'string' &&
+    typeof order.updatedAt === 'string' &&
+    Array.isArray(order.statusHistory) &&
+    (order.assignedDriver === null ||
+      (!!order.assignedDriver &&
+        typeof order.assignedDriver.id === 'string' &&
+        typeof order.assignedDriver.name === 'string'))
+  );
+}
+
 /**
  * Crea un nuevo pedido validando los campos obligatorios según el tipo de servicio.
  */
@@ -293,8 +368,7 @@ export function createDemoOrder(
       : 7.5;
 
   const totalAmount = Number((productsCost + demoDeliveryFee).toFixed(2));
-  const nextNumber = 1001 + orders.length;
-  const id = `VG-${nextNumber}`;
+  const id = getNextOrderId(orders);
 
   const createdOrder: DemoOrder = {
     id,
@@ -520,8 +594,11 @@ export function loadPersistedOrders(): DemoOrder[] {
     const raw = window.localStorage.getItem(ORDERS_STORAGE_KEY);
     if (!raw) return INITIAL_DEMO_ORDERS;
     const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed;
+    if (Array.isArray(parsed)) {
+      const valid = parsed.filter(isValidOrder);
+      if (valid.length > 0) {
+        return valid;
+      }
     }
   } catch {
     // Ignore storage read errors
