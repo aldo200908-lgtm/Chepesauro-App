@@ -28,6 +28,7 @@ import { MainBottomNavigation } from './MainBottomNavigation';
 import { PWAInstallButton } from './PWAInstallButton';
 import { ClientOrdersView } from './ClientOrdersView';
 import { DriverOrdersView } from './DriverOrdersView';
+import { MapboxView } from './MapboxView';
 
 interface MainAppLayoutProps {
   state: OnboardingState;
@@ -253,13 +254,13 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
             </>
           )}
 
-          {/* TAB 3: MAPA */}
+          {/* TAB 3: MAPA CON MAPBOX 3D */}
           {state.activeTab === 'mapa' && currentMapOrder && (
             <div className="space-y-3.5">
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="font-display text-xl font-bold text-[#102F27]">
-                    Mapa de Ruta (Demo)
+                    Mapa 3D Mapbox (Puno)
                   </h1>
                   <p className="text-xs text-[#64877C]">
                     Pedido {currentMapOrder.id} ·{' '}
@@ -271,59 +272,8 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                 </span>
               </div>
 
-              <div className="relative w-full h-56 rounded-3xl bg-[#EAF8F2] border border-[#DCECE5] overflow-hidden flex flex-col justify-between p-4">
-                <svg
-                  viewBox="0 0 400 220"
-                  className="absolute inset-0 w-full h-full object-cover"
-                  aria-label="Mapa esquemático de ruta entre recogida y destino"
-                >
-                  <g stroke="#078F68" strokeOpacity="0.12" strokeWidth="2">
-                    <line x1="0" y1="45" x2="400" y2="45" />
-                    <line x1="0" y1="110" x2="400" y2="110" />
-                    <line x1="0" y1="175" x2="400" y2="175" />
-                    <line x1="80" y1="0" x2="80" y2="220" />
-                    <line x1="200" y1="0" x2="200" y2="220" />
-                    <line x1="320" y1="0" x2="320" y2="220" />
-                  </g>
-
-                  <path
-                    d="M 70 165 Q 150 160 200 105 T 330 55"
-                    fill="none"
-                    stroke="#078F68"
-                    strokeWidth="5"
-                    strokeLinecap="round"
-                    strokeDasharray="8 6"
-                  />
-
-                  <circle cx="70" cy="165" r="10" fill="#064B3C" />
-                  <circle cx="70" cy="165" r="4" fill="#FFFFFF" />
-
-                  <circle cx="200" cy="105" r="14" fill="#078F68" />
-                  <circle cx="200" cy="105" r="6" fill="#FFFFFF" />
-
-                  <circle cx="330" cy="55" r="10" fill="#078F68" />
-                  <circle cx="330" cy="55" r="4" fill="#FFFFFF" />
-                </svg>
-
-                <div className="relative z-10 flex items-center justify-between text-xs font-semibold text-[#102F27] bg-white/95 backdrop-blur-xs px-3.5 py-2 rounded-2xl border border-[#DCECE5]">
-                  <span className="truncate">
-                    Recogida: {currentMapOrder.pickup.address}
-                  </span>
-                  <Navigation
-                    className="w-4 h-4 text-[#078F68] shrink-0"
-                    aria-hidden="true"
-                  />
-                </div>
-
-                <div className="relative z-10 flex items-center justify-between text-xs font-semibold text-[#102F27] bg-white/95 backdrop-blur-xs px-3.5 py-2 rounded-2xl border border-[#DCECE5]">
-                  <span className="truncate">
-                    Destino: {currentMapOrder.dropoff.address}
-                  </span>
-                  <span className="text-[#078F68] font-bold tabular-nums shrink-0 ml-2">
-                    {formatPenCurrency(currentMapOrder.demoDeliveryFee)}
-                  </span>
-                </div>
-              </div>
+              {/* Interactive Mapbox GL JS 3D Map */}
+              <MapboxView activeOrder={currentMapOrder} />
 
               <div className="space-y-2">
                 <p className="text-xs font-semibold text-[#064B3C]">

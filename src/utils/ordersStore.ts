@@ -37,6 +37,11 @@ export interface OrderItem {
 export interface OrderLocationPoint {
   address: string;
   referencePoint: string;
+  /**
+   * Coordenadas geográficas verificadas [longitud, latitud].
+   * Si es undefined, la dirección es un texto descriptivo sin geocodificar.
+   */
+  coordinates?: [number, number];
 }
 
 export interface AssignedDriverInfo {
