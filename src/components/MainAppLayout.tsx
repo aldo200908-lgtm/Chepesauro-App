@@ -10,6 +10,7 @@ import {
   Package,
   LogOut,
   RotateCcw,
+  FileText,
 } from 'lucide-react';
 import {
   ROLE_OPTIONS,
@@ -19,7 +20,9 @@ import {
   OnboardingState,
 } from '../utils/onboarding';
 import {
+  DemoOrder,
   AssignedDriverInfo,
+  DEMO_DRIVERS,
   CreateCustomOrderInput,
   ORDER_STATUS_LABELS,
   formatPenCurrency,
@@ -43,6 +46,11 @@ interface MainAppLayoutProps {
   onAcceptOrder: (orderId: string) => { success: boolean; error?: string };
   onAdvanceOrder: (orderId: string) => { success: boolean; error?: string };
   onSelectMapOrder: (orderId: string) => void;
+  onReviewOrder: (orderId: string) => void;
+  onStartNavigation: (
+    order: DemoOrder,
+    targetType?: 'pickup' | 'dropoff'
+  ) => void;
   onResetDemoOrders: () => void;
   onLogout: () => void;
 }
@@ -57,6 +65,8 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
   onAcceptOrder,
   onAdvanceOrder,
   onSelectMapOrder,
+  onReviewOrder,
+  onStartNavigation,
   onResetDemoOrders,
   onLogout,
 }) => {
@@ -68,11 +78,23 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
     (o) => o.status !== 'entregado' && o.status !== 'cancelado'
   ).length;
 
+  const availableOrders = state.orders.filter((o) => o.status === 'disponible');
+  const myDriverOrders = state.orders.filter(
+    (o) =>
+      o.assignedDriver?.id === state.activeDriver.id &&
+      o.status !== 'entregado' &&
+      o.status !== 'cancelado'
+  );
+
+  // Kept intact for future reuse as requested
   const currentMapOrder =
     state.orders.find((o) => o.id === state.activeOrderId) || state.orders[0];
 
   const headerSubtitle: Record<AppTab, string> = {
-    inicio: `Modo ${activeRoleOption.title} (Demo)`,
+    inicio:
+      state.selectedRole === 'motorizado'
+        ? `Panel de Pedidos · ${state.activeDriver.name}`
+        : `Modo ${activeRoleOption.title} (Demo)`,
     pedidos:
       state.selectedRole === 'motorizado'
         ? `Entregas · ${state.activeDriver.name}`
@@ -133,96 +155,332 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
         <div className="max-w-lg mx-auto px-4 py-4">
           {/* TAB 1: INICIO */}
           {state.activeTab === 'inicio' && (
-            <div className="space-y-4">
-              <div className="rounded-3xl bg-[#EAF8F2] border border-[#DCECE5] p-5 space-y-3.5">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-14 h-14 rounded-2xl bg-[#078F68] text-white flex items-center justify-center shrink-0">
-                    {state.selectedRole === 'motorizado' ? (
-                      <Bike className="w-7 h-7" aria-hidden="true" />
-                    ) : (
-                      <ShoppingBag className="w-7 h-7" aria-hidden="true" />
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#078F68]">
-                      <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" />
-                      <span>Modo Demostración Local</span>
+            <>
+              {state.selectedRole === 'motorizado' ? (
+                /* PANEL DE INICIO PARA MOTORIZADO: ESCOGER PEDIDOS Y PASAR A DATOS + NAVEGACIÓN 3D */
+                <div className="space-y-5">
+                  {/* Driver Header & Quick Switcher */}
+                  <div className="rounded-3xl bg-[#EAF8F2] border border-[#DCECE5] p-4 space-y-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-12 h-12 rounded-2xl bg-[#078F68] text-white flex items-center justify-center shrink-0">
+                          <Bike className="w-6 h-6" aria-hidden="true" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-[#078F68]">
+                            Panel de Inicio · Motorizado
+                          </p>
+                          <h1 className="font-display text-lg font-bold text-[#102F27] truncate">
+                            {state.activeDriver.name}
+                          </h1>
+                          <p className="text-xs text-[#64877C]">
+                            Placa: {state.activeDriver.vehiclePlate} · Puno
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <h1 className="font-display text-xl font-bold text-[#102F27]">
-                      {state.selectedRole === 'motorizado'
-                        ? `Motorizado: ${state.activeDriver.name}`
-                        : 'Panel de Cliente'}
-                    </h1>
+
+                    <div className="grid grid-cols-2 gap-2 pt-1">
+                      {DEMO_DRIVERS.map((drv) => {
+                        const isCurrent = drv.id === state.activeDriver.id;
+                        return (
+                          <button
+                            key={drv.id}
+                            type="button"
+                            onClick={() => onSelectDemoDriver(drv)}
+                            className={`h-9 px-3 rounded-xl text-xs font-semibold transition-colors cursor-pointer truncate ${
+                              isCurrent
+                                ? 'bg-[#078F68] text-white'
+                                : 'bg-white text-[#102F27] border border-[#DCECE5] hover:bg-[#EAF8F2]'
+                            }`}
+                          >
+                            {drv.name.replace(' (Demo)', '')} ({drv.id})
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
+
+                  {/* SECTION A: BOLSA DE PEDIDOS DISPONIBLES PARA ESCOGER */}
+                  <section className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="font-display text-base font-bold text-[#102F27]">
+                          Escoger pedido disponible ({availableOrders.length})
+                        </h2>
+                        <p className="text-xs text-[#64877C]">
+                          Acepta un pedido de agente o tienda para revisar sus
+                          datos e iniciar el GPS 3D
+                        </p>
+                      </div>
+                    </div>
+
+                    {availableOrders.length === 0 ? (
+                      <div className="rounded-3xl bg-white border border-[#DCECE5] p-5 text-center space-y-2">
+                        <p className="text-xs text-[#64877C]">
+                          Todos los pedidos de demostración han sido aceptados.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={onResetDemoOrders}
+                          className="h-9 px-4 rounded-full bg-[#EAF8F2] hover:bg-[#DCECE5] text-[#064B3C] text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" />
+                          <span>Cargar nuevos pedidos demo</span>
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {availableOrders.map((order) => {
+                          const isStore = order.type === 'compra_negocio';
+                          const originTitle =
+                            order.businessName ||
+                            (isStore
+                              ? 'Tienda / Comercio en Puno'
+                              : 'Agente / Encargo en Puno');
+
+                          return (
+                            <div
+                              key={order.id}
+                              className="rounded-3xl bg-white border border-[#DCECE5] hover:border-[#078F68] p-4 space-y-3.5 shadow-xs transition-all"
+                            >
+                              {/* Card Header: Origin Store/Agent & Price */}
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex items-start gap-2.5 min-w-0">
+                                  <div className="w-10 h-10 rounded-2xl bg-[#EAF8F2] text-[#078F68] flex items-center justify-center shrink-0 mt-0.5">
+                                    {isStore ? (
+                                      <Store className="w-5 h-5" />
+                                    ) : (
+                                      <Package className="w-5 h-5" />
+                                    )}
+                                  </div>
+                                  <div className="min-w-0">
+                                    <div className="flex items-center gap-1.5 text-xs text-[#64877C]">
+                                      <span className="font-bold text-[#078F68]">
+                                        {order.id}
+                                      </span>
+                                      <span aria-hidden="true">·</span>
+                                      <span>
+                                        {isStore
+                                          ? 'Compra en tienda'
+                                          : 'Envío de agente'}
+                                      </span>
+                                    </div>
+                                    <h3 className="font-display text-sm font-bold text-[#102F27] truncate mt-0.5">
+                                      {originTitle}
+                                    </h3>
+                                  </div>
+                                </div>
+
+                                <div className="text-right shrink-0">
+                                  <p className="font-display text-base font-extrabold text-[#078F68] tabular-nums">
+                                    {formatPenCurrency(order.totalAmount)}
+                                  </p>
+                                  <p className="text-[11px] text-[#64877C] tabular-nums">
+                                    Envío: {formatPenCurrency(order.demoDeliveryFee)}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Origin -> Destination Route Box */}
+                              <div className="rounded-2xl bg-[#F8FCFA] border border-[#DCECE5] p-3 space-y-2 text-xs">
+                                <div className="flex items-start gap-2">
+                                  <MapPin className="w-4 h-4 text-[#078F68] shrink-0 mt-0.5" />
+                                  <div className="min-w-0">
+                                    <span className="font-bold text-[#102F27]">
+                                      De (Recogida):{' '}
+                                    </span>
+                                    <span className="text-[#102F27]">
+                                      {order.pickup.address}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-start gap-2">
+                                  <Navigation className="w-4 h-4 text-[#9333EA] shrink-0 mt-0.5" />
+                                  <div className="min-w-0">
+                                    <span className="font-bold text-[#102F27]">
+                                      A (Entrega):{' '}
+                                    </span>
+                                    <span className="text-[#102F27]">
+                                      {order.dropoff.address}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Brief Content Summary */}
+                              <p className="text-xs text-[#64877C] truncate">
+                                {isStore && order.items
+                                  ? `Pedido: ${order.items
+                                      .map((i) => `${i.quantity}x ${i.name}`)
+                                      .join(', ')}`
+                                  : `Encargo: ${order.customDescription}`}
+                              </p>
+
+                              {/* Accept Action -> Automatically opens Order Detail Screen */}
+                              <button
+                                type="button"
+                                onClick={() => onAcceptOrder(order.id)}
+                                className="w-full h-11 px-4 rounded-2xl bg-[#078F68] hover:bg-[#064B3C] active:scale-[0.99] text-white font-display text-xs font-bold inline-flex items-center justify-center gap-2 transition-all cursor-pointer"
+                              >
+                                <span>Aceptar pedido y revisar datos</span>
+                                <ArrowRight className="w-4 h-4" />
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </section>
+
+                  {/* SECTION B: MIS PEDIDOS ACEPTADOS / EN CURSO */}
+                  {myDriverOrders.length > 0 && (
+                    <section className="space-y-3 pt-1">
+                      <h2 className="font-display text-base font-bold text-[#102F27]">
+                        Tus entregas activas ({myDriverOrders.length})
+                      </h2>
+                      <div className="space-y-3">
+                        {myDriverOrders.map((order) => (
+                          <div
+                            key={order.id}
+                            className="rounded-3xl bg-[#EAF8F2]/60 border-2 border-[#078F68]/40 p-4 space-y-3"
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5 text-xs font-bold text-[#078F68]">
+                                  <span>{order.id}</span>
+                                  <span aria-hidden="true">·</span>
+                                  <span>{ORDER_STATUS_LABELS[order.status]}</span>
+                                </div>
+                                <h3 className="font-display text-sm font-bold text-[#102F27] truncate mt-0.5">
+                                  {order.businessName || order.customDescription}
+                                </h3>
+                              </div>
+                              <span className="font-display text-sm font-extrabold text-[#078F68] tabular-nums shrink-0">
+                                {formatPenCurrency(order.totalAmount)}
+                              </span>
+                            </div>
+
+                            <div className="text-xs text-[#64877C] space-y-1">
+                              <p className="truncate">
+                                <strong className="text-[#102F27]">De:</strong>{' '}
+                                {order.pickup.address}
+                              </p>
+                              <p className="truncate">
+                                <strong className="text-[#102F27]">A:</strong>{' '}
+                                {order.dropoff.address}
+                              </p>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2 pt-1">
+                              <button
+                                type="button"
+                                onClick={() => onReviewOrder(order.id)}
+                                className="h-10 px-3 rounded-xl bg-white border border-[#DCECE5] hover:bg-[#EAF8F2] text-[#102F27] text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                              >
+                                <FileText className="w-3.5 h-3.5 text-[#078F68]" />
+                                <span>Ver datos</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  onStartNavigation(
+                                    order,
+                                    order.status === 'recogido' ||
+                                      order.status === 'en_camino_cliente'
+                                      ? 'dropoff'
+                                      : 'pickup'
+                                  )
+                                }
+                                className="h-10 px-3 rounded-xl bg-[#9333EA] hover:bg-[#7E22CE] text-white text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                              >
+                                <Navigation className="w-3.5 h-3.5" />
+                                <span>Navegar 3D</span>
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
                 </div>
+              ) : (
+                /* PANEL DE INICIO PARA CLIENTE */
+                <div className="space-y-4">
+                  <div className="rounded-3xl bg-[#EAF8F2] border border-[#DCECE5] p-5 space-y-3.5">
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-14 h-14 rounded-2xl bg-[#078F68] text-white flex items-center justify-center shrink-0">
+                        <ShoppingBag className="w-7 h-7" aria-hidden="true" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#078F68]">
+                          <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" />
+                          <span>Modo Demostración Local</span>
+                        </div>
+                        <h1 className="font-display text-xl font-bold text-[#102F27]">
+                          Panel de Cliente
+                        </h1>
+                      </div>
+                    </div>
 
-                <p className="text-xs sm:text-sm text-[#64877C] leading-relaxed">
-                  {activeRoleOption.summaryText}
-                </p>
+                    <p className="text-xs sm:text-sm text-[#64877C] leading-relaxed">
+                      {activeRoleOption.summaryText}
+                    </p>
 
-                <div className="grid grid-cols-2 gap-2.5 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab('pedidos')}
-                    className="h-11 px-4 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
-                  >
-                    <span>
-                      {state.selectedRole === 'motorizado'
-                        ? 'Gestionar Entregas'
-                        : 'Mis Pedidos'}
-                    </span>
-                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => onSelectTab('mapa')}
-                    className="h-11 px-4 rounded-full bg-white text-[#102F27] border border-[#DCECE5] hover:bg-[#EAF8F2] text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
-                  >
-                    <MapPin className="w-3.5 h-3.5 text-[#078F68]" aria-hidden="true" />
-                    <span>Abrir Mapa</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Services Quick Access */}
-              <div className="space-y-2.5">
-                <h2 className="font-display text-sm font-bold text-[#102F27]">
-                  Operaciones de demostración
-                </h2>
-                <div className="grid grid-cols-1 gap-2.5">
-                  {SERVICE_OPTIONS.map((service) => {
-                    const Icon = service.id === 'comprar' ? Store : Package;
-                    return (
+                    <div className="pt-1">
                       <button
-                        key={service.id}
                         type="button"
                         onClick={() => onSelectTab('pedidos')}
-                        className="w-full text-left rounded-2xl bg-white border border-[#DCECE5] hover:border-[#078F68]/50 p-4 flex items-center justify-between gap-3 transition-colors cursor-pointer"
+                        className="w-full h-11 px-4 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
                       >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-11 h-11 rounded-xl bg-[#EAF8F2] text-[#078F68] flex items-center justify-center shrink-0">
-                            <Icon className="w-5 h-5" aria-hidden="true" />
-                          </div>
-                          <div className="min-w-0">
-                            <p className="font-display text-sm font-bold text-[#102F27] truncate">
-                              {service.title}
-                            </p>
-                            <p className="text-xs text-[#64877C] truncate">
-                              {service.description}
-                            </p>
-                          </div>
-                        </div>
-                        <ArrowRight
-                          className="w-4 h-4 text-[#078F68] shrink-0"
-                          aria-hidden="true"
-                        />
+                        <span>Ver y crear mis pedidos</span>
+                        <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
-                    );
-                  })}
+                    </div>
+                  </div>
+
+                  {/* Services Quick Access */}
+                  <div className="space-y-2.5">
+                    <h2 className="font-display text-sm font-bold text-[#102F27]">
+                      Operaciones de demostración
+                    </h2>
+                    <div className="grid grid-cols-1 gap-2.5">
+                      {SERVICE_OPTIONS.map((service) => {
+                        const Icon = service.id === 'comprar' ? Store : Package;
+                        return (
+                          <button
+                            key={service.id}
+                            type="button"
+                            onClick={() => onSelectTab('pedidos')}
+                            className="w-full text-left rounded-2xl bg-white border border-[#DCECE5] hover:border-[#078F68]/50 p-4 flex items-center justify-between gap-3 transition-colors cursor-pointer"
+                          >
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="w-11 h-11 rounded-xl bg-[#EAF8F2] text-[#078F68] flex items-center justify-center shrink-0">
+                                <Icon className="w-5 h-5" aria-hidden="true" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="font-display text-sm font-bold text-[#102F27] truncate">
+                                  {service.title}
+                                </p>
+                                <p className="text-xs text-[#64877C] truncate">
+                                  {service.description}
+                                </p>
+                              </div>
+                            </div>
+                            <ArrowRight
+                              className="w-4 h-4 text-[#078F68] shrink-0"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              )}
+            </>
           )}
 
           {/* TAB 2: PEDIDOS (ClientOrdersView vs DriverOrdersView) */}
@@ -237,7 +495,19 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                   onAdvanceOrder={onAdvanceOrder}
                   onOpenOrderInMap={(orderId) => {
                     onSelectMapOrder(orderId);
-                    onSelectTab('mapa');
+                    onReviewOrder(orderId);
+                  }}
+                  onStartNavigation={(orderId) => {
+                    const target = state.orders.find((o) => o.id === orderId);
+                    if (target) {
+                      onStartNavigation(
+                        target,
+                        target.status === 'recogido' ||
+                          target.status === 'en_camino_cliente'
+                          ? 'dropoff'
+                          : 'pickup'
+                      );
+                    }
                   }}
                 />
               ) : (
@@ -247,84 +517,34 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                   onCancelOrder={onCancelOrder}
                   onOpenOrderInMap={(orderId) => {
                     onSelectMapOrder(orderId);
-                    onSelectTab('mapa');
+                  }}
+                  onStartNavigation={(orderId) => {
+                    const target = state.orders.find((o) => o.id === orderId);
+                    if (target) {
+                      onStartNavigation(target, 'dropoff');
+                    }
                   }}
                 />
               )}
             </>
           )}
 
-          {/* TAB 3: MAPA CON MAPBOX 3D */}
+          {/* REUSABLE MAPBOX 3D MODULE (Preserved in codebase for future reuse) */}
           {state.activeTab === 'mapa' && currentMapOrder && (
             <div className="space-y-3.5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="font-display text-xl font-bold text-[#102F27]">
-                    Mapa 3D Mapbox (Puno)
-                  </h1>
-                  <p className="text-xs text-[#64877C]">
-                    Pedido {currentMapOrder.id} ·{' '}
-                    {ORDER_STATUS_LABELS[currentMapOrder.status]}
-                  </p>
-                </div>
-                <span className="text-xs font-semibold text-[#078F68] tabular-nums">
-                  {formatPenCurrency(currentMapOrder.totalAmount)}
-                </span>
-              </div>
-
-              {/* Interactive Mapbox GL JS 3D Map */}
-              <MapboxView activeOrder={currentMapOrder} />
-
-              <div className="space-y-2">
-                <p className="text-xs font-semibold text-[#064B3C]">
-                  Seleccionar pedido en el mapa
-                </p>
-                <div className="grid grid-cols-1 gap-2">
-                  {state.orders.map((order) => {
-                    const isSelected = order.id === currentMapOrder.id;
-                    return (
-                      <button
-                        key={order.id}
-                        type="button"
-                        onClick={() => onSelectMapOrder(order.id)}
-                        className={`w-full text-left p-3.5 rounded-2xl border transition-colors flex items-center justify-between gap-3 cursor-pointer ${
-                          isSelected
-                            ? 'bg-[#078F68] text-white border-[#078F68]'
-                            : 'bg-white text-[#102F27] border-[#DCECE5] hover:bg-[#EAF8F2]/60'
-                        }`}
-                      >
-                        <div className="min-w-0">
-                          <p
-                            className={`text-xs font-bold truncate ${
-                              isSelected ? 'text-white' : 'text-[#102F27]'
-                            }`}
-                          >
-                            {order.id} · {ORDER_STATUS_LABELS[order.status]}
-                          </p>
-                          <p
-                            className={`text-[11px] truncate mt-0.5 ${
-                              isSelected ? 'text-[#EAF8F2]' : 'text-[#64877C]'
-                            }`}
-                          >
-                            {order.pickup.address} → {order.dropoff.address}
-                          </p>
-                        </div>
-                        <span
-                          className={`text-xs font-semibold tabular-nums shrink-0 ${
-                            isSelected ? 'text-white' : 'text-[#078F68]'
-                          }`}
-                        >
-                          {formatPenCurrency(order.totalAmount)}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              <MapboxView
+                activeOrder={currentMapOrder}
+                onStartNavigation={(ord) =>
+                  onStartNavigation(
+                    ord,
+                    ord.status === 'en_camino_cliente' ? 'dropoff' : 'pickup'
+                  )
+                }
+              />
             </div>
           )}
 
-          {/* TAB 4: PERFIL */}
+          {/* TAB 3: PERFIL */}
           {state.activeTab === 'perfil' && (
             <div className="space-y-4">
               <div>
@@ -421,7 +641,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
         </div>
       </main>
 
-      {/* FIXED BOTTOM NAVIGATION BAR */}
+      {/* FIXED BOTTOM NAVIGATION BAR (3 TABS: INICIO, PEDIDOS, PERFIL) */}
       <MainBottomNavigation
         activeTab={state.activeTab}
         onSelectTab={onSelectTab}

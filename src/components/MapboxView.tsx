@@ -48,12 +48,14 @@ interface MapboxViewProps {
   activeOrder?: DemoOrder;
   customMarkers?: MapMarkerPoint[];
   className?: string;
+  onStartNavigation?: (order: DemoOrder) => void;
 }
 
 export const MapboxView: React.FC<MapboxViewProps> = ({
   activeOrder,
   customMarkers = [],
   className = '',
+  onStartNavigation,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
@@ -940,6 +942,19 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
                 Probar en Puno
               </button>
             </div>
+          </div>
+        )}
+
+        {onStartNavigation && activeOrder && (
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={() => onStartNavigation(activeOrder)}
+              className="w-full h-12 rounded-2xl bg-[#0091FF] hover:bg-[#0077D4] active:scale-98 text-white font-display text-xs font-bold inline-flex items-center justify-center gap-2 shadow-lg shadow-[#0091FF]/25 transition-all cursor-pointer"
+            >
+              <Navigation className="w-4 h-4" />
+              <span>Iniciar navegación GPS 3D en pantalla completa</span>
+            </button>
           </div>
         )}
       </div>

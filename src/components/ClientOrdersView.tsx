@@ -8,6 +8,7 @@ import {
   ChevronUp,
   Store,
   Package,
+  Navigation,
 } from 'lucide-react';
 import {
   DemoOrder,
@@ -27,6 +28,7 @@ interface ClientOrdersViewProps {
   };
   onCancelOrder: (orderId: string) => { success: boolean; error?: string };
   onOpenOrderInMap: (orderId: string) => void;
+  onStartNavigation?: (orderId: string) => void;
 }
 
 export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
@@ -34,6 +36,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
   onCreateOrder,
   onCancelOrder,
   onOpenOrderInMap,
+  onStartNavigation,
 }) => {
   const [serviceType, setServiceType] = useState<OrderServiceType>(
     'encargo_personalizado'
@@ -510,13 +513,18 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                 </button>
 
                 <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => onOpenOrderInMap(order.id)}
-                    className="h-8 px-3 rounded-full bg-[#EAF8F2] hover:bg-[#DCECE5] text-[#064B3C] text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-                  >
-                    Ver ruta
-                  </button>
+                  {onStartNavigation &&
+                    order.status !== 'cancelado' &&
+                    order.status !== 'entregado' && (
+                      <button
+                        type="button"
+                        onClick={() => onStartNavigation(order.id)}
+                        className="h-8 px-3 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white text-xs font-bold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 shadow-xs cursor-pointer"
+                      >
+                        <Navigation className="w-3 h-3" aria-hidden="true" />
+                        <span>Seguimiento 3D</span>
+                      </button>
+                    )}
 
                   {isCancellable && (
                     <button

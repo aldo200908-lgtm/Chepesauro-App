@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Package, MapPin, User } from 'lucide-react';
+import { Home, Package, User } from 'lucide-react';
 import { AppTab } from '../utils/onboarding';
 
 interface MainBottomNavigationProps {
@@ -15,7 +15,6 @@ const NAV_ITEMS: {
 }[] = [
   { id: 'inicio', label: 'Inicio', Icon: Home },
   { id: 'pedidos', label: 'Pedidos', Icon: Package },
-  { id: 'mapa', label: 'Mapa', Icon: MapPin },
   { id: 'perfil', label: 'Perfil', Icon: User },
 ];
 
@@ -29,7 +28,7 @@ export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
       aria-label="Navegación principal inferior"
       className="fixed bottom-0 left-0 right-0 w-full z-40 bg-[#FFFFFF]/95 backdrop-blur-md border-t border-[#DCECE5] bottom-nav-safe"
     >
-      <div className="max-w-lg mx-auto grid grid-cols-4 items-center h-16 px-2">
+      <div className="max-w-lg mx-auto grid grid-cols-3 items-center h-16 px-2">
         {NAV_ITEMS.map(({ id, label, Icon }) => {
           const isActive = activeTab === id;
           return (

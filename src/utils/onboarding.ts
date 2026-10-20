@@ -242,7 +242,7 @@ export function activateDemoMotorizadoSession(
     onboardingCompleted: true,
     viewMode: 'main_app',
     step: 'confirmed',
-    activeTab: 'pedidos',
+    activeTab: 'inicio',
   };
 }
 

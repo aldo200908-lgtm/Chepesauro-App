@@ -36,10 +36,18 @@ import { WelcomeScreen } from './components/WelcomeScreen';
 import { ServicesIntroScreen } from './components/ServicesIntroScreen';
 import { ProfileSelectionScreen } from './components/ProfileSelectionScreen';
 import { MainAppLayout } from './components/MainAppLayout';
+import { DriverOrderReviewScreen } from './components/DriverOrderReviewScreen';
+import { GPSNavigationView } from './components/GPSNavigationView';
 
 const ONBOARDING_STORAGE_KEY = 'verdego_onboarding_v2';
 
 export default function App() {
+  const [reviewingOrderId, setReviewingOrderId] = useState<string | null>(null);
+  const [activeNavigationSession, setActiveNavigationSession] = useState<{
+    order: (typeof INITIAL_DEMO_ORDERS)[number];
+    targetType: 'pickup' | 'dropoff';
+  } | null>(null);
+
   const [state, setState] = useState(() => {
     const search = typeof window !== 'undefined' ? window.location.search : '';
     const params = new URLSearchParams(search);
@@ -150,10 +158,13 @@ export default function App() {
     } catch {
       // Ignore
     }
+    setReviewingOrderId(null);
+    setActiveNavigationSession(null);
     setState((prev) => resetOnboardingSelection(prev));
   };
 
   const handleSwitchRoleInApp = (role: UserRole) => {
+    setReviewingOrderId(null);
     if (role === 'motorizado' && !state.motorizadoVerified) {
       setState((prev) => ({
         ...prev,
@@ -166,7 +177,7 @@ export default function App() {
       ...prev,
       selectedRole: role,
       viewMode: 'main_app',
-      activeTab: 'pedidos',
+      activeTab: role === 'motorizado' ? 'inicio' : 'pedidos',
     }));
   };
 
@@ -209,6 +220,8 @@ export default function App() {
       orders: res.orders,
       activeOrderId: orderId,
     }));
+    // Automatically take the motorizado to the Order Details Review Screen
+    setReviewingOrderId(orderId);
     return { success: true };
   };
 
@@ -229,8 +242,67 @@ export default function App() {
     return { success: true };
   };
 
+  // Advance order through the 2-stage navigation lifecycle
+  const handleAdvanceNavigationStage = (
+    orderId: string,
+    nextStage?: 'pickup' | 'dropoff'
+  ) => {
+    let updatedOrders = state.orders;
+    const currentOrder = updatedOrders.find((o) => o.id === orderId);
+    if (!currentOrder) return;
+
+    if (nextStage === 'dropoff' && currentOrder.status !== 'en_camino_cliente') {
+      // Advance through pickup steps up to 'en_camino_cliente'
+      let stepOrder = currentOrder;
+      while (
+        stepOrder &&
+        stepOrder.status !== 'en_camino_cliente' &&
+        stepOrder.status !== 'entregado'
+      ) {
+        const res = advanceDriverOrderStatus(
+          updatedOrders,
+          orderId,
+          state.activeDriver.id
+        );
+        if (!res.success) break;
+        updatedOrders = res.orders;
+        stepOrder = updatedOrders.find((o) => o.id === orderId)!;
+      }
+    } else {
+      // Final stage completion -> 'entregado'
+      let stepOrder = currentOrder;
+      while (stepOrder && stepOrder.status !== 'entregado') {
+        const res = advanceDriverOrderStatus(
+          updatedOrders,
+          orderId,
+          state.activeDriver.id
+        );
+        if (!res.success) break;
+        updatedOrders = res.orders;
+        stepOrder = updatedOrders.find((o) => o.id === orderId)!;
+      }
+      setReviewingOrderId(null);
+    }
+
+    setState((prev) => ({
+      ...prev,
+      orders: updatedOrders,
+      activeOrderId: orderId,
+    }));
+
+    const latestOrder = updatedOrders.find((o) => o.id === orderId);
+    if (latestOrder && latestOrder.status !== 'entregado') {
+      setActiveNavigationSession({
+        order: latestOrder,
+        targetType: nextStage || 'dropoff',
+      });
+    }
+  };
+
   const handleResetDemoOrders = () => {
     savePersistedOrders(INITIAL_DEMO_ORDERS);
+    setReviewingOrderId(null);
+    setActiveNavigationSession(null);
     setState((prev) => ({
       ...prev,
       orders: INITIAL_DEMO_ORDERS,
@@ -267,7 +339,7 @@ export default function App() {
     );
   }
 
-  // 2. DEMO MOTORIZADO ACCESS GATE (Clearly labeled as simulation mode, separate from future server auth)
+  // 2. DEMO MOTORIZADO ACCESS GATE
   if (state.viewMode === 'motorizado_auth') {
     return (
       <div
@@ -302,8 +374,8 @@ export default function App() {
                 Acceso de demostración para motorizado
               </h1>
               <p className="text-sm text-[#64877C] leading-relaxed">
-                Selecciona un perfil de motorizado de prueba para simular la
-                recepción, asignación exclusiva y entrega de pedidos.
+                Selecciona un perfil de motorizado de prueba para escoger pedidos
+                en el panel de inicio, revisar sus datos y navegar en 3D.
               </p>
             </div>
 
@@ -360,9 +432,8 @@ export default function App() {
                   aria-hidden="true"
                 />
                 <span>
-                  Modo de demostración local: esta selección simula la sesión del
-                  repartidor en el navegador y no sustituye la autenticación del
-                  servidor en producción.
+                  Modo de demostración local: al entrar verás en Inicio los
+                  pedidos disponibles de agentes y tiendas para aceptar y navegar.
                 </span>
               </div>
             </form>
@@ -374,7 +445,7 @@ export default function App() {
               form="motorizado-auth-form"
               className="w-full h-14 px-6 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white font-display text-base font-semibold inline-flex items-center justify-center gap-2.5 shadow-md shadow-[#078F68]/20 transition-all cursor-pointer"
             >
-              <span>Entrar al panel de motorizado (Demo)</span>
+              <span>Entrar al panel de inicio de motorizado</span>
               <ArrowRight className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
@@ -383,7 +454,43 @@ export default function App() {
     );
   }
 
-  // 3. MAIN APPLICATION LAYOUT
+  // 3. FULL-SCREEN IMMERSIVE 3D NAVIGATION (GOOGLE MAPS HUD + GTA V ROUTE LINE)
+  if (activeNavigationSession) {
+    const liveOrder =
+      state.orders.find((o) => o.id === activeNavigationSession.order.id) ||
+      activeNavigationSession.order;
+
+    return (
+      <GPSNavigationView
+        order={liveOrder}
+        targetType={activeNavigationSession.targetType}
+        onExit={() => setActiveNavigationSession(null)}
+        onAdvanceOrderStatus={handleAdvanceNavigationStage}
+      />
+    );
+  }
+
+  // 4. DEDICATED ORDER DETAILS REVIEW SCREEN (OPENED AUTOMATICALLY AFTER ACCEPTING AN ORDER)
+  const reviewingOrder = reviewingOrderId
+    ? state.orders.find((o) => o.id === reviewingOrderId) || null
+    : null;
+
+  if (reviewingOrder) {
+    return (
+      <DriverOrderReviewScreen
+        order={reviewingOrder}
+        onBack={() => setReviewingOrderId(null)}
+        onContinueToNavigation={(order, initialStage) => {
+          setActiveNavigationSession({
+            order,
+            targetType: initialStage,
+          });
+        }}
+      />
+    );
+  }
+
+  // 5. MAIN APPLICATION LAYOUT (3 TABS: INICIO, PEDIDOS, PERFIL)
   return (
     <MainAppLayout
       state={state}
@@ -398,6 +505,10 @@ export default function App() {
       onAdvanceOrder={handleAdvanceOrder}
       onSelectMapOrder={(orderId: string) =>
         setState((prev) => ({ ...prev, activeOrderId: orderId }))
+      }
+      onReviewOrder={(orderId: string) => setReviewingOrderId(orderId)}
+      onStartNavigation={(order, targetType = 'pickup') =>
+        setActiveNavigationSession({ order, targetType })
       }
       onResetDemoOrders={handleResetDemoOrders}
       onLogout={handleLogout}

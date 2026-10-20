@@ -164,16 +164,19 @@ export const INITIAL_DEMO_ORDERS: DemoOrder[] = [
   {
     id: 'VG-1001',
     type: 'encargo_personalizado',
-    customDescription: 'Recoger sobre sellado con documentos contables y llaves.',
+    businessName: 'Agente Multired & KasNet Laykakota',
+    customDescription: 'Recoger sobre sellado con documentos contables y llaves de oficina.',
     pickup: {
-      address: 'Av. Principal 420, Centro',
-      referencePoint: 'Recepción del edificio gris, piso 1',
+      address: 'Jr. Carabaya 350, Mercado Laykakota, Puno',
+      referencePoint: 'Módulo Agente Puerta 2 del mercado',
+      coordinates: [-70.0235, -15.8465],
     },
     dropoff: {
-      address: 'Calle Los Pinos 185, Miraflores',
-      referencePoint: 'Casa con portón blanco frente al parque',
+      address: 'Jr. Deustua 458, Plaza Mayor, Puno',
+      referencePoint: 'Edificio colonial frente a la Catedral',
+      coordinates: [-70.0282, -15.8402],
     },
-    instructions: 'Preguntar por la Sra. Elena al recoger. Llamar al llegar al destino.',
+    instructions: 'Preguntar por la Sra. Elena en el agente al recoger. Llamar al llegar al destino.',
     productsCost: 0,
     demoDeliveryFee: 7.5,
     totalAmount: 7.5,
@@ -187,7 +190,7 @@ export const INITIAL_DEMO_ORDERS: DemoOrder[] = [
         status: 'disponible',
         timestamp: '2026-10-17T16:30:00.000Z',
         actor: 'cliente',
-        note: 'Encargo personalizado creado y disponible para motorizados.',
+        note: 'Encargo de agente creado y disponible para motorizados.',
       },
     ],
   },
@@ -200,12 +203,14 @@ export const INITIAL_DEMO_ORDERS: DemoOrder[] = [
       { name: 'Empanada de queso horneada', quantity: 2, unitPrice: 6.5 },
     ],
     pickup: {
-      address: 'Av. Las Palmas 890, San Isidro',
-      referencePoint: 'Mostrador de entregas rápidas',
+      address: 'Jr. Deustua 458, Plaza Mayor, Puno',
+      referencePoint: 'Mostrador Panadería San Martín frente a la Catedral',
+      coordinates: [-70.0282, -15.8402],
     },
     dropoff: {
-      address: 'Jr. Alcanfores 240, Surco',
-      referencePoint: 'Departamento 302, timbre 302',
+      address: 'Av. Titicaca s/n, Puerto Lacustre, Puno',
+      referencePoint: 'Muelle turístico principal del Lago Titicaca',
+      coordinates: [-70.0165, -15.8368],
     },
     instructions: 'Pedir boleta simple en el local y revisar que el café/pan esté bien cerrado.',
     productsCost: 27.0,
@@ -228,6 +233,75 @@ export const INITIAL_DEMO_ORDERS: DemoOrder[] = [
         timestamp: '2026-10-17T16:22:00.000Z',
         actor: 'motorizado',
         note: `Asignado a ${DEMO_DRIVERS[0].name}.`,
+      },
+    ],
+  },
+  {
+    id: 'VG-1003',
+    type: 'compra_negocio',
+    businessName: 'Pollería & Grill El Rancho Puno',
+    items: [
+      { name: '1/2 Pollo a la brasa con papas nativas y ensalada', quantity: 1, unitPrice: 34.0 },
+      { name: 'Chicha morada artesanal 1 litro', quantity: 1, unitPrice: 10.0 },
+    ],
+    pickup: {
+      address: 'Jr. Lima 415, Paseo Peatonal, Puno',
+      referencePoint: 'Segundo piso frente al Banco de la Nación',
+      coordinates: [-70.0274, -15.8384],
+    },
+    dropoff: {
+      address: 'Av. El Sol 890, Barrio Porteño, Puno',
+      referencePoint: 'Condominio Las Torres, Puerta B',
+      coordinates: [-70.0218, -15.8342],
+    },
+    instructions: 'Solicitar cremas adicionales y mantener el pedido térmico.',
+    productsCost: 44.0,
+    demoDeliveryFee: 6.5,
+    totalAmount: 50.5,
+    paymentMethod: 'Yape / Plin (Demo)',
+    status: 'disponible',
+    assignedDriver: null,
+    createdAt: '2026-10-17T16:40:00.000Z',
+    updatedAt: '2026-10-17T16:40:00.000Z',
+    statusHistory: [
+      {
+        status: 'disponible',
+        timestamp: '2026-10-17T16:40:00.000Z',
+        actor: 'cliente',
+        note: 'Pedido de restaurante disponible para recojo inmediato.',
+      },
+    ],
+  },
+  {
+    id: 'VG-1004',
+    type: 'encargo_personalizado',
+    businessName: 'Agente BCP Parque Pino',
+    customDescription: 'Caja pequeña con repuestos de laptop y guía de remisión sellada.',
+    pickup: {
+      address: 'Jr. Tarapacá 280, Parque Pino, Puno',
+      referencePoint: 'Agente BCP esquina con Calle Lima, frente al Colegio San Carlos',
+      coordinates: [-70.0268, -15.8369],
+    },
+    dropoff: {
+      address: 'Av. La Torre 540, Estación Central, Puno',
+      referencePoint: 'Oficina de recepción frente a la estación de trenes',
+      coordinates: [-70.0241, -15.8348],
+    },
+    instructions: 'Recoger con el código #4821 en ventanilla del agente y entregar en recepción.',
+    productsCost: 0,
+    demoDeliveryFee: 8.0,
+    totalAmount: 8.0,
+    paymentMethod: 'Efectivo (Demo)',
+    status: 'disponible',
+    assignedDriver: null,
+    createdAt: '2026-10-17T16:45:00.000Z',
+    updatedAt: '2026-10-17T16:45:00.000Z',
+    statusHistory: [
+      {
+        status: 'disponible',
+        timestamp: '2026-10-17T16:45:00.000Z',
+        actor: 'cliente',
+        note: 'Encargo de agente registrado para entrega rápida.',
       },
     ],
   },
@@ -526,7 +600,30 @@ export function loadPersistedOrders(): DemoOrder[] {
     if (!raw) return INITIAL_DEMO_ORDERS;
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed;
+      // Enrich demo orders with coordinates and businessName if saved in previous sessions
+      const enriched = parsed.map((o: DemoOrder) => {
+        const initialMatch = INITIAL_DEMO_ORDERS.find((init) => init.id === o.id);
+        if (initialMatch) {
+          return {
+            ...o,
+            businessName: o.businessName || initialMatch.businessName,
+            pickup: {
+              ...o.pickup,
+              coordinates: o.pickup?.coordinates || initialMatch.pickup.coordinates,
+            },
+            dropoff: {
+              ...o.dropoff,
+              coordinates: o.dropoff?.coordinates || initialMatch.dropoff.coordinates,
+            },
+          };
+        }
+        return o;
+      });
+      const existingIds = new Set(enriched.map((o: DemoOrder) => o.id));
+      const missingInitials = INITIAL_DEMO_ORDERS.filter(
+        (init) => !existingIds.has(init.id)
+      );
+      return [...enriched, ...missingInitials];
     }
   } catch {
     // Ignore storage read errors

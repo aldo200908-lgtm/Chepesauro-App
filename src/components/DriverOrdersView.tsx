@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Clock,
   Info,
+  Navigation,
 } from 'lucide-react';
 import {
   DemoOrder,
@@ -26,6 +27,7 @@ interface DriverOrdersViewProps {
   onAcceptOrder: (orderId: string) => { success: boolean; error?: string };
   onAdvanceOrder: (orderId: string) => { success: boolean; error?: string };
   onOpenOrderInMap: (orderId: string) => void;
+  onStartNavigation?: (orderId: string) => void;
 }
 
 export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
@@ -35,6 +37,7 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
   onAcceptOrder,
   onAdvanceOrder,
   onOpenOrderInMap,
+  onStartNavigation,
 }) => {
   const [statusMessage, setStatusMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -324,14 +327,27 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
                   </div>
 
                   <div className="pt-2.5 border-t border-[#DCECE5] flex flex-wrap items-center justify-between gap-2">
-                    <button
-                      type="button"
-                      onClick={() => onOpenOrderInMap(order.id)}
-                      className="h-9 px-3.5 rounded-full bg-[#EAF8F2] hover:bg-[#DCECE5] text-[#064B3C] text-xs font-semibold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-                    >
-                      <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
-                      <span>Ver ruta</span>
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => onOpenOrderInMap(order.id)}
+                        className="h-9 px-3 rounded-full bg-[#EAF8F2] hover:bg-[#DCECE5] text-[#064B3C] text-xs font-semibold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                      >
+                        <Info className="w-3.5 h-3.5" aria-hidden="true" />
+                        <span>Ver datos</span>
+                      </button>
+
+                      {onStartNavigation && (
+                        <button
+                          type="button"
+                          onClick={() => onStartNavigation(order.id)}
+                          className="h-9 px-3.5 rounded-full bg-[#9333EA] hover:bg-[#7E22CE] text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 shadow-xs cursor-pointer"
+                        >
+                          <Navigation className="w-3.5 h-3.5" aria-hidden="true" />
+                          <span>Navegar 3D</span>
+                        </button>
+                      )}
+                    </div>
 
                     {nextStatus && actionLabel ? (
                       <button
