@@ -46,6 +46,7 @@ import { ProfileSelectionScreen } from './components/ProfileSelectionScreen';
 import { MainAppLayout } from './components/MainAppLayout';
 import { DriverOrderReviewScreen } from './components/DriverOrderReviewScreen';
 import { GPSNavigationView } from './components/GPSNavigationView';
+import logoUrl from './assets/chepesaurio-logo.png';
 
 const ONBOARDING_STORAGE_KEY = 'verdego_onboarding_v2';
 
@@ -353,7 +354,7 @@ export default function App() {
     return (
       <div
         data-testid="motorizado-auth-screen"
-        className="app-viewport vg-dark-canvas flex flex-col justify-between text-[#F2F5F3] select-none px-6 relative overflow-hidden"
+        className="app-viewport vg-dark-canvas flex flex-col justify-between text-[#F6F3E6] select-none px-6 relative overflow-hidden"
       >
         <header className="relative z-10 shrink-0 onboarding-safe-top">
           <div className="max-w-md mx-auto flex items-center justify-between min-h-[52px]">
@@ -361,16 +362,16 @@ export default function App() {
               type="button"
               onClick={handlePrevStep}
               aria-label="Volver a elegir perfil"
-              className="w-11 h-11 -ml-2 rounded-xl bg-transparent hover:bg-white/[0.04] active:bg-white/[0.08] text-[#F2F5F3] flex items-center justify-center transition-colors cursor-pointer"
+              className="w-11 h-11 -ml-2 rounded-xl bg-transparent hover:bg-white/[0.04] active:bg-white/[0.08] text-[#F6F3E6] flex items-center justify-center transition-colors cursor-pointer"
             >
               <ArrowLeft size={18} weight="regular" aria-hidden="true" />
             </button>
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[#10B981] text-[#06110C] flex items-center justify-center font-display font-extrabold text-xs tracking-tight">
-                V
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                <img src={logoUrl} alt="" className="w-7 h-7 object-contain" />
               </div>
-              <span className="font-display text-[17px] font-semibold tracking-tight text-[#F2F5F3]">
-                VerdeGo
+              <span className="font-display text-[17px] font-semibold tracking-tight text-[#F6F3E6]">
+                Chepesaurio
               </span>
             </div>
             <div className="w-11" />
@@ -386,12 +387,12 @@ export default function App() {
           >
             <div className="space-y-2.5 text-left">
               <h1
-                className="font-display text-[28px] sm:text-[32px] font-bold text-[#F2F5F3] tracking-tight leading-[1.15]"
+                className="font-display text-[28px] sm:text-[32px] font-bold text-[#F6F3E6] tracking-tight leading-[1.15]"
                 style={{ textWrap: 'balance' }}
               >
                 Elige tu perfil de motorizado
               </h1>
-              <p className="text-[15px] text-[#8E9893] leading-relaxed">
+              <p className="text-[15px] text-[#A9BDB0] leading-relaxed">
                 Selecciona una unidad de demostración para recibir pedidos y navegar en 3D.
               </p>
             </div>
@@ -411,16 +412,16 @@ export default function App() {
                     onClick={() => setSelectedDemoDriver(drv)}
                     className={`w-full text-left p-5 rounded-2xl transition-colors flex items-center justify-between gap-4 cursor-pointer ${
                       isSelected
-                        ? 'bg-[#121D18] border border-[#22C58B]/70'
-                        : 'vg-surface-flat hover:bg-[#151B19] hover:border-white/12 text-[#F2F5F3]'
+                        ? 'bg-[#121D18] border border-[#86C77A]/70'
+                        : 'vg-surface-flat hover:bg-[#151B19] hover:border-white/12 text-[#F6F3E6]'
                     }`}
                   >
                     <div className="flex items-center gap-4 min-w-0">
                       <div
                         className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
                           isSelected
-                            ? 'bg-[#22C58B] text-[#06110C]'
-                            : 'bg-[#161C1A] text-[#22C58B]'
+                            ? 'bg-[#86C77A] text-[#06110C]'
+                            : 'bg-[#161C1A] text-[#86C77A]'
                         }`}
                       >
                         <Motorcycle
@@ -430,10 +431,10 @@ export default function App() {
                         />
                       </div>
                       <div className="min-w-0">
-                        <p className="font-display text-[16px] font-semibold truncate text-[#F2F5F3]">
+                        <p className="font-display text-[16px] font-semibold truncate text-[#F6F3E6]">
                           {drv.name}
                         </p>
-                        <p className="text-xs font-mono tabular-nums mt-0.5 text-[#8E9893]">
+                        <p className="text-xs font-mono tabular-nums mt-0.5 text-[#A9BDB0]">
                           {drv.vehiclePlate} · {drv.id}
                         </p>
                       </div>
@@ -442,7 +443,7 @@ export default function App() {
                       <CheckCircle
                         size={20}
                         weight="fill"
-                        className="shrink-0 text-[#22C58B]"
+                        className="shrink-0 text-[#86C77A]"
                         aria-hidden="true"
                       />
                     )}

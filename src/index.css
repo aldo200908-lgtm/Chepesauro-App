@@ -3,51 +3,63 @@
 @layer base {
   :root {
     /* =====================================================================
-     * LAYER 1: PRIMITIVE TOKENS — ESPRESSO & CARAMEL
+     * LAYER 1: PRIMITIVE TOKENS — CHEPESAURIO (colores extraídos del logo)
+     * Verde dino #4F9A45 · Rojo mochila #D2362A · Crema panza #F6E7C3
      * ===================================================================== */
     --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 
-    /* Espresso surfaces (dark roast, warm — never pure black) */
-    --primitive-espresso-950: #1A0E07;
-    --primitive-espresso-900: #24140A;
-    --primitive-espresso-850: #2E1A0E;
-    --primitive-espresso-800: #3B2212;
-    --primitive-roast-600: #6A4328;
+    /* Verde (cuerpo del dinosaurio) */
+    --brand-green-100: #E4F0DF;
+    --brand-green-300: #A9D99E;
+    --brand-green-400: #86C77A;
+    --brand-green-500: #4F9A45;
+    --brand-green-600: #3D8438;
+    --brand-green-700: #2F6B30;
+    --brand-green-800: #21402B;
+    --brand-green-900: #12251A;
+    --brand-green-950: #0C1A11;
 
-    /* Caramel — reserved for primary action, selected state, price */
-    --primitive-caramel-300: #E0BC91;
-    --primitive-caramel-400: #D4A574;
-    --primitive-caramel-500: #C8995F;
-    --primitive-caramel-600: #B0824B;
+    /* Rojo (mochila y letras DELIVERY) — acción principal */
+    --brand-red-400: #E25A4E;
+    --brand-red-500: #D2362A;
+    --brand-red-600: #B42B21;
 
-    /* Crema neutrals */
-    --primitive-cream: #F7F1EA;
-    --primitive-tan-300: #D9C9B8;
-    --primitive-tan-400: #B3A090;
-    --primitive-tan-600: #8A7766;
+    /* Crema (panza) y neutros */
+    --brand-cream: #F6E7C3;
+    --brand-paper: #FBFCF7;
+    --brand-mist: #F2F5EA;
+    --brand-line: #DCE5D5;
+    --brand-ink: #131A14;
+    --brand-ink-soft: #5F7364;
 
-    /* Semantic status colors */
     --primitive-amber-400: #F59E0B;
-    --primitive-red-400: #EF4444;
+    --primitive-red-400: var(--brand-red-400);
 
     /* =====================================================================
      * LAYER 2: SEMANTIC TOKENS (nombres --vg-* sin cambios)
      * ===================================================================== */
-    --vg-bg-canvas: var(--primitive-espresso-950);
-    --vg-bg-surface: var(--primitive-espresso-900);
-    --vg-bg-elevated: var(--primitive-espresso-850);
+    --vg-bg-canvas: var(--brand-green-950);
+    --vg-bg-surface: var(--brand-green-900);
+    --vg-bg-elevated: #1A3322;
 
-    --vg-border-subtle: rgba(247, 241, 234, 0.07);
-    --vg-border-default: rgba(247, 241, 234, 0.12);
-    --vg-border-active: rgba(200, 153, 95, 0.65);
+    --vg-border-subtle: rgba(246, 243, 230, 0.07);
+    --vg-border-default: rgba(246, 243, 230, 0.12);
+    --vg-border-active: rgba(134, 199, 122, 0.65);
 
-    --vg-brand-primary: var(--primitive-caramel-500);
-    --vg-text-primary: var(--primitive-cream);
-    --vg-text-secondary: var(--primitive-tan-400);
-    --vg-text-muted: var(--primitive-tan-600);
-    --vg-on-brand: #2A1608;
+    --vg-brand-primary: var(--brand-red-500);
+    --vg-text-primary: #F6F3E6;
+    --vg-text-secondary: #A9BDB0;
+    --vg-text-muted: #84998B;
+    --vg-on-brand: #FFFFFF;
+
+    /* Superficies claras (estilo de la referencia: pantalla blanca + tarjeta oscura) */
+    --vg-light-bg: var(--brand-paper);
+    --vg-light-surface: #FFFFFF;
+    --vg-light-chip: var(--brand-mist);
+    --vg-light-text: var(--brand-ink);
+    --vg-light-text-soft: var(--brand-ink-soft);
 
     /* =====================================================================
      * LAYER 3: COMPONENT TOKENS
@@ -59,8 +71,8 @@
     --radius-sheet: 36px;
     --radius-pill: 999px;
 
-    --gradient-roast: linear-gradient(165deg, #6A4328 0%, #3B2212 55%, #26150B 100%);
-    --shadow-card: 0 18px 40px -16px rgba(0, 0, 0, 0.55);
+    --gradient-roast: linear-gradient(165deg, #2E6B3A 0%, #21402B 55%, #12251A 100%);
+    --shadow-card: 0 18px 40px -16px rgba(12, 26, 17, 0.55);
 
     /* Motion */
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -70,17 +82,30 @@
      * LEGACY ALIASES — evitan romper componentes que aún usen los nombres
      * viejos. Se pueden borrar cuando ya no haya referencias.
      * ===================================================================== */
-    --primitive-carbon-950: var(--primitive-espresso-950);
-    --primitive-carbon-900: var(--primitive-espresso-900);
-    --primitive-carbon-850: var(--primitive-espresso-850);
-    --primitive-carbon-800: var(--primitive-espresso-800);
-    --primitive-emerald-400: var(--primitive-caramel-400);
-    --primitive-emerald-500: var(--primitive-caramel-500);
-    --primitive-emerald-600: var(--primitive-caramel-600);
+    --primitive-espresso-950: var(--brand-green-950);
+    --primitive-espresso-900: var(--brand-green-900);
+    --primitive-espresso-850: #1A3322;
+    --primitive-espresso-800: var(--brand-green-800);
+    --primitive-roast-600: #2E6B3A;
+    --primitive-caramel-300: var(--brand-green-300);
+    --primitive-caramel-400: var(--brand-green-400);
+    --primitive-caramel-500: #6DB35F;
+    --primitive-caramel-600: var(--brand-green-500);
+    --primitive-cream: #F6F3E6;
+    --primitive-tan-300: #CFE0D3;
+    --primitive-tan-400: #A9BDB0;
+    --primitive-tan-600: #84998B;
+    --primitive-carbon-950: var(--brand-green-950);
+    --primitive-carbon-900: var(--brand-green-900);
+    --primitive-carbon-850: #1A3322;
+    --primitive-carbon-800: var(--brand-green-800);
+    --primitive-emerald-400: var(--brand-green-400);
+    --primitive-emerald-500: var(--brand-green-500);
+    --primitive-emerald-600: var(--brand-green-600);
     --primitive-white-soft: var(--primitive-cream);
-    --primitive-gray-300: var(--primitive-tan-300);
-    --primitive-gray-400: var(--primitive-tan-400);
-    --primitive-gray-600: var(--primitive-tan-600);
+    --primitive-gray-300: #CFE0D3;
+    --primitive-gray-400: #A9BDB0;
+    --primitive-gray-600: #84998B;
   }
 
   html,
@@ -106,7 +131,7 @@
 
   /* Foco visible para teclado */
   :focus-visible {
-    outline: 2px solid var(--primitive-caramel-400);
+    outline: 2px solid var(--brand-green-400);
     outline-offset: 3px;
   }
 }
@@ -138,8 +163,14 @@
 /* Canvas oscuro con un velo cálido muy sutil arriba (como el fondo de la referencia) */
 .vg-dark-canvas {
   background-color: var(--primitive-espresso-950);
-  background-image: radial-gradient(120% 60% at 50% 0%, rgba(106, 67, 40, 0.35) 0%, transparent 70%);
+  background-image: radial-gradient(120% 60% at 50% 0%, rgba(79, 154, 69, 0.22) 0%, transparent 70%);
   color: var(--primitive-cream);
+}
+
+/* Pantalla clara (estilo de la referencia): fondo casi blanco, texto tinta */
+.vg-light-canvas {
+  background-color: var(--brand-paper);
+  color: var(--brand-ink);
 }
 
 .vg-surface-flat {
@@ -155,7 +186,7 @@
 
 /* Glass: solo para barras flotantes y overlays */
 .vg-glass-restrained {
-  background: rgba(36, 20, 10, 0.78);
+  background: rgba(18, 37, 26, 0.82);
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   border: 1px solid var(--vg-border-default);
@@ -167,25 +198,25 @@
 
 .vg-btn-primary,
 .vg-btn-futuristic {
-  background-color: var(--primitive-caramel-500);
-  color: var(--vg-on-brand);
+  background-color: var(--brand-red-500);
+  color: #FFFFFF;
   font-weight: 700;
   transition:
     background-color 180ms var(--ease-out),
     transform 220ms var(--ease-spring),
     box-shadow 220ms var(--ease-out);
-  box-shadow: 0 10px 24px -12px rgba(200, 153, 95, 0.6);
+  box-shadow: 0 10px 24px -12px rgba(210, 54, 42, 0.6);
 }
 
 .vg-btn-primary:hover,
 .vg-btn-futuristic:hover {
-  background-color: var(--primitive-caramel-400);
-  box-shadow: 0 14px 28px -12px rgba(212, 165, 116, 0.7);
+  background-color: var(--brand-red-400);
+  box-shadow: 0 14px 28px -12px rgba(226, 90, 78, 0.7);
 }
 
 .vg-btn-primary:active,
 .vg-btn-futuristic:active {
-  background-color: var(--primitive-caramel-600);
+  background-color: var(--brand-red-600);
   transform: scale(0.97);
 }
 
@@ -236,11 +267,11 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  min-height: 36px;
+  min-height: 40px;
   padding: 0 1rem;
   border-radius: var(--radius-pill);
-  background-color: rgba(247, 241, 234, 0.09);
-  color: var(--primitive-tan-300);
+  background-color: var(--brand-mist);
+  color: var(--brand-ink-soft);
   font-weight: 600;
   font-size: 0.8125rem;
   white-space: nowrap;
@@ -257,8 +288,8 @@
 .vg-chip.is-active,
 .vg-chip[aria-pressed="true"],
 .vg-chip[aria-selected="true"] {
-  background-color: var(--primitive-caramel-500);
-  color: var(--vg-on-brand);
+  background-color: var(--brand-green-600);
+  color: #FFFFFF;
 }
 
 /* Etiqueta de calificación (★ 4.3) */
@@ -268,7 +299,7 @@
   gap: 0.3rem;
   padding: 0.25rem 0.7rem;
   border-radius: var(--radius-pill);
-  background-color: rgba(247, 241, 234, 0.16);
+  background-color: rgba(246, 243, 230, 0.16);
   color: var(--primitive-cream);
   font-size: 0.8125rem;
   font-weight: 600;
@@ -282,7 +313,7 @@
   height: 52px;
   border-radius: 50%;
   background-color: var(--primitive-cream);
-  color: var(--primitive-espresso-800);
+  color: var(--brand-green-800);
   box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.6);
   transition: transform 260ms var(--ease-spring), background-color 180ms var(--ease-out);
 }
@@ -363,9 +394,9 @@
 .vg-shimmer {
   background: linear-gradient(
     100deg,
-    rgba(247, 241, 234, 0.05) 30%,
-    rgba(247, 241, 234, 0.14) 50%,
-    rgba(247, 241, 234, 0.05) 70%
+    rgba(246, 243, 230, 0.05) 30%,
+    rgba(246, 243, 230, 0.14) 50%,
+    rgba(246, 243, 230, 0.05) 70%
   );
   background-size: 200% 100%;
   animation: vg-shimmer 1.6s linear infinite;
