@@ -1,17 +1,17 @@
 # Graph Report - Chepesauro-App  (2026-10-21)
 
 ## Corpus Check
-- 36 files · ~124,583 words
+- 37 files · ~124,668 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: .example 1, (none) 1, .lock 1)
 
 ## Summary
-- 283 nodes · 586 edges · 15 communities (14 shown, 1 thin omitted)
+- 287 nodes · 589 edges · 16 communities (14 shown, 2 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b07f578f`
+- Built from commit: `b4b17aa5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -30,7 +30,8 @@
 - Navegación Vehicular de Alta Precisión en Puno: Zonas Restringidas, Esquinas de Acceso Vehicular y Calles Cerradas
 - vercel.json
 - sw.js
-- OnboardingLayout.tsx
+- PWAInstallButton.tsx
+- assets.d.ts
 
 ## God Nodes (most connected - your core abstractions)
 1. `App()` - 24 edges
@@ -59,27 +60,27 @@
 ## Import Cycles
 - None detected.
 
-## Communities (15 total, 1 thin omitted)
+## Communities (16 total, 2 thin omitted)
 
 ### Community 0 - "ordersStore.ts"
-Cohesion: 0.11
-Nodes (37): motion, @phosphor-icons/react, ClientOrdersView(), ClientOrdersViewProps, DriverOrderReviewScreen(), DriverOrderReviewScreenProps, DriverOrdersView(), DriverOrdersViewProps (+29 more)
+Cohesion: 0.12
+Nodes (35): motion, @phosphor-icons/react, ClientOrdersView(), ClientOrdersViewProps, DriverOrderReviewScreen(), DriverOrderReviewScreenProps, DriverOrdersView(), DriverOrdersViewProps (+27 more)
 
 ### Community 1 - "GPSNavigationView.tsx"
-Cohesion: 0.12
-Nodes (34): mapbox-gl, GPSNavigationView(), ManeuverIcon(), MapboxViewProps, MapMarkerPoint, PUNO_COORDINATES, buildMapboxExcludeParam(), calculateBearing() (+26 more)
+Cohesion: 0.13
+Nodes (35): mapbox-gl, GPSNavigationView(), ManeuverIcon(), MapboxView(), MapboxViewProps, MapMarkerPoint, PUNO_COORDINATES, buildMapboxExcludeParam() (+27 more)
 
 ### Community 2 - "App.tsx"
-Cohesion: 0.16
-Nodes (25): react-dom, App(), ProfileSelectionScreen(), WelcomeScreen(), WelcomeScreenProps, activateDemoMotorizadoSession(), AppViewMode, confirmRoleSelection() (+17 more)
+Cohesion: 0.14
+Nodes (24): react-dom, App(), WelcomeScreen(), WelcomeScreenProps, activateDemoMotorizadoSession(), AppViewMode, confirmRoleSelection(), createInitialOnboardingState() (+16 more)
 
 ### Community 3 - "package.json"
 Cohesion: 0.07
 Nodes (28): name, private, scripts, build, clean, dev, lint, preview (+20 more)
 
 ### Community 4 - "react"
-Cohesion: 0.18
-Nodes (14): lucide-react, react, ClientRole3DRender(), DriverRole3DRender(), Parcel3DRender(), Store3DRender(), PWAInstallButtonProps, RoleCard() (+6 more)
+Cohesion: 0.15
+Nodes (20): react, three, ClientRole3DRender(), DriverRole3DRender(), Parcel3DRender(), Store3DRender(), OnboardingLayout(), OnboardingLayoutProps (+12 more)
 
 ### Community 5 - "Design System Master File"
 Cohesion: 0.12
@@ -113,29 +114,29 @@ Nodes (9): 1. Overview & Core Concept, 2. User Experience & Visual Design, 3. Ke
 Cohesion: 0.40
 Nodes (4): buildCommand, framework, headers, outputDirectory
 
-### Community 14 - "OnboardingLayout.tsx"
-Cohesion: 0.33
-Nodes (9): three, OnboardingLayout(), OnboardingLayoutProps, STEP_LABELS, OnboardingSpatialStage(), OnboardingSpatialStageProps, ProfileSelectionScreenProps, OnboardingStepNumber (+1 more)
+### Community 14 - "PWAInstallButton.tsx"
+Cohesion: 0.38
+Nodes (5): lucide-react, PWAInstallButton(), PWAInstallButtonProps, BeforeInstallPromptEvent, usePWAInstall()
 
 ## Knowledge Gaps
 - **14 isolated node(s):** `@google/genai`, `@types/three`, `dotenv`, `express`, `@types/express` (+9 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 139 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 142 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `react` to `ordersStore.ts`, `GPSNavigationView.tsx`, `App.tsx`, `package.json`, `OnboardingLayout.tsx`?**
-  _High betweenness centrality (0.107) - this node is a cross-community bridge._
+- **Why does `react` connect `react` to `ordersStore.ts`, `GPSNavigationView.tsx`, `App.tsx`, `package.json`, `PWAInstallButton.tsx`?**
+  _High betweenness centrality (0.105) - this node is a cross-community bridge._
 - **What connects `@google/genai`, `@types/three`, `dotenv` to the rest of the system?**
   _14 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ordersStore.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.1109936575052854 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11614401858304298 - nodes in this community are weakly interconnected._
 - **Why does `dependencies` connect `dependencies` to `package.json`?**
-  _High betweenness centrality (0.075) - this node is a cross-community bridge._
+  _High betweenness centrality (0.073) - this node is a cross-community bridge._
 - **Should `GPSNavigationView.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.12439024390243902 - nodes in this community are weakly interconnected._
-- **Why does `@phosphor-icons/react` connect `ordersStore.ts` to `GPSNavigationView.tsx`, `App.tsx`, `package.json`, `react`, `OnboardingLayout.tsx`?**
-  _High betweenness centrality (0.060) - this node is a cross-community bridge._
-- **Should `package.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.06881720430107527 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13205128205128205 - nodes in this community are weakly interconnected._
+- **Why does `@phosphor-icons/react` connect `ordersStore.ts` to `GPSNavigationView.tsx`, `App.tsx`, `package.json`, `react`?**
+  _High betweenness centrality (0.059) - this node is a cross-community bridge._
+- **Should `App.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.1408199643493761 - nodes in this community are weakly interconnected._
