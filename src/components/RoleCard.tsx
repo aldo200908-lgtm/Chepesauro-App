@@ -21,10 +21,10 @@ export const RoleCard: React.FC<RoleCardProps> = ({
       type="button"
       onClick={onSelect}
       aria-pressed={isSelected}
-      className={`group relative w-full text-left rounded-2xl p-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C58B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B100E] cursor-pointer transition-all ${
+      className={`group relative w-full text-left rounded-[28px] p-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4A574] focus-visible:ring-offset-2 focus-visible:ring-offset-[#150B05] cursor-pointer transition-all duration-300 active:scale-[0.98] ${
         isSelected
-          ? 'bg-[#121F1A] border border-[#22C58B] shadow-[0_12px_30px_-14px_rgba(16,185,129,0.35)]'
-          : 'bg-[#111614] border border-white/[0.06] hover:bg-[#151C19] hover:border-white/15'
+          ? 'bg-[linear-gradient(165deg,#6A4328_0%,#3B2212_55%,#26150B_100%)] border border-[#D4A574] shadow-[0_18px_40px_-16px_rgba(0,0,0,0.6)]'
+          : 'bg-[#24140A] border border-white/[0.06] hover:bg-[#2E1A0E] hover:border-white/15'
       }`}
     >
       <div className="flex items-center justify-between gap-4">
@@ -34,7 +34,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({
             <div
               className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-colors ${
                 isSelected
-                  ? 'bg-[#22C58B] text-[#050E0A]'
+                  ? 'bg-[#D4A574] text-[#2A1608] vg-pop'
                   : 'border border-white/20 bg-transparent group-hover:border-white/40'
               }`}
               aria-hidden="true"
@@ -42,22 +42,22 @@ export const RoleCard: React.FC<RoleCardProps> = ({
               {isSelected && <Check size={12} weight="bold" />}
             </div>
 
-            <h2 className="font-display text-[17px] font-bold tracking-tight text-[#F2F5F3]">
+            <h2 className="font-display text-[17px] font-bold tracking-tight text-[#F7F1EA]">
               {option.title}
             </h2>
           </div>
 
-          <p className="text-xs sm:text-sm text-[#8E9893] leading-relaxed pl-7">
+          <p className="text-xs sm:text-sm text-[#B3A090] leading-relaxed pl-7">
             {option.description}
           </p>
         </div>
 
         {/* Right: Studio 3D Isometric Miniature Stage */}
         <div
-          className={`w-24 h-20 rounded-xl shrink-0 overflow-hidden border transition-colors ${
+          className={`w-24 h-20 rounded-2xl shrink-0 overflow-hidden border transition-colors ${
             isSelected
-              ? 'bg-[#0B1410] border-[#22C58B]/40'
-              : 'bg-[#0B100E] border-white/[0.04]'
+              ? 'bg-[#1F1109] border-[#D4A574]/40'
+              : 'bg-[#150B05] border-white/[0.04]'
           }`}
         >
           {isClient ? (
