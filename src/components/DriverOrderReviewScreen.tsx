@@ -83,7 +83,7 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
           <button
             type="button"
             onClick={onBack}
-            className="h-11 px-3.5 rounded-xl bg-[#111A16] hover:bg-[#16221D] border border-white/10 text-[#F3F7F5] text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+            className="h-11 px-3.5 rounded-xl bg-[#0F1B14] hover:bg-[#16221D] border border-white/10 text-[#F3F7F5] text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
           >
             <ArrowLeft weight="bold" className="w-4 h-4" aria-hidden="true" />
             <span>Volver al inicio</span>
@@ -93,7 +93,7 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
             <p className="font-display text-sm font-bold text-[#F3F7F5] truncate">
               Datos del Pedido {order.id}
             </p>
-            <p className="text-[11px] font-mono text-[#22C58B] truncate">
+            <p className="text-[11px] font-mono text-[#86C77A] truncate">
               {ORDER_STATUS_LABELS[order.status]}
             </p>
           </div>
@@ -106,7 +106,7 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
           {/* STATUS CONFIRMATION BANNER */}
           <div className="vg-surface-flat rounded-2xl p-4 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-11 h-11 rounded-xl bg-[#10B981] text-[#050E0A] flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-[#4F9A45] text-[#050E0A] flex items-center justify-center shrink-0">
                 {isStorePurchase ? (
                   <Storefront weight="fill" className="w-6 h-6" aria-hidden="true" />
                 ) : (
@@ -114,7 +114,7 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
                 )}
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-[#22C58B]">
+                <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-[#86C77A]">
                   <CheckCircle weight="fill" className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>
                     {isStorePurchase
@@ -132,7 +132,7 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
               <p className="text-[10px] font-mono uppercase tracking-wider text-[#8A9E95]">
                 Total pedido
               </p>
-              <p className="font-display text-lg font-extrabold text-[#22C58B] tabular-nums">
+              <p className="font-display text-lg font-extrabold text-[#86C77A] tabular-nums">
                 {formatPenCurrency(order.totalAmount)}
               </p>
             </div>
@@ -154,21 +154,21 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
               <div
                 className={`rounded-xl p-3.5 border transition-colors ${
                   defaultStage === 'pickup'
-                    ? 'bg-[#101E18] border-[#22C58B]'
-                    : 'bg-[#111A16] border-white/[0.06]'
+                    ? 'bg-[#101E18] border-[#86C77A]'
+                    : 'bg-[#0F1B14] border-white/[0.06]'
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-[#10B981] text-[#050E0A] font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-lg bg-[#4F9A45] text-[#050E0A] font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
                     1
                   </div>
                   <div className="min-w-0 flex-1 space-y-1">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] font-mono uppercase tracking-wider text-[#22C58B]">
+                      <span className="text-[11px] font-mono uppercase tracking-wider text-[#86C77A]">
                         Etapa 1 · Punto de recogida (Tienda / Agente)
                       </span>
                       {defaultStage === 'pickup' && (
-                        <span className="text-[10px] font-mono uppercase tracking-wider text-[#22C58B]">
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-[#86C77A]">
                           Siguiente destino
                         </span>
                       )}
@@ -202,8 +202,8 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
               <div
                 className={`rounded-xl p-3.5 border transition-colors ${
                   defaultStage === 'dropoff'
-                    ? 'bg-[#101E18] border-[#22C58B]'
-                    : 'bg-[#111A16] border-white/[0.06]'
+                    ? 'bg-[#101E18] border-[#86C77A]'
+                    : 'bg-[#0F1B14] border-white/[0.06]'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -216,7 +216,7 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
                         Etapa 2 · Punto de entrega (Cliente final)
                       </span>
                       {defaultStage === 'dropoff' && (
-                        <span className="text-[10px] font-mono uppercase tracking-wider text-[#22C58B]">
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-[#86C77A]">
                           Siguiente destino
                         </span>
                       )}
@@ -248,7 +248,7 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
           {/* ORDER ITEMS / PACKAGE CONTENTS */}
           <section className="vg-surface-flat rounded-2xl p-4 space-y-3">
             <div className="flex items-center gap-2 pb-2 border-b border-white/[0.06]">
-              <FileText weight="duotone" className="w-4 h-4 text-[#22C58B]" aria-hidden="true" />
+              <FileText weight="duotone" className="w-4 h-4 text-[#86C77A]" aria-hidden="true" />
               <h2 className="font-display text-sm font-bold text-[#F3F7F5]">
                 {isStorePurchase
                   ? 'Productos solicitados en la tienda'
@@ -278,7 +278,7 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
                 ))}
               </div>
             ) : (
-              <div className="rounded-xl bg-[#111A16] border border-white/[0.06] p-3 text-xs text-[#F3F7F5] leading-relaxed">
+              <div className="rounded-xl bg-[#0F1B14] border border-white/[0.06] p-3 text-xs text-[#F3F7F5] leading-relaxed">
                 {order.customDescription ||
                   'Paquete verificado listo para recoger en el punto de origen.'}
               </div>
@@ -286,7 +286,7 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
 
             {/* Driver Instructions */}
             <div className="pt-2 border-t border-white/[0.06] space-y-1">
-              <p className="text-[11px] font-mono uppercase tracking-wider text-[#22C58B]">
+              <p className="text-[11px] font-mono uppercase tracking-wider text-[#86C77A]">
                 Instrucciones para el motorizado
               </p>
               <p className="text-xs text-[#C8D6D0] leading-relaxed">
@@ -302,7 +302,7 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
                 Resumen económico y pago
               </h2>
               <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#C8D6D0]">
-                <CreditCard weight="duotone" className="w-4 h-4 text-[#22C58B]" />
+                <CreditCard weight="duotone" className="w-4 h-4 text-[#86C77A]" />
                 <span>{order.paymentMethod}</span>
               </div>
             </div>
@@ -316,13 +316,13 @@ export const DriverOrderReviewScreen: React.FC<DriverOrderReviewScreenProps> = (
               </div>
               <div className="flex items-center justify-between text-[#8A9E95]">
                 <span>Tarifa de entrega (ganancia motorizado)</span>
-                <span className="font-mono tabular-nums font-semibold text-[#22C58B]">
+                <span className="font-mono tabular-nums font-semibold text-[#86C77A]">
                   {formatPenCurrency(order.demoDeliveryFee)}
                 </span>
               </div>
               <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-sm font-bold text-[#F3F7F5]">
                 <span>Total del pedido</span>
-                <span className="font-display text-base text-[#22C58B] tabular-nums">
+                <span className="font-display text-base text-[#86C77A] tabular-nums">
                   {formatPenCurrency(order.totalAmount)}
                 </span>
               </div>

@@ -79,14 +79,14 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
       <div className="vg-card-hero p-5 space-y-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-full bg-[#C8995F] text-[#2A1608] flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-full bg-[#6DB35F] text-[#10230F] flex items-center justify-center shrink-0">
               <Motorcycle weight="fill" className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-[#D4A574]">
+              <p className="text-[11px] font-semibold text-[#86C77A]">
                 Motorizado activo · Demo
               </p>
-              <h1 className="font-display text-base font-bold text-[#F7F1EA]">
+              <h1 className="font-display text-base font-bold text-[#F6F3E6]">
                 {activeDriver.name} · Placa {activeDriver.vehiclePlate}
               </h1>
             </div>
@@ -110,8 +110,8 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
                 }}
                 className={`h-11 px-3 rounded-full text-xs font-semibold transition-all duration-200 active:scale-[0.97] whitespace-nowrap shrink-0 truncate cursor-pointer ${
                   isCurrent
-                    ? 'bg-[#3A2614] text-[#D4A574] border border-[#D4A574]'
-                    : 'bg-[#2E1A0E] text-[#B3A090] border border-white/[0.06] hover:text-[#F7F1EA]'
+                    ? 'bg-[#244A30] text-[#86C77A] border border-[#86C77A]'
+                    : 'bg-[#1A3322] text-[#A9BDB0] border border-white/[0.06] hover:text-[#F6F3E6]'
                 }`}
               >
                 {shortName} · {drv.id}
@@ -120,10 +120,10 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
           })}
         </div>
 
-        <p className="text-[11px] text-[#B3A090] flex items-start gap-1.5 leading-snug pt-1 border-t border-white/[0.06]">
+        <p className="text-[11px] text-[#A9BDB0] flex items-start gap-1.5 leading-snug pt-1 border-t border-white/[0.06]">
           <Info
             weight="duotone"
-            className="w-3.5 h-3.5 text-[#D4A574] shrink-0 mt-0.5"
+            className="w-3.5 h-3.5 text-[#86C77A] shrink-0 mt-0.5"
             aria-hidden="true"
           />
           <span>
@@ -136,9 +136,9 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
       {statusMessage && (
         <div
           role="status"
-          className="rounded-xl bg-[#3A2614] border border-[#D4A574]/40 px-3.5 py-2.5 flex items-center gap-2 text-xs font-semibold text-[#F7F1EA]"
+          className="rounded-xl bg-[#244A30] border border-[#86C77A]/40 px-3.5 py-2.5 flex items-center gap-2 text-xs font-semibold text-[#F6F3E6]"
         >
-          <CheckCircle weight="fill" className="w-4 h-4 text-[#D4A574] shrink-0" />
+          <CheckCircle weight="fill" className="w-4 h-4 text-[#86C77A] shrink-0" />
           <span>{statusMessage}</span>
         </div>
       )}
@@ -155,20 +155,20 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
       {/* SECTION 1: PEDIDOS DISPONIBLES */}
       <section className="space-y-3" aria-label="Pedidos disponibles para aceptar">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-base font-bold text-[#F7F1EA]">
+          <h2 className="font-display text-base font-bold text-[#F6F3E6]">
             Pedidos disponibles ({availableOrders.length})
           </h2>
-          <span className="text-xs font-mono text-[#B3A090]">
+          <span className="text-xs font-mono text-[#A9BDB0]">
             Tarifas en S/
           </span>
         </div>
 
         {availableOrders.length === 0 ? (
           <div className="vg-surface-flat rounded-[28px] p-5 text-center space-y-1">
-            <p className="text-sm font-semibold text-[#F7F1EA]">
+            <p className="text-sm font-semibold text-[#F6F3E6]">
               No hay pedidos disponibles en este momento
             </p>
-            <p className="text-xs text-[#B3A090]">
+            <p className="text-xs text-[#A9BDB0]">
               Los pedidos aceptados pasan a la sección de Mis entregas asignadas.
             </p>
           </div>
@@ -192,10 +192,10 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <div className="text-xs font-mono font-semibold text-[#D4A574] flex items-center gap-1.5 tabular-nums">
+                      <div className="text-xs font-mono font-semibold text-[#86C77A] flex items-center gap-1.5 tabular-nums">
                         <span>{order.id}</span>
                         <span aria-hidden="true">·</span>
-                        <span className="text-[#B3A090]">
+                        <span className="text-[#A9BDB0]">
                           {order.type === 'compra_negocio'
                             ? 'Compra en negocio'
                             : 'Encargo personalizado'}
@@ -204,10 +204,10 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
                       <div className="flex items-center gap-2 mt-1">
                         <TypeIcon
                           weight="duotone"
-                          className="w-4 h-4 text-[#D4A574] shrink-0"
+                          className="w-4 h-4 text-[#86C77A] shrink-0"
                           aria-hidden="true"
                         />
-                        <h3 className="font-display text-sm font-bold text-[#F7F1EA]">
+                        <h3 className="font-display text-sm font-bold text-[#F6F3E6]">
                           {order.type === 'compra_negocio'
                             ? order.businessName
                             : order.customDescription}
@@ -216,30 +216,30 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
                     </div>
 
                     <div className="text-right shrink-0 tabular-nums">
-                      <span className="block text-[10px] font-mono text-[#B3A090]">
+                      <span className="block text-[10px] font-mono text-[#A9BDB0]">
                         Tarifa entrega
                       </span>
-                      <span className="font-display text-sm font-bold text-[#D4A574]">
+                      <span className="font-display text-sm font-bold text-[#86C77A]">
                         {formatPenCurrency(order.demoDeliveryFee)}
                       </span>
                     </div>
                   </div>
 
-                  <div className="text-xs text-[#B3A090] space-y-1">
+                  <div className="text-xs text-[#A9BDB0] space-y-1">
                     <p>
-                      <strong className="font-semibold text-[#D9C9B8]">
+                      <strong className="font-semibold text-[#CFE0D3]">
                         Recogida:
                       </strong>{' '}
                       {order.pickup.address} ({order.pickup.referencePoint})
                     </p>
                     <p>
-                      <strong className="font-semibold text-[#D9C9B8]">
+                      <strong className="font-semibold text-[#CFE0D3]">
                         Destino:
                       </strong>{' '}
                       {order.dropoff.address} ({order.dropoff.referencePoint})
                     </p>
                     <p>
-                      <strong className="font-semibold text-[#D9C9B8]">
+                      <strong className="font-semibold text-[#CFE0D3]">
                         Instrucciones:
                       </strong>{' '}
                       {order.instructions}
@@ -247,7 +247,7 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
                   </div>
 
                   <div className="pt-2.5 border-t border-white/[0.06] flex items-center justify-between gap-2">
-                    <span className="text-[11px] font-mono text-[#B3A090] tabular-nums">
+                    <span className="text-[11px] font-mono text-[#A9BDB0] tabular-nums">
                       Total pedido: {formatPenCurrency(order.totalAmount)} ·{' '}
                       {order.paymentMethod}
                     </span>
@@ -271,17 +271,17 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
       {/* SECTION 2: MIS PEDIDOS ASIGNADOS */}
       <section className="space-y-3" aria-label="Mis pedidos asignados">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-base font-bold text-[#F7F1EA]">
+          <h2 className="font-display text-base font-bold text-[#F6F3E6]">
             Mis pedidos asignados ({myAssignedOrders.length})
           </h2>
-          <span className="text-xs font-mono font-semibold text-[#D4A574]">
+          <span className="text-xs font-mono font-semibold text-[#86C77A]">
             {activeDriver.id}
           </span>
         </div>
 
         {myAssignedOrders.length === 0 ? (
           <div className="vg-surface-flat rounded-[28px] p-5 text-center">
-            <p className="text-xs text-[#B3A090]">
+            <p className="text-xs text-[#A9BDB0]">
               Aún no tienes pedidos asignados a {activeDriver.name}. Acepta un
               pedido disponible arriba para comenzar el flujo de entrega.
             </p>
@@ -295,44 +295,44 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
               return (
                 <div
                   key={order.id}
-                  className="rounded-2xl bg-[#3A2614] border border-[#D4A574]/50 p-4 space-y-3"
+                  className="rounded-2xl bg-[#244A30] border border-[#86C77A]/50 p-4 space-y-3"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <div className="text-xs font-mono font-semibold text-[#D4A574] flex flex-wrap items-center gap-1.5 tabular-nums">
+                      <div className="text-xs font-mono font-semibold text-[#86C77A] flex flex-wrap items-center gap-1.5 tabular-nums">
                         <span>{order.id}</span>
                         <span aria-hidden="true">·</span>
-                        <span className="text-[#F7F1EA] font-bold">
+                        <span className="text-[#F6F3E6] font-bold">
                           {ORDER_STATUS_LABELS[order.status]}
                         </span>
                       </div>
-                      <h3 className="font-display text-sm font-bold text-[#F7F1EA] mt-1">
+                      <h3 className="font-display text-sm font-bold text-[#F6F3E6] mt-1">
                         {order.type === 'compra_negocio'
                           ? order.businessName
                           : order.customDescription}
                       </h3>
                     </div>
 
-                    <span className="font-display text-sm font-bold text-[#D4A574] tabular-nums shrink-0">
+                    <span className="font-display text-sm font-bold text-[#86C77A] tabular-nums shrink-0">
                       {formatPenCurrency(order.demoDeliveryFee)}
                     </span>
                   </div>
 
-                  <div className="text-xs text-[#D9C9B8] space-y-1">
+                  <div className="text-xs text-[#CFE0D3] space-y-1">
                     <p>
-                      <strong className="font-semibold text-[#B3A090]">
+                      <strong className="font-semibold text-[#A9BDB0]">
                         Recogida:
                       </strong>{' '}
                       {order.pickup.address} ({order.pickup.referencePoint})
                     </p>
                     <p>
-                      <strong className="font-semibold text-[#B3A090]">
+                      <strong className="font-semibold text-[#A9BDB0]">
                         Destino:
                       </strong>{' '}
                       {order.dropoff.address} ({order.dropoff.referencePoint})
                     </p>
                     <p>
-                      <strong className="font-semibold text-[#B3A090]">
+                      <strong className="font-semibold text-[#A9BDB0]">
                         Instrucciones:
                       </strong>{' '}
                       {order.instructions}
@@ -344,9 +344,9 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
                       <button
                         type="button"
                         onClick={() => onOpenOrderInMap(order.id)}
-                        className="h-11 px-3.5 rounded-full bg-[#1F1109] hover:bg-[#2E1A0E] border border-white/10 text-[#F7F1EA] text-xs font-semibold inline-flex items-center gap-1.5 transition-all duration-200 active:scale-[0.97] whitespace-nowrap shrink-0 cursor-pointer"
+                        className="h-11 px-3.5 rounded-full bg-[#0F2016] hover:bg-[#1A3322] border border-white/10 text-[#F6F3E6] text-xs font-semibold inline-flex items-center gap-1.5 transition-all duration-200 active:scale-[0.97] whitespace-nowrap shrink-0 cursor-pointer"
                       >
-                        <Info weight="duotone" className="w-4 h-4 text-[#D4A574]" aria-hidden="true" />
+                        <Info weight="duotone" className="w-4 h-4 text-[#86C77A]" aria-hidden="true" />
                         <span>Ver datos</span>
                       </button>
 
@@ -354,7 +354,7 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
                         <button
                           type="button"
                           onClick={() => onStartNavigation(order.id)}
-                          className="h-11 px-3.5 rounded-full bg-[#2E1A0E] hover:bg-[#3B2212] border border-[#D4A574]/40 text-[#D4A574] text-xs font-bold inline-flex items-center gap-1.5 transition-all duration-200 active:scale-[0.97] whitespace-nowrap shrink-0 cursor-pointer"
+                          className="h-11 px-3.5 rounded-full bg-[#1A3322] hover:bg-[#21402B] border border-[#86C77A]/40 text-[#86C77A] text-xs font-bold inline-flex items-center gap-1.5 transition-all duration-200 active:scale-[0.97] whitespace-nowrap shrink-0 cursor-pointer"
                         >
                           <NavigationArrow weight="fill" className="w-4 h-4" aria-hidden="true" />
                           <span>Navegar 3D</span>
@@ -372,7 +372,7 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
                         <ArrowRight weight="bold" className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                     ) : (
-                      <span className="inline-flex items-center gap-1 text-xs font-bold text-[#D4A574]">
+                      <span className="inline-flex items-center gap-1 text-xs font-bold text-[#86C77A]">
                         <CheckCircle weight="fill" className="w-4 h-4" aria-hidden="true" />
                         <span>Entrega completada</span>
                       </span>
@@ -391,7 +391,7 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
           className="space-y-2.5 pt-1"
           aria-label="Pedidos asignados a otros motorizados"
         >
-          <h2 className="font-display text-xs font-bold text-[#B3A090]">
+          <h2 className="font-display text-xs font-bold text-[#A9BDB0]">
             Asignados a otros motorizados ({otherDriversOrders.length})
           </h2>
 
@@ -402,20 +402,20 @@ export const DriverOrdersView: React.FC<DriverOrdersViewProps> = ({
                 className="rounded-xl vg-surface-flat p-3 flex items-center justify-between gap-2 opacity-80"
               >
                 <div className="min-w-0">
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#B3A090]">
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#A9BDB0]">
                     <Clock weight="duotone" className="w-3.5 h-3.5 shrink-0" />
                     <span>
                       {order.id} · Asignado a {order.assignedDriver?.name}
                     </span>
                   </div>
-                  <p className="text-xs font-bold text-[#F7F1EA] truncate mt-0.5">
+                  <p className="text-xs font-bold text-[#F6F3E6] truncate mt-0.5">
                     {order.type === 'compra_negocio'
                       ? order.businessName
                       : order.customDescription}
                   </p>
                 </div>
 
-                <span className="text-[11px] font-mono font-semibold text-[#D4A574] shrink-0">
+                <span className="text-[11px] font-mono font-semibold text-[#86C77A] shrink-0">
                   {ORDER_STATUS_LABELS[order.status]}
                 </span>
               </div>

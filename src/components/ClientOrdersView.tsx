@@ -117,14 +117,14 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
       {/* Header & Demo Notice */}
       <div className="space-y-1">
         <div className="flex items-center justify-between gap-2">
-          <h1 className="font-display text-xl font-bold text-[#F7F1EA]">
+          <h1 className="font-display text-xl font-bold text-[#F6F3E6]">
             Pedidos de Cliente
           </h1>
-          <span className="text-xs font-mono font-semibold text-[#D4A574] tabular-nums">
+          <span className="text-xs font-mono font-semibold text-[#86C77A] tabular-nums">
             {orders.length} registrados
           </span>
         </div>
-        <p className="text-xs text-[#B3A090]">
+        <p className="text-xs text-[#A9BDB0]">
           Flujo de demostración · Tarifas e importes en soles (S/)
         </p>
       </div>
@@ -135,10 +135,10 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
         className="rounded-[28px] vg-surface-flat p-4 space-y-3.5"
       >
         <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/[0.06]">
-          <h2 className="font-display text-sm font-bold text-[#F7F1EA]">
+          <h2 className="font-display text-sm font-bold text-[#F6F3E6]">
             Crear nuevo pedido (Demo)
           </h2>
-          <span className="text-[11px] font-mono text-[#D4A574] tabular-nums">
+          <span className="text-[11px] font-mono text-[#86C77A] tabular-nums">
             Tarifa demo: {formatPenCurrency(demoDeliveryFee)}
           </span>
         </div>
@@ -147,7 +147,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
         <div
           role="group"
           aria-label="Tipo de pedido"
-          className="grid grid-cols-2 gap-2 p-1 bg-[#150B05] rounded-full border border-white/[0.08]"
+          className="grid grid-cols-2 gap-2 p-1 bg-[#0A150E] rounded-full border border-white/[0.08]"
         >
           <button
             type="button"
@@ -155,8 +155,8 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
             onClick={() => setServiceType('encargo_personalizado')}
             className={`h-10 px-3 rounded-full text-xs font-semibold transition-all duration-200 active:scale-[0.97] whitespace-nowrap shrink-0 cursor-pointer ${
               serviceType === 'encargo_personalizado'
-                ? 'bg-[#C8995F] text-[#2A1608] font-bold'
-                : 'text-[#B3A090] hover:text-[#F7F1EA]'
+                ? 'bg-[#6DB35F] text-[#10230F] font-bold'
+                : 'text-[#A9BDB0] hover:text-[#F6F3E6]'
             }`}
           >
             Encargo personalizado
@@ -167,8 +167,8 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
             onClick={() => setServiceType('compra_negocio')}
             className={`h-10 px-3 rounded-full text-xs font-semibold transition-all duration-200 active:scale-[0.97] whitespace-nowrap shrink-0 cursor-pointer ${
               serviceType === 'compra_negocio'
-                ? 'bg-[#C8995F] text-[#2A1608] font-bold'
-                : 'text-[#B3A090] hover:text-[#F7F1EA]'
+                ? 'bg-[#6DB35F] text-[#10230F] font-bold'
+                : 'text-[#A9BDB0] hover:text-[#F6F3E6]'
             }`}
           >
             Compra en negocio
@@ -180,7 +180,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
             <div>
               <label
                 htmlFor="business-name-input"
-                className="block text-[11px] font-semibold text-[#B3A090] mb-1"
+                className="block text-[11px] font-semibold text-[#A9BDB0] mb-1"
               >
                 Nombre del negocio de recogida
               </label>
@@ -190,7 +190,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
                 placeholder="Ej. Bodega y Panadería San Martín"
-                className="w-full h-11 px-3.5 rounded-2xl bg-[#2E1A0E] border border-white/10 text-xs text-[#F7F1EA] placeholder:text-[#8A7766] focus:outline-none focus:border-[#D4A574]"
+                className="w-full h-11 px-3.5 rounded-2xl bg-[#1A3322] border border-white/10 text-xs text-[#F6F3E6] placeholder:text-[#84998B] focus:outline-none focus:border-[#86C77A]"
               />
             </div>
 
@@ -198,7 +198,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               <div className="col-span-6">
                 <label
                   htmlFor="item-name-input"
-                  className="block text-[11px] font-semibold text-[#B3A090] mb-1"
+                  className="block text-[11px] font-semibold text-[#A9BDB0] mb-1"
                 >
                   Producto (Demo)
                 </label>
@@ -207,13 +207,13 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   type="text"
                   value={itemName}
                   onChange={(e) => setItemName(e.target.value)}
-                  className="w-full h-11 px-3 rounded-2xl bg-[#2E1A0E] border border-white/10 text-xs text-[#F7F1EA] focus:outline-none focus:border-[#D4A574]"
+                  className="w-full h-11 px-3 rounded-2xl bg-[#1A3322] border border-white/10 text-xs text-[#F6F3E6] focus:outline-none focus:border-[#86C77A]"
                 />
               </div>
               <div className="col-span-2">
                 <label
                   htmlFor="item-qty-input"
-                  className="block text-[11px] font-semibold text-[#B3A090] mb-1"
+                  className="block text-[11px] font-semibold text-[#A9BDB0] mb-1"
                 >
                   Cant.
                 </label>
@@ -224,13 +224,13 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   min="1"
                   value={itemQty}
                   onChange={(e) => setItemQty(e.target.value)}
-                  className="w-full h-11 px-2.5 rounded-2xl bg-[#2E1A0E] border border-white/10 text-xs text-[#F7F1EA] tabular-nums focus:outline-none focus:border-[#D4A574]"
+                  className="w-full h-11 px-2.5 rounded-2xl bg-[#1A3322] border border-white/10 text-xs text-[#F6F3E6] tabular-nums focus:outline-none focus:border-[#86C77A]"
                 />
               </div>
               <div className="col-span-4">
                 <label
                   htmlFor="item-price-input"
-                  className="block text-[11px] font-semibold text-[#B3A090] mb-1"
+                  className="block text-[11px] font-semibold text-[#A9BDB0] mb-1"
                 >
                   Precio (S/)
                 </label>
@@ -242,7 +242,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   min="0"
                   value={itemPrice}
                   onChange={(e) => setItemPrice(e.target.value)}
-                  className="w-full h-11 px-3 rounded-2xl bg-[#2E1A0E] border border-white/10 text-xs text-[#F7F1EA] tabular-nums focus:outline-none focus:border-[#D4A574]"
+                  className="w-full h-11 px-3 rounded-2xl bg-[#1A3322] border border-white/10 text-xs text-[#F6F3E6] tabular-nums focus:outline-none focus:border-[#86C77A]"
                 />
               </div>
             </div>
@@ -251,7 +251,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
           <div>
             <label
               htmlFor="custom-desc-input"
-              className="block text-[11px] font-semibold text-[#B3A090] mb-1"
+              className="block text-[11px] font-semibold text-[#A9BDB0] mb-1"
             >
               Descripción del encargo
             </label>
@@ -261,7 +261,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               value={customDescription}
               onChange={(e) => setCustomDescription(e.target.value)}
               placeholder="Ej. Enviar llaves y sobre con documentos"
-              className="w-full h-11 px-3.5 rounded-2xl bg-[#2E1A0E] border border-white/10 text-xs text-[#F7F1EA] placeholder:text-[#8A7766] focus:outline-none focus:border-[#D4A574]"
+              className="w-full h-11 px-3.5 rounded-2xl bg-[#1A3322] border border-white/10 text-xs text-[#F6F3E6] placeholder:text-[#84998B] focus:outline-none focus:border-[#86C77A]"
             />
           </div>
         )}
@@ -271,7 +271,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
           <div>
             <label
               htmlFor="pickup-address-input"
-              className="block text-[11px] font-semibold text-[#B3A090] mb-1"
+              className="block text-[11px] font-semibold text-[#A9BDB0] mb-1"
             >
               Dirección de recogida
             </label>
@@ -281,14 +281,14 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               value={pickupAddress}
               onChange={(e) => setPickupAddress(e.target.value)}
               placeholder="Ej. Jr. Lima 415, Puno"
-              className="w-full h-11 px-3.5 rounded-2xl bg-[#2E1A0E] border border-white/10 text-xs text-[#F7F1EA] placeholder:text-[#8A7766] focus:outline-none focus:border-[#D4A574]"
+              className="w-full h-11 px-3.5 rounded-2xl bg-[#1A3322] border border-white/10 text-xs text-[#F6F3E6] placeholder:text-[#84998B] focus:outline-none focus:border-[#86C77A]"
             />
           </div>
 
           <div>
             <label
               htmlFor="dropoff-address-input"
-              className="block text-[11px] font-semibold text-[#B3A090] mb-1"
+              className="block text-[11px] font-semibold text-[#A9BDB0] mb-1"
             >
               Dirección de destino
             </label>
@@ -298,7 +298,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               value={dropoffAddress}
               onChange={(e) => setDropoffAddress(e.target.value)}
               placeholder="Ej. Av. La Torre 240, Puno"
-              className="w-full h-11 px-3.5 rounded-2xl bg-[#2E1A0E] border border-white/10 text-xs text-[#F7F1EA] placeholder:text-[#8A7766] focus:outline-none focus:border-[#D4A574]"
+              className="w-full h-11 px-3.5 rounded-2xl bg-[#1A3322] border border-white/10 text-xs text-[#F6F3E6] placeholder:text-[#84998B] focus:outline-none focus:border-[#86C77A]"
             />
           </div>
         </div>
@@ -307,7 +307,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
           <div>
             <label
               htmlFor="instructions-input"
-              className="block text-[11px] font-semibold text-[#B3A090] mb-1"
+              className="block text-[11px] font-semibold text-[#A9BDB0] mb-1"
             >
               Instrucciones y referencias
             </label>
@@ -317,14 +317,14 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
               placeholder="Ej. Portón negro, tocar timbre 2"
-              className="w-full h-11 px-3.5 rounded-2xl bg-[#2E1A0E] border border-white/10 text-xs text-[#F7F1EA] placeholder:text-[#8A7766] focus:outline-none focus:border-[#D4A574]"
+              className="w-full h-11 px-3.5 rounded-2xl bg-[#1A3322] border border-white/10 text-xs text-[#F6F3E6] placeholder:text-[#84998B] focus:outline-none focus:border-[#86C77A]"
             />
           </div>
 
           <div>
             <label
               htmlFor="payment-method-select"
-              className="block text-[11px] font-semibold text-[#B3A090] mb-1"
+              className="block text-[11px] font-semibold text-[#A9BDB0] mb-1"
             >
               Método de pago (Demo)
             </label>
@@ -334,7 +334,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               onChange={(e) =>
                 setPaymentMethod(e.target.value as DemoPaymentMethod)
               }
-              className="w-full h-11 px-3 rounded-2xl bg-[#2E1A0E] border border-white/10 text-xs text-[#F7F1EA] focus:outline-none focus:border-[#D4A574]"
+              className="w-full h-11 px-3 rounded-2xl bg-[#1A3322] border border-white/10 text-xs text-[#F6F3E6] focus:outline-none focus:border-[#86C77A]"
             >
               <option value="Yape / Plin (Demo)">Yape / Plin (Demo)</option>
               <option value="Efectivo (Demo)">Efectivo (Demo)</option>
@@ -344,13 +344,13 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
         </div>
 
         {/* Cost Summary Preview */}
-        <div className="pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-xs text-[#B3A090] tabular-nums">
+        <div className="pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-xs text-[#A9BDB0] tabular-nums">
           <span>
             {serviceType === 'compra_negocio'
               ? `Productos: ${formatPenCurrency(previewProductsCost)} · Envío demo: ${formatPenCurrency(demoDeliveryFee)}`
               : `Tarifa de entrega demo: ${formatPenCurrency(demoDeliveryFee)}`}
           </span>
-          <strong className="font-bold text-[#D4A574]">
+          <strong className="font-bold text-[#86C77A]">
             Total: {formatPenCurrency(previewTotal)}
           </strong>
         </div>
@@ -362,7 +362,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
         )}
 
         {feedbackBanner && (
-          <p role="status" className="text-xs font-semibold text-[#D4A574]">
+          <p role="status" className="text-xs font-semibold text-[#86C77A]">
             {feedbackBanner}
           </p>
         )}
@@ -400,8 +400,8 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               {/* Order Header: ID, Type & Status */}
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <div className="text-xs font-mono text-[#B3A090] flex flex-wrap items-center gap-1.5 tabular-nums">
-                    <span className="text-[#D4A574] font-bold">{order.id}</span>
+                  <div className="text-xs font-mono text-[#A9BDB0] flex flex-wrap items-center gap-1.5 tabular-nums">
+                    <span className="text-[#86C77A] font-bold">{order.id}</span>
                     <span aria-hidden="true">·</span>
                     <span>
                       {order.type === 'compra_negocio'
@@ -413,7 +413,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                       className={
                         order.status === 'cancelado'
                           ? 'text-red-400 font-bold'
-                          : 'text-[#F7F1EA] font-bold'
+                          : 'text-[#F6F3E6] font-bold'
                       }
                     >
                       {ORDER_STATUS_LABELS[order.status]}
@@ -423,10 +423,10 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   <div className="flex items-center gap-2 mt-1">
                     <TypeIcon
                       weight="duotone"
-                      className="w-4 h-4 text-[#D4A574] shrink-0"
+                      className="w-4 h-4 text-[#86C77A] shrink-0"
                       aria-hidden="true"
                     />
-                    <h3 className="font-display text-sm font-bold text-[#F7F1EA] truncate">
+                    <h3 className="font-display text-sm font-bold text-[#F6F3E6] truncate">
                       {order.type === 'compra_negocio'
                         ? order.businessName
                         : order.customDescription}
@@ -434,7 +434,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   </div>
                 </div>
 
-                <span className="font-display text-sm font-bold text-[#D4A574] tabular-nums shrink-0">
+                <span className="font-display text-sm font-bold text-[#86C77A] tabular-nums shrink-0">
                   {formatPenCurrency(order.totalAmount)}
                 </span>
               </div>
@@ -443,7 +443,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               {order.type === 'compra_negocio' &&
                 order.items &&
                 order.items.length > 0 && (
-                  <div className="text-xs text-[#D9C9B8] pt-1 border-t border-white/[0.06] space-y-0.5 tabular-nums">
+                  <div className="text-xs text-[#CFE0D3] pt-1 border-t border-white/[0.06] space-y-0.5 tabular-nums">
                     {order.items.map((item, idx) => (
                       <p key={idx}>
                         {item.quantity}x {item.name} ({formatPenCurrency(item.unitPrice)})
@@ -453,21 +453,21 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                 )}
 
               {/* Pickup, Dropoff & Instructions */}
-              <div className="text-xs text-[#B3A090] space-y-1">
+              <div className="text-xs text-[#A9BDB0] space-y-1">
                 <p>
-                  <strong className="font-semibold text-[#D9C9B8]">
+                  <strong className="font-semibold text-[#CFE0D3]">
                     Recogida:
                   </strong>{' '}
                   {order.pickup.address} ({order.pickup.referencePoint})
                 </p>
                 <p>
-                  <strong className="font-semibold text-[#D9C9B8]">
+                  <strong className="font-semibold text-[#CFE0D3]">
                     Destino:
                   </strong>{' '}
                   {order.dropoff.address} ({order.dropoff.referencePoint})
                 </p>
                 <p>
-                  <strong className="font-semibold text-[#D9C9B8]">
+                  <strong className="font-semibold text-[#CFE0D3]">
                     Instrucciones:
                   </strong>{' '}
                   {order.instructions}
@@ -476,11 +476,11 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
 
               {/* Assigned Driver & Cost Breakdown */}
               <div className="pt-2.5 border-t border-white/[0.06] space-y-1.5 text-xs">
-                <div className="flex items-center justify-between text-[#F7F1EA]">
+                <div className="flex items-center justify-between text-[#F6F3E6]">
                   <span className="inline-flex items-center gap-1.5 font-medium">
                     <Motorcycle
                       weight="duotone"
-                      className="w-3.5 h-3.5 text-[#D4A574] shrink-0"
+                      className="w-3.5 h-3.5 text-[#86C77A] shrink-0"
                       aria-hidden="true"
                     />
                     <span>
@@ -491,7 +491,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   </span>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-[#B3A090] tabular-nums">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-[#A9BDB0] tabular-nums">
                   <span>
                     {order.productsCost > 0
                       ? `Productos: ${formatPenCurrency(order.productsCost)} · `
@@ -499,7 +499,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                     Envío demo: {formatPenCurrency(order.demoDeliveryFee)} · Pago:{' '}
                     {order.paymentMethod}
                   </span>
-                  <strong className="text-[#F7F1EA]">
+                  <strong className="text-[#F6F3E6]">
                     Total: {formatPenCurrency(order.totalAmount)}
                   </strong>
                 </div>
@@ -512,9 +512,9 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   onClick={() =>
                     setExpandedHistoryId(isHistoryOpen ? null : order.id)
                   }
-                  className="h-9 px-3 rounded-full bg-[#2E1A0E] hover:bg-[#3B2212] border border-white/[0.08] text-[#D9C9B8] text-xs font-semibold inline-flex items-center gap-1 transition-all duration-200 active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0"
+                  className="h-9 px-3 rounded-full bg-[#1A3322] hover:bg-[#21402B] border border-white/[0.08] text-[#CFE0D3] text-xs font-semibold inline-flex items-center gap-1 transition-all duration-200 active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0"
                 >
-                  <Clock weight="duotone" className="w-3.5 h-3.5 text-[#D4A574]" aria-hidden="true" />
+                  <Clock weight="duotone" className="w-3.5 h-3.5 text-[#86C77A]" aria-hidden="true" />
                   <span>Historial ({order.statusHistory.length})</span>
                   {isHistoryOpen ? (
                     <CaretUp weight="bold" className="w-3.5 h-3.5" aria-hidden="true" />
@@ -553,17 +553,17 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               {/* Status History Log */}
               {isHistoryOpen && (
                 <div className="pt-2.5 border-t border-white/[0.06] space-y-2">
-                  <p className="text-[11px] font-semibold text-[#D4A574]">
+                  <p className="text-[11px] font-semibold text-[#86C77A]">
                     Historial de cambios de estado
                   </p>
-                  <ol className="space-y-1.5 text-[11px] text-[#B3A090]">
+                  <ol className="space-y-1.5 text-[11px] text-[#A9BDB0]">
                     {order.statusHistory.map((entry, idx) => (
                       <li
                         key={`${entry.status}-${idx}`}
                         className="flex items-start justify-between gap-2"
                       >
                         <div>
-                          <strong className="text-[#F7F1EA] font-semibold">
+                          <strong className="text-[#F6F3E6] font-semibold">
                             {ORDER_STATUS_LABELS[entry.status]}:
                           </strong>{' '}
                           <span>{entry.note}</span>

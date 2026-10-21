@@ -40,7 +40,7 @@ export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1, ease: EASE_OUT }}
-        className="pointer-events-auto max-w-md mx-auto vg-glass-restrained rounded-[28px] px-2 py-1.5 grid grid-cols-3 gap-1 shadow-[0_18px_40px_-14px_rgba(0,0,0,0.65)]"
+        className="pointer-events-auto max-w-md mx-auto bg-white rounded-[28px] px-2 py-1.5 grid grid-cols-3 gap-1 shadow-[0_18px_40px_-14px_rgba(12,26,17,0.55)] border border-[#DCE5D5]"
       >
         {NAV_ITEMS.map((item) => {
           const isActive = activeTab === item.id;
@@ -54,8 +54,8 @@ export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
               aria-current={isActive ? 'page' : undefined}
               className={`relative flex flex-col items-center justify-center min-h-[52px] py-1.5 px-2 rounded-full transition-all duration-200 active:scale-[0.94] cursor-pointer ${
                 isActive
-                  ? 'text-[#D4A574]'
-                  : 'text-[#B3A090] hover:text-[#F7F1EA]'
+                  ? 'text-[#3D8438]'
+                  : 'text-[#84998B] hover:text-[#131A14]'
               }`}
             >
               {/* Píldora que se desliza entre pestañas */}
@@ -63,7 +63,7 @@ export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
                 <motion.span
                   layoutId="vg-bottom-nav-pill"
                   transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  className="absolute inset-0 rounded-full bg-[#3A2614] border border-[#D4A574]/25 -z-10"
+                  className="absolute inset-0 rounded-full bg-[#E4F0DF] -z-10"
                 />
               )}
 
@@ -84,7 +84,7 @@ export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', stiffness: 600, damping: 16 }}
                     aria-label={`${badgeCount} pedidos activos`}
-                    className="absolute -top-2 -right-4 min-w-[18px] h-[18px] px-1 rounded-full bg-[#C8995F] text-[#2A1608] text-[10px] font-mono font-bold flex items-center justify-center tabular-nums"
+                    className="absolute -top-2 -right-4 min-w-[18px] h-[18px] px-1 rounded-full bg-[#D2362A] text-white text-[10px] font-mono font-bold flex items-center justify-center tabular-nums"
                   >
                     {badgeCount}
                   </motion.span>
@@ -93,7 +93,7 @@ export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
 
               <span
                 className={`mt-1 text-[11px] tracking-tight leading-none ${
-                  isActive ? 'font-bold text-[#F7F1EA]' : 'font-medium'
+                  isActive ? 'font-bold text-[#131A14]' : 'font-medium'
                 }`}
               >
                 {item.label}

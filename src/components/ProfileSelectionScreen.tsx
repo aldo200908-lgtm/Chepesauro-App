@@ -20,12 +20,12 @@ export const ProfileSelectionScreen: React.FC<ProfileSelectionScreenProps> = ({
         {/* Clean Editorial Heading */}
         <div className="space-y-1.5 text-left">
           <h1
-            className="font-display text-[26px] sm:text-[30px] font-extrabold tracking-tight text-[#F7F1EA] leading-[1.12]"
+            className="font-display text-[26px] sm:text-[30px] font-extrabold tracking-tight text-[#131A14] leading-[1.12]"
             style={{ textWrap: 'balance' }}
           >
             ¿Cómo quieres ingresar?
           </h1>
-          <p className="text-sm text-[#B3A090] leading-relaxed">
+          <p className="text-sm text-[#5F7364] leading-relaxed">
             Selecciona tu perfil para configurar el mapa 3D.
           </p>
         </div>
@@ -58,8 +58,8 @@ export const ProfileSelectionScreen: React.FC<ProfileSelectionScreenProps> = ({
           disabled={!selectedRole}
           className={`group w-full h-[54px] px-6 rounded-full font-display text-[15px] font-bold inline-flex items-center justify-between transition-all duration-200 whitespace-nowrap shrink-0 ${
             selectedRole
-              ? 'vg-btn-primary cursor-pointer shadow-[0_14px_32px_-12px_rgba(200,153,95,0.55)]'
-              : 'bg-[#24140A] text-[#8A7766] border border-white/[0.05] cursor-not-allowed'
+              ? 'vg-btn-primary cursor-pointer'
+              : 'bg-[#F2F5EA] text-[#84998B] border border-[#DCE5D5] cursor-not-allowed'
           }`}
         >
           <span>

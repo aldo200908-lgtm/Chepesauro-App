@@ -343,7 +343,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
             'line-cap': 'round',
           },
           paint: {
-            'line-color': '#2A1608',
+            'line-color': '#10230F',
             'line-width': 13,
             'line-opacity': 0.9,
           },
@@ -359,7 +359,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
             'line-cap': 'round',
           },
           paint: {
-            'line-color': '#D4A574',
+            'line-color': '#86C77A',
             'line-width': 8,
             'line-opacity': 0.98,
           },
@@ -375,7 +375,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
             'line-cap': 'round',
           },
           paint: {
-            'line-color': '#F6EBDD',
+            'line-color': '#F2F5EA',
             'line-width': 3,
             'line-opacity': 0.95,
           },
@@ -397,7 +397,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
               'line-cap': 'round',
             },
             paint: {
-              'line-color': '#C8995F',
+              'line-color': '#6DB35F',
               'line-width': 4.5,
               'line-dasharray': [1.5, 1.8],
               'line-opacity': 0.95,
@@ -535,17 +535,17 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
         <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 110 110">
           <defs>
             <linearGradient id="aimBeamGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-              <stop offset="0%" stop-color="#D4A574" stop-opacity="0.65" />
-              <stop offset="65%" stop-color="#D4A574" stop-opacity="0.28" />
-              <stop offset="100%" stop-color="#E0BC91" stop-opacity="0.0" />
+              <stop offset="0%" stop-color="#86C77A" stop-opacity="0.65" />
+              <stop offset="65%" stop-color="#86C77A" stop-opacity="0.28" />
+              <stop offset="100%" stop-color="#A9D99E" stop-opacity="0.0" />
             </linearGradient>
           </defs>
           <path d="M 55 55 L 22 6 A 48 48 0 0 1 88 6 Z" fill="url(#aimBeamGrad)" />
-          <line x1="55" y1="55" x2="55" y2="8" stroke="#E0BC91" stroke-width="2" stroke-dasharray="3 3" opacity="0.85" />
+          <line x1="55" y1="55" x2="55" y2="8" stroke="#A9D99E" stroke-width="2" stroke-dasharray="3 3" opacity="0.85" />
         </svg>
-        <div class="absolute w-12 h-12 rounded-full bg-[#D4A574]/25 animate-ping"></div>
-        <div class="relative w-9 h-9 rounded-full bg-[#2A1608] border-3 border-white shadow-2xl flex items-center justify-center">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="#E0BC91" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <div class="absolute w-12 h-12 rounded-full bg-[#86C77A]/25 animate-ping"></div>
+        <div class="relative w-9 h-9 rounded-full bg-[#10230F] border-3 border-white shadow-2xl flex items-center justify-center">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="#A9D99E" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="12 2 19 21 12 17 5 21 12 2"></polygon>
           </svg>
         </div>
@@ -565,7 +565,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
       // Create GTA V Style Waypoint Destination Pin
       const destEl = document.createElement('div');
       destEl.className =
-        'w-11 h-11 rounded-full bg-[#C8995F] border-3 border-white shadow-2xl flex items-center justify-center text-[#2A1608] ring-4 ring-[#D4A574]/40';
+        'w-11 h-11 rounded-full bg-[#6DB35F] border-3 border-white shadow-2xl flex items-center justify-center text-[#10230F] ring-4 ring-[#86C77A]/40';
       destEl.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
@@ -679,7 +679,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
     if (routeResult.accessResolution?.isSnappedToCorner) {
       const cornerEl = document.createElement('div');
       cornerEl.className =
-        'px-2.5 py-1 rounded-full bg-[#8A5A2B] border-2 border-white text-white text-[10px] font-bold shadow-xl flex items-center gap-1 whitespace-nowrap';
+        'px-2.5 py-1 rounded-full bg-[#3D8438] border-2 border-white text-white text-[10px] font-bold shadow-xl flex items-center gap-1 whitespace-nowrap';
       cornerEl.innerHTML = `<span>Parada Moto Permitida</span>`;
 
       vehicularCornerMarkerRef.current = new mapboxgl.Marker({ element: cornerEl })
@@ -919,7 +919,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
   return (
     <div
       data-testid="gps-navigation-screen"
-      className="fixed inset-0 z-50 bg-[#150B05] w-screen h-screen overflow-hidden flex flex-col select-none touch-none"
+      className="fixed inset-0 z-50 bg-[#0A150E] w-screen h-screen overflow-hidden flex flex-col select-none touch-none"
     >
       {/* 1. FULL-VIEWPORT 3D MAP CANVAS (100% OF SCREEN) */}
       <div
@@ -933,16 +933,16 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
       {aimPointerActive && (
         <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
           <div className="relative flex flex-col items-center">
-            <div className="px-3 py-1.5 rounded-2xl bg-[#1F1109]/95 border border-[#E0BC91] text-white text-xs font-bold shadow-2xl mb-2 max-w-[260px] text-center">
-              <p className="text-[10px] text-[#E0BC91] font-semibold">
+            <div className="px-3 py-1.5 rounded-2xl bg-[#0F2016]/95 border border-[#A9D99E] text-white text-xs font-bold shadow-2xl mb-2 max-w-[260px] text-center">
+              <p className="text-[10px] text-[#A9D99E] font-semibold">
                 Dirección a la que apuntas ({pointingCardinal.label})
               </p>
               <p className="truncate">
                 {aimedAddress?.streetAddress || 'Calculando calle apuntada...'}
               </p>
             </div>
-            <div className="w-10 h-10 rounded-full border-2 border-[#E0BC91] bg-[#C8995F]/25 flex items-center justify-center shadow-lg">
-              <div className="w-2.5 h-2.5 rounded-full bg-[#E0BC91]" />
+            <div className="w-10 h-10 rounded-full border-2 border-[#A9D99E] bg-[#6DB35F]/25 flex items-center justify-center shadow-lg">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#A9D99E]" />
             </div>
           </div>
         </div>
@@ -952,10 +952,10 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
       <div className="absolute top-0 left-0 right-0 z-30 pt-[max(env(safe-area-inset-top),10px)] px-3 pointer-events-none">
         <div className="max-w-md mx-auto space-y-2 pointer-events-auto">
           {/* Main Google Maps Turn-by-Turn Banner */}
-          <div className="rounded-3xl bg-[#5A3A1C]/95 backdrop-blur-md text-white border border-white/15 shadow-2xl p-3.5 transition-all">
+          <div className="rounded-3xl bg-[#1F4A26]/95 backdrop-blur-md text-white border border-white/15 shadow-2xl p-3.5 transition-all">
             <div className="flex items-center gap-3">
               {/* Turn Icon Box */}
-              <div className="w-13 h-13 rounded-2xl bg-[#8A5A2B] border border-white/20 flex items-center justify-center shrink-0 shadow-md">
+              <div className="w-13 h-13 rounded-2xl bg-[#3D8438] border border-white/20 flex items-center justify-center shrink-0 shadow-md">
                 {activeStep ? (
                   <ManeuverIcon
                     type={activeStep.maneuver.type}
@@ -974,12 +974,12 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
                     {formatManeuverDistance(distanceToCurrentManeuver)}
                   </span>
                   {activeStep?.streetName && (
-                    <span className="text-xs font-semibold text-[#E0BC91] truncate">
+                    <span className="text-xs font-semibold text-[#A9D99E] truncate">
                       {activeStep.streetName}
                     </span>
                   )}
                 </div>
-                <p className="font-semibold text-sm text-[#F6EBDD] truncate mt-0.5 leading-snug">
+                <p className="font-semibold text-sm text-[#F2F5EA] truncate mt-0.5 leading-snug">
                   {activeStep?.bannerInstruction ||
                     activeStep?.maneuver.instruction ||
                     'Calculando ruta vehicular óptima...'}
@@ -999,7 +999,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
 
             {/* Live Compass & Pointing Direction Bar ("Dirección a la que apunto") */}
             <div className="mt-2 pt-2 border-t border-white/10 flex items-center justify-between gap-2 text-xs">
-              <div className="flex items-center gap-1.5 min-w-0 text-[#E0BC91]">
+              <div className="flex items-center gap-1.5 min-w-0 text-[#A9D99E]">
                 <Compass
                   className="w-3.5 h-3.5 shrink-0 transition-transform duration-300"
                   style={{ transform: `rotate(${activePointingDegrees}deg)` }}
@@ -1012,7 +1012,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
               </div>
 
               {nextStep && (
-                <span className="shrink-0 text-[#D9C9B8] font-medium tabular-nums">
+                <span className="shrink-0 text-[#CFE0D3] font-medium tabular-nums">
                   Luego {formatManeuverDistance(nextStep.distanceMeters)}
                 </span>
               )}
@@ -1020,13 +1020,13 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
           </div>
 
           {/* 2-Stage Delivery Selector Bar (Stage 1: Store/Agent -> Stage 2: Customer) */}
-          <div className="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-[#1F1109]/90 backdrop-blur-md border border-white/10 shadow-lg">
+          <div className="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-[#0F2016]/90 backdrop-blur-md border border-white/10 shadow-lg">
             <button
               type="button"
               onClick={() => setActiveStage('pickup')}
               className={`h-9 px-3 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-[0.97] cursor-pointer whitespace-nowrap ${
                 activeStage === 'pickup'
-                  ? 'bg-[#C8995F] text-[#2A1608] shadow-sm'
+                  ? 'bg-[#6DB35F] text-[#10230F] shadow-sm'
                   : 'text-white/75 hover:text-white'
               }`}
             >
@@ -1039,7 +1039,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
               onClick={() => setActiveStage('dropoff')}
               className={`h-9 px-3 rounded-xl text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-[0.97] cursor-pointer whitespace-nowrap ${
                 activeStage === 'dropoff'
-                  ? 'bg-[#C8995F] text-[#2A1608] shadow-sm'
+                  ? 'bg-[#6DB35F] text-[#10230F] shadow-sm'
                   : 'text-white/75 hover:text-white'
               }`}
             >
@@ -1099,8 +1099,8 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
           title="Mi dirección exacta GPS y rumbo"
           className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-all cursor-pointer active:scale-95 ${
             isFollowingDriver
-              ? 'bg-[#C8995F] text-[#2A1608] ring-2 ring-white shadow-[#C8995F]/40'
-              : 'bg-white text-[#2A1608] hover:bg-[#F6EBDD]'
+              ? 'bg-[#6DB35F] text-[#10230F] ring-2 ring-white shadow-[#6DB35F]/40'
+              : 'bg-white text-[#10230F] hover:bg-[#F2F5EA]'
           }`}
         >
           <LocateFixed className="w-5 h-5" />
@@ -1115,8 +1115,8 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
           title="Mira de dirección a la que apunto"
           className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 active:scale-[0.97] cursor-pointer ${
             aimPointerActive
-              ? 'bg-[#E0BC91] text-[#2A1608] ring-2 ring-white'
-              : 'bg-white text-[#8A5A2B] hover:bg-[#F6EBDD]'
+              ? 'bg-[#A9D99E] text-[#10230F] ring-2 ring-white'
+              : 'bg-white text-[#3D8438] hover:bg-[#F2F5EA]'
           }`}
         >
           <Crosshair className="w-5 h-5" aria-hidden="true" />
@@ -1131,8 +1131,8 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
           title={is3DMode ? 'Vista 3D activa' : 'Vista 2D'}
           className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 active:scale-[0.97] cursor-pointer ${
             is3DMode
-              ? 'bg-[#5A3A1C] text-white ring-2 ring-white/50'
-              : 'bg-white text-[#2A1608] hover:bg-[#F6EBDD]'
+              ? 'bg-[#1F4A26] text-white ring-2 ring-white/50'
+              : 'bg-white text-[#10230F] hover:bg-[#F2F5EA]'
           }`}
         >
           <Layers className="w-5 h-5" aria-hidden="true" />
@@ -1183,7 +1183,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
           aria-label={voiceEnabled ? 'Silenciar voz' : 'Activar voz'}
           className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 active:scale-[0.97] cursor-pointer ${
             voiceEnabled
-              ? 'bg-white text-[#8A5A2B]'
+              ? 'bg-white text-[#3D8438]'
               : 'bg-white/80 text-gray-400'
           }`}
         >
@@ -1200,20 +1200,20 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
           onClick={handleFitRouteOverview}
           aria-label="Ver ruta completa"
           title="Ver recorrido completo"
-          className="w-11 h-11 rounded-2xl bg-white text-[#2A1608] hover:bg-[#F6EBDD] flex items-center justify-center shadow-lg transition-all cursor-pointer active:scale-95"
+          className="w-11 h-11 rounded-2xl bg-white text-[#10230F] hover:bg-[#F2F5EA] flex items-center justify-center shadow-lg transition-all cursor-pointer active:scale-95"
         >
-          <Eye className="w-5 h-5 text-[#5A3A1C]" />
+          <Eye className="w-5 h-5 text-[#1F4A26]" />
         </button>
       </div>
 
       {/* 4. COMPACT BOTTOM ARRIVAL, MY EXACT ADDRESS & STAGE PROGRESSION PANEL */}
       <div className="absolute bottom-0 left-0 right-0 z-30 pb-[max(env(safe-area-inset-bottom),12px)] px-3 pointer-events-none">
         <div className="max-w-md mx-auto pointer-events-auto">
-          <div className="rounded-3xl bg-[#1F1109]/95 backdrop-blur-md border border-white/15 p-4 shadow-2xl text-white space-y-2.5">
+          <div className="rounded-3xl bg-[#0F2016]/95 backdrop-blur-md border border-white/15 p-4 shadow-2xl text-white space-y-2.5">
             {/* Top row: ETA, Distance, Arrival Time & Order Price */}
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-baseline gap-2.5">
-                <span className="font-display text-2xl font-extrabold text-[#E0BC91] tracking-tight tabular-nums">
+                <span className="font-display text-2xl font-extrabold text-[#A9D99E] tracking-tight tabular-nums">
                   {routeResult
                     ? formatDurationMinutes(routeResult.durationSeconds)
                     : '-- min'}
@@ -1227,7 +1227,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
                 </span>
               </div>
 
-              <span className="text-xs font-bold text-[#D9C9B8] tabular-nums shrink-0">
+              <span className="text-xs font-bold text-[#CFE0D3] tabular-nums shrink-0">
                 {formatPenCurrency(order.totalAmount)}
               </span>
             </div>
@@ -1235,10 +1235,10 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
             {/* MY EXACT CURRENT ADDRESS & COMPASS HEADING BOX */}
             <div className="rounded-2xl bg-white/8 border border-white/10 px-3 py-2 flex items-center justify-between gap-2 text-xs">
               <div className="flex items-center gap-2 min-w-0">
-                <LocateFixed className="w-4 h-4 text-[#E0BC91] shrink-0" />
+                <LocateFixed className="w-4 h-4 text-[#A9D99E] shrink-0" />
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-bold text-[#E0BC91]">
+                    <span className="text-[11px] font-bold text-[#A9D99E]">
                       Mi dirección exacta:
                     </span>
                     <span className="text-[10px] text-white/70 tabular-nums">
@@ -1258,7 +1258,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
               <button
                 type="button"
                 onClick={handleLocateMyExactAddress}
-                className="px-2.5 py-1 rounded-xl bg-[#C8995F]/40 hover:bg-[#C8995F]/70 border border-[#E0BC91]/40 text-[11px] font-bold text-white shrink-0 transition-all duration-200 active:scale-[0.97] cursor-pointer"
+                className="px-2.5 py-1 rounded-xl bg-[#6DB35F]/40 hover:bg-[#6DB35F]/70 border border-[#A9D99E]/40 text-[11px] font-bold text-white shrink-0 transition-all duration-200 active:scale-[0.97] cursor-pointer"
               >
                 Actualizar GPS
               </button>
@@ -1266,10 +1266,10 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
 
             {/* Vehicular Corner Resolution Alert (When Store/Client is in Plaza Mayor or Pedestrian Street) */}
             {snappedResolution?.isSnappedToCorner && (
-              <div className="rounded-2xl bg-[#8A5A2B]/35 border border-[#D9C9B8]/40 px-3 py-2 flex items-start gap-2 text-xs">
-                <Footprints className="w-4 h-4 text-[#D9C9B8] shrink-0 mt-0.5" />
+              <div className="rounded-2xl bg-[#3D8438]/35 border border-[#CFE0D3]/40 px-3 py-2 flex items-start gap-2 text-xs">
+                <Footprints className="w-4 h-4 text-[#CFE0D3] shrink-0 mt-0.5" />
                 <div className="min-w-0">
-                  <p className="font-bold text-[#D9C9B8] truncate">
+                  <p className="font-bold text-[#CFE0D3] truncate">
                     Zona peatonal evitada · Parada en esquina permitida
                   </p>
                   <p className="text-[11px] text-white/90 truncate">
@@ -1282,7 +1282,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
 
             {/* Destination Address Line */}
             <div className="flex items-start gap-2.5 pt-1.5 border-t border-white/10">
-              <div className="w-8 h-8 rounded-xl bg-[#C8995F]/30 border border-[#E0BC91]/40 text-[#E0BC91] flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-8 h-8 rounded-xl bg-[#6DB35F]/30 border border-[#A9D99E]/40 text-[#A9D99E] flex items-center justify-center shrink-0 mt-0.5">
                 <MapPin className="w-4 h-4" />
               </div>
               <div className="min-w-0 flex-1 text-xs">
@@ -1292,13 +1292,13 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
                       ? `Etapa 1 · ${destinationTitle}`
                       : `Etapa 2 · ${destinationTitle}`}
                   </span>
-                  <span className="text-[11px] text-[#D9C9B8] shrink-0 tabular-nums">
+                  <span className="text-[11px] text-[#CFE0D3] shrink-0 tabular-nums">
                     Rumbo {pointingCardinal.shortCardinal} ({pointingCardinal.degrees}°)
                   </span>
                 </div>
                 <p className="text-white/85 truncate mt-0.5">{destinationAddress}</p>
                 {destinationReference && (
-                  <p className="text-[11px] text-[#D9C9B8] truncate">
+                  <p className="text-[11px] text-[#CFE0D3] truncate">
                     Ref: {destinationReference}
                   </p>
                 )}
@@ -1320,7 +1320,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
                 <Drawer.Trigger asChild>
                   <button
                     type="button"
-                    className="h-12 px-3.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-[#E0BC91] font-display text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 border border-white/10"
+                    className="h-12 px-3.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-[#A9D99E] font-display text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 border border-white/10"
                   >
                     <ListChecks weight="duotone" className="w-4 h-4" />
                     <span>Pasos</span>
@@ -1328,7 +1328,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
                 </Drawer.Trigger>
                 <Drawer.Portal>
                   <Drawer.Overlay className="fixed inset-0 z-50 bg-black/55 backdrop-blur-[2px]" />
-                  <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mt-24 flex max-h-[80dvh] flex-col rounded-t-3xl bg-[#1F1109] text-white border-t border-white/15 shadow-2xl focus:outline-none">
+                  <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mt-24 flex max-h-[80dvh] flex-col rounded-t-3xl bg-[#0F2016] text-white border-t border-white/15 shadow-2xl focus:outline-none">
                     <div className="mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-white/25" />
                     <div className="overflow-y-auto px-5 pt-4 pb-6 space-y-4 max-w-lg mx-auto w-full">
                       <div className="flex items-center justify-between gap-2">
@@ -1336,7 +1336,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
                           <Drawer.Title className="font-display text-base font-bold text-white">
                             Instrucciones giro a giro y vías restringidas
                           </Drawer.Title>
-                          <Drawer.Description className="text-xs text-[#D9C9B8] tabular-nums">
+                          <Drawer.Description className="text-xs text-[#CFE0D3] tabular-nums">
                             {routeResult
                               ? `${routeResult.steps.length} maniobras · ${(
                                   routeResult.distanceMeters / 1000
@@ -1348,7 +1348,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
 
                       {/* Restricted Zones Active Notice */}
                       <div className="rounded-2xl bg-white/8 border border-white/10 p-3 space-y-1 text-xs">
-                        <p className="font-bold text-[#E0BC91]">
+                        <p className="font-bold text-[#A9D99E]">
                           Zonas peatonales y bloqueos evitados automáticamente:
                         </p>
                         <p className="text-white/80">
@@ -1367,7 +1367,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
                             <div
                               key={st.id || `${st.streetName}-${idx}`}
                               className={`py-2.5 flex items-center justify-between gap-3 text-xs ${
-                                isCurrent ? 'text-[#E0BC91] font-bold' : 'text-white/85'
+                                isCurrent ? 'text-[#A9D99E] font-bold' : 'text-white/85'
                               }`}
                             >
                               <div className="flex items-center gap-2.5 min-w-0">
@@ -1379,7 +1379,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
                                     {st.bannerInstruction || st.maneuver.instruction}
                                   </p>
                                   {st.streetName && (
-                                    <p className="text-[11px] text-[#D9C9B8] truncate">
+                                    <p className="text-[11px] text-[#CFE0D3] truncate">
                                       Vía: {st.streetName}
                                     </p>
                                   )}
@@ -1400,7 +1400,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
               <button
                 type="button"
                 onClick={handleCompleteStageAndContinue}
-                className="flex-1 h-12 px-4 rounded-full bg-[#C8995F] hover:bg-[#B0824B] active:scale-95 text-[#2A1608] font-display text-xs font-bold inline-flex items-center justify-center gap-2 shadow-lg shadow-[#C8995F]/30 transition-all cursor-pointer"
+                className="flex-1 h-12 px-4 rounded-full bg-[#6DB35F] hover:bg-[#4F9A45] active:scale-95 text-[#10230F] font-display text-xs font-bold inline-flex items-center justify-center gap-2 shadow-lg shadow-[#6DB35F]/30 transition-all cursor-pointer"
               >
                 {activeStage === 'pickup' ? (
                   <>
@@ -1426,22 +1426,22 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
       {hasArrived && (
         <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full max-w-sm rounded-3xl bg-white p-6 text-center space-y-4 shadow-2xl">
-            <div className="w-16 h-16 rounded-3xl bg-[#F6EBDD] text-[#8A5A2B] flex items-center justify-center mx-auto shadow-md">
+            <div className="w-16 h-16 rounded-3xl bg-[#F2F5EA] text-[#3D8438] flex items-center justify-center mx-auto shadow-md">
               <CheckCircle2 className="w-9 h-9 stroke-[2.5]" />
             </div>
 
             <div className="space-y-1">
-              <span className="text-xs font-bold text-[#8A5A2B]">
+              <span className="text-xs font-bold text-[#3D8438]">
                 {activeStage === 'pickup'
                   ? 'Etapa 1 completada'
                   : 'Destino final alcanzado'}
               </span>
-              <h3 className="font-display text-xl font-black text-[#2A1608]">
+              <h3 className="font-display text-xl font-black text-[#10230F]">
                 {activeStage === 'pickup'
                   ? 'Llegaste a la esquina de recogida'
                   : 'Llegaste donde el cliente'}
               </h3>
-              <p className="text-xs text-[#7A6757] leading-relaxed">
+              <p className="text-xs text-[#5F7364] leading-relaxed">
                 {snappedResolution?.isSnappedToCorner
                   ? `Parada vehicular en ${snappedResolution.cornerLabel} para ingresar a ${destinationAddress}.`
                   : `Ubicación: ${destinationAddress}`}
@@ -1452,7 +1452,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
               <button
                 type="button"
                 onClick={handleCompleteStageAndContinue}
-                className="w-full h-12 rounded-full bg-[#C8995F] hover:bg-[#B0824B] text-[#2A1608] font-display text-sm font-bold shadow-lg transition-all duration-200 active:scale-[0.97] cursor-pointer"
+                className="w-full h-12 rounded-full bg-[#6DB35F] hover:bg-[#4F9A45] text-[#10230F] font-display text-sm font-bold shadow-lg transition-all duration-200 active:scale-[0.97] cursor-pointer"
               >
                 {activeStage === 'pickup'
                   ? 'Recoger pedido e iniciar Etapa 2 (Cliente)'
@@ -1462,7 +1462,7 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
               <button
                 type="button"
                 onClick={() => setHasArrived(false)}
-                className="w-full h-11 rounded-full bg-[#F6EBDD] hover:bg-[#EADBCB] text-[#5A3A1C] font-display text-xs font-bold transition-all duration-200 active:scale-[0.97] cursor-pointer"
+                className="w-full h-11 rounded-full bg-[#F2F5EA] hover:bg-[#DCE5D5] text-[#1F4A26] font-display text-xs font-bold transition-all duration-200 active:scale-[0.97] cursor-pointer"
               >
                 Seguir viendo el mapa 3D
               </button>

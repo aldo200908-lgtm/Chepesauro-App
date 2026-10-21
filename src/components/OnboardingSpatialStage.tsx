@@ -598,7 +598,7 @@ export const OnboardingSpatialStage: React.FC<OnboardingSpatialStageProps> = ({
   }, []);
 
   return (
-    <div className="relative w-full h-full select-none overflow-hidden bg-[#080C0A]">
+    <div className="relative w-full h-full select-none overflow-hidden bg-[#0A150E]">
       {/* WebGL 3D Canvas */}
       <div
         ref={containerRef}
@@ -608,18 +608,18 @@ export const OnboardingSpatialStage: React.FC<OnboardingSpatialStageProps> = ({
 
       {/* Fallback only if headless browser has no WebGL */}
       {!webglSupported && (
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0E1814] to-[#080C0A]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#12251A] to-[#0A150E]" />
       )}
 
       {/* Top Subtle Vignette so Header remains crisp */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#080C0A]/90 via-[#080C0A]/40 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#0A150E]/90 via-[#0A150E]/40 to-transparent"
         aria-hidden="true"
       />
 
       {/* Bottom Atmospheric Fade into the Architectural Sheet */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0A0D0C] via-[#0A0D0C]/80 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0C1A11] via-[#0C1A11]/80 to-transparent"
         aria-hidden="true"
       />
     </div>

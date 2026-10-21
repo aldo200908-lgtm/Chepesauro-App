@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, CubeTransparent } from '@phosphor-icons/react';
 import { OnboardingStepNumber, UserRole } from '../utils/onboarding';
 import { OnboardingSpatialStage } from './OnboardingSpatialStage';
+import logoUrl from '../assets/chepesaurio-logo.png';
 
 interface OnboardingLayoutProps {
   step: OnboardingStepNumber;
@@ -33,7 +34,7 @@ export const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
   return (
     <div
       data-testid="onboarding-layout"
-      className="app-viewport bg-[#150B05] flex flex-col justify-between text-[#F7F1EA] select-none relative overflow-hidden"
+      className="app-viewport bg-[#0A150E] flex flex-col justify-between text-[#F6F3E6] select-none relative overflow-hidden"
     >
       {/* Floating Translucent Top Bar over the Full-Bleed 3D Stage */}
       <header className="absolute top-0 inset-x-0 z-30 px-5 onboarding-safe-top pointer-events-none">
@@ -44,17 +45,17 @@ export const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
                 type="button"
                 onClick={onBack}
                 aria-label="Volver al paso anterior"
-                className="w-11 h-11 rounded-full bg-[#24140A]/85 backdrop-blur-md border border-white/10 hover:border-white/20 active:bg-[#3B2212] text-[#F7F1EA] flex items-center justify-center transition-all duration-200 active:scale-[0.94] cursor-pointer shadow-lg"
+                className="w-11 h-11 rounded-full bg-[#12251A]/85 backdrop-blur-md border border-white/10 hover:border-white/20 active:bg-[#21402B] text-[#F6F3E6] flex items-center justify-center transition-all duration-200 active:scale-[0.94] cursor-pointer shadow-lg"
               >
                 <ArrowLeft size={18} weight="bold" aria-hidden="true" />
               </button>
             )}
-            <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#24140A]/80 backdrop-blur-md border border-white/[0.08]">
-              <div className="w-6 h-6 rounded-full bg-[#D4A574] text-[#2A1608] flex items-center justify-center font-display font-extrabold text-xs tracking-tight">
-                V
+            <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#12251A]/80 backdrop-blur-md border border-white/[0.08]">
+              <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0">
+                <img src={logoUrl} alt="" className="w-6 h-6 object-contain" />
               </div>
-              <span className="font-display text-[15px] font-bold tracking-tight text-[#F7F1EA] pr-1">
-                VerdeGo
+              <span className="font-display text-[15px] font-bold tracking-tight text-[#F6F3E6] pr-1">
+                Chepesaurio
               </span>
             </div>
           </div>
@@ -63,7 +64,7 @@ export const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
           <div
             role="status"
             aria-label={`Paso ${step} de 3: ${STEP_LABELS[step]}`}
-            className="pointer-events-auto flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#24140A]/80 backdrop-blur-md border border-white/[0.08]"
+            className="pointer-events-auto flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#12251A]/80 backdrop-blur-md border border-white/[0.08]"
           >
             {[1, 2, 3].map((idx) => {
               const isCurrent = idx === step;
@@ -73,9 +74,9 @@ export const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
                   key={idx}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
                     isCurrent
-                      ? 'w-7 bg-[#D4A574]'
+                      ? 'w-7 bg-[#86C77A]'
                       : isDone
-                      ? 'w-2 bg-[#C8995F]/60'
+                      ? 'w-2 bg-[#6DB35F]/60'
                       : 'w-2 bg-white/15'
                   }`}
                 />
@@ -93,17 +94,17 @@ export const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
 
         {/* Subtle Interactive 3D Hint on Step 1 */}
         {step === 1 && (
-          <div className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1F1109]/85 backdrop-blur-md border border-white/[0.08] text-[11px] text-[#B3A090]">
-            <CubeTransparent size={13} className="text-[#D4A574]" />
+          <div className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0F2016]/85 backdrop-blur-md border border-white/[0.08] text-[11px] text-[#A9BDB0]">
+            <CubeTransparent size={13} className="text-[#86C77A]" />
             <span>Puno 3D en vivo · Arrastra para rotar</span>
           </div>
         )}
       </div>
 
       {/* ARCHITECTURAL BOTTOM SHEET (Breaks generic centered card-stacking) */}
-      <main className="relative z-20 flex-1 min-h-0 w-full -mt-4 rounded-t-[36px] bg-[#1A0E07] border-t border-white/[0.09] shadow-[0_-20px_50px_rgba(0,0,0,0.85)] overflow-y-auto overflow-x-hidden px-6 flex flex-col">
+      <main className="relative z-20 flex-1 min-h-0 w-full -mt-4 rounded-t-[36px] bg-white text-[#131A14] border-t border-white shadow-[0_-20px_50px_rgba(0,0,0,0.45)] overflow-y-auto overflow-x-hidden px-6 flex flex-col">
         {/* Subtle Architectural Handle Bar */}
-        <div className="w-9 h-1 rounded-full bg-white/12 mx-auto mt-3 shrink-0" aria-hidden="true" />
+        <div className="w-9 h-1 rounded-full bg-black/15 mx-auto mt-3 shrink-0" aria-hidden="true" />
 
         <div className="max-w-md w-full mx-auto flex-1 flex flex-col justify-between pt-4 onboarding-safe-bottom">
           <AnimatePresence mode="wait" initial={false}>

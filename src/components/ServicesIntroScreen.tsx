@@ -21,12 +21,12 @@ export const ServicesIntroScreen: React.FC<ServicesIntroScreenProps> = ({
         {/* Editorial Heading */}
         <div className="space-y-1.5 text-left">
           <h1
-            className="font-display text-[26px] sm:text-[30px] font-extrabold tracking-tight text-[#F7F1EA] leading-[1.12]"
+            className="font-display text-[26px] sm:text-[30px] font-extrabold tracking-tight text-[#131A14] leading-[1.12]"
             style={{ textWrap: 'balance' }}
           >
             ¿Qué necesitas hoy?
           </h1>
-          <p className="text-sm text-[#B3A090] leading-relaxed">
+          <p className="text-sm text-[#5F7364] leading-relaxed">
             Todo lo que necesitas, desde una sola aplicación
           </p>
         </div>
@@ -56,18 +56,18 @@ export const ServicesIntroScreen: React.FC<ServicesIntroScreenProps> = ({
                 }}
                 className={`group rounded-[28px] p-4 transition-colors duration-300 cursor-pointer flex sm:flex-col items-center sm:items-stretch gap-4 sm:gap-3 ${
                   isActive
-                    ? 'vg-card-hero border border-[#D4A574]/40'
-                    : 'bg-[#24140A] border border-white/[0.07] hover:border-white/15'
+                    ? 'vg-card-hero'
+                    : 'bg-[#F2F5EA] border border-[#DCE5D5] hover:border-[#A9D99E]'
                 }`}
               >
                 {/* 3D Volumetric Render Stage */}
-                <div className="w-24 h-20 sm:w-full sm:h-28 rounded-3xl bg-[#150B05] border border-white/[0.04] overflow-hidden shrink-0 flex items-center justify-center relative">
+                <div className="w-24 h-20 sm:w-full sm:h-28 rounded-3xl bg-[#0A150E] border border-white/[0.04] overflow-hidden shrink-0 flex items-center justify-center relative">
                   {isComprar ? (
                     <Store3DRender active={isActive} />
                   ) : (
                     <Parcel3DRender active={isActive} />
                   )}
-                  <span className="hidden sm:inline-block absolute top-2 right-2.5 text-[10px] font-mono text-[#D4A574] tabular-nums">
+                  <span className="hidden sm:inline-block absolute top-2 right-2.5 text-[10px] font-mono text-[#86C77A] tabular-nums">
                     {isComprar ? 'S/ 6.00' : 'S/ 7.50'}
                   </span>
                 </div>
@@ -75,14 +75,14 @@ export const ServicesIntroScreen: React.FC<ServicesIntroScreenProps> = ({
                 {/* Editorial Copy */}
                 <div className="space-y-1 min-w-0 flex-1 text-left">
                   <div className="flex items-center justify-between gap-2">
-                    <h2 className="font-display text-[16px] font-bold text-[#F7F1EA] tracking-tight">
+                    <h2 className={`font-display text-[16px] font-bold tracking-tight ${isActive ? 'text-[#F6F3E6]' : 'text-[#131A14]'}`}>
                       {service.title}
                     </h2>
-                    <span className="sm:hidden text-[11px] font-mono text-[#D4A574] tabular-nums shrink-0">
+                    <span className="sm:hidden text-[11px] font-mono text-[#86C77A] tabular-nums shrink-0">
                       {isComprar ? 'S/ 6.00' : 'S/ 7.50'}
                     </span>
                   </div>
-                  <p className="text-xs text-[#B3A090] leading-relaxed">
+                  <p className={`text-xs leading-relaxed ${isActive ? 'text-[#CFE0D3]' : 'text-[#5F7364]'}`}>
                     {service.description}
                   </p>
                 </div>
@@ -97,7 +97,7 @@ export const ServicesIntroScreen: React.FC<ServicesIntroScreenProps> = ({
         <button
           type="button"
           onClick={onContinue}
-          className="group w-full h-[54px] px-6 rounded-full vg-btn-primary font-display text-[15px] font-bold inline-flex items-center justify-between cursor-pointer shadow-[0_14px_32px_-12px_rgba(200,153,95,0.55)]"
+          className="group w-full h-[54px] px-6 rounded-full vg-btn-primary font-display text-[15px] font-bold inline-flex items-center justify-between cursor-pointer "
         >
           <span>Continuar</span>
           <ArrowRight size={18} weight="bold" className="shrink-0 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
@@ -106,7 +106,7 @@ export const ServicesIntroScreen: React.FC<ServicesIntroScreenProps> = ({
         <button
           type="button"
           onClick={onSkip}
-          className="w-full h-10 px-4 rounded-full bg-transparent hover:bg-white/[0.04] active:bg-white/[0.07] text-[#B3A090] hover:text-[#F7F1EA] text-xs font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer"
+          className="w-full h-10 px-4 rounded-full bg-transparent hover:bg-black/[0.04] active:bg-black/[0.07] text-[#5F7364] hover:text-[#131A14] text-xs font-medium transition-all duration-200 active:scale-[0.97] cursor-pointer"
         >
           Omitir introducción
         </button>
