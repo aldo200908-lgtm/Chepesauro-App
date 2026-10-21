@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, NavigationArrow } from '@phosphor-icons/react';
 
 interface WelcomeScreenProps {
   onStart: () => void;
@@ -7,159 +7,60 @@ interface WelcomeScreenProps {
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
   return (
-    <div className="flex-1 flex flex-col justify-between py-2">
-      {/* Center High-Quality Original SVG Illustration: Shopping, Packages & City Delivery */}
-      <div className="my-auto flex flex-col items-center text-center space-y-6">
-        <div className="w-full max-w-[270px] aspect-square rounded-[36px] bg-[#EAF8F2] border border-[#DCECE5] flex items-center justify-center p-6 relative overflow-hidden">
-          <svg
-            viewBox="0 0 240 240"
-            className="w-full h-full"
-            role="img"
-            aria-label="Ilustración de compras en negocios y envíos rápidos en la ciudad"
-          >
-            {/* Soft background circles */}
-            <circle cx="120" cy="120" r="88" fill="#FFFFFF" />
-            <circle cx="120" cy="120" r="68" fill="#EAF8F2" />
+    <div className="flex-1 flex flex-col justify-between py-1">
+      <div className="my-auto space-y-6">
+        {/* Live Spatial Route Telemetry Strip (High-contrast asymmetric bar, not a generic box) */}
+        <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-[#111815] border border-white/[0.07]">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-xl bg-[#22C58B]/15 text-[#22C58B] flex items-center justify-center shrink-0">
+              <NavigationArrow size={18} weight="fill" aria-hidden="true" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 text-xs font-medium text-[#F2F5F3] truncate">
+                <span>Jr. Lima</span>
+                <span className="text-[#22C58B]" aria-hidden="true">→</span>
+                <span>Av. La Torre</span>
+              </div>
+              <p className="text-[11px] text-[#8E9893] truncate mt-0.5">
+                Desvío automático por Plaza Mayor peatonal
+              </p>
+            </div>
+          </div>
 
-            {/* Route connection curve */}
-            <path
-              d="M 56 156 C 85 176, 155 176, 184 150"
-              fill="none"
-              stroke="#078F68"
-              strokeWidth="3.5"
-              strokeDasharray="6 6"
-              strokeLinecap="round"
-            />
-
-            {/* Storefront / Local Business Card (Left-Top) */}
-            <g transform="translate(36, 48)">
-              <rect
-                x="0"
-                y="0"
-                width="76"
-                height="68"
-                rx="16"
-                fill="#FFFFFF"
-                stroke="#DCECE5"
-                strokeWidth="2.5"
-              />
-              {/* Store awning */}
-              <path
-                d="M 10 18 C 10 12, 66 12, 66 18 L 62 28 L 14 28 Z"
-                fill="#078F68"
-              />
-              {/* Shopping bag inside card */}
-              <rect
-                x="24"
-                y="33"
-                width="28"
-                height="24"
-                rx="6"
-                fill="#EAF8F2"
-                stroke="#078F68"
-                strokeWidth="2.2"
-              />
-              <path
-                d="M 32 33 C 32 27, 44 27, 44 33"
-                fill="none"
-                stroke="#064B3C"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-              />
-            </g>
-
-            {/* Express Package / Parcel Card (Right-Top) */}
-            <g transform="translate(124, 56)">
-              <rect
-                x="0"
-                y="0"
-                width="80"
-                height="72"
-                rx="18"
-                fill="#078F68"
-              />
-              {/* Parcel box */}
-              <rect
-                x="20"
-                y="18"
-                width="40"
-                height="36"
-                rx="8"
-                fill="#FFFFFF"
-              />
-              <line
-                x1="20"
-                y1="32"
-                x2="60"
-                y2="32"
-                stroke="#078F68"
-                strokeWidth="2.5"
-              />
-              <line
-                x1="40"
-                y1="18"
-                x2="40"
-                y2="32"
-                stroke="#078F68"
-                strokeWidth="2.5"
-              />
-              {/* Check badge */}
-              <circle cx="58" cy="52" r="10" fill="#064B3C" />
-              <path
-                d="M 54 52 L 57 55 L 63 49"
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </g>
-
-            {/* Delivery Courier & Location Pin Badge (Bottom Center) */}
-            <g transform="translate(68, 134)">
-              <rect
-                x="0"
-                y="0"
-                width="104"
-                height="50"
-                rx="25"
-                fill="#064B3C"
-              />
-              <circle cx="27" cy="25" r="15" fill="#078F68" />
-              <path
-                d="M 27 17 C 22.5 17, 19 20.5, 19 25 C 19 30.5, 27 35, 27 35 C 27 35, 35 30.5, 35 25 C 35 20.5, 31.5 17, 27 17 Z"
-                fill="#FFFFFF"
-              />
-              <circle cx="27" cy="24.5" r="3" fill="#064B3C" />
-              <rect x="50" y="16" width="38" height="7" rx="3.5" fill="#FFFFFF" />
-              <rect x="50" y="28" width="26" height="6" rx="3" fill="#EAF8F2" opacity="0.75" />
-            </g>
-          </svg>
+          <div className="text-right shrink-0 pl-2 border-l border-white/[0.07]">
+            <span className="text-xs font-mono font-bold text-[#22C58B] tabular-nums block">
+              5 min
+            </span>
+            <span className="text-[11px] font-mono text-[#8E9893] tabular-nums block">
+              S/ 4.50
+            </span>
+          </div>
         </div>
 
-        {/* Welcome Text Block */}
-        <div className="space-y-3 px-2 max-w-sm">
+        {/* Bold Editorial Typography */}
+        <div className="space-y-3 text-left">
           <h1
-            className="font-display text-3xl font-bold tracking-tight text-[#102F27] leading-tight"
+            className="font-display text-[32px] sm:text-[36px] font-extrabold tracking-tight text-[#F2F5F3] leading-[1.08]"
             style={{ textWrap: 'balance' }}
           >
             Tus entregas, más fáciles
           </h1>
-          <p className="text-base text-[#64877C] leading-relaxed">
-            Compra en tus negocios favoritos o envía lo que necesitas
+
+          <p className="text-[15px] text-[#94A09A] leading-relaxed max-w-[36ch]">
+            Compra en comercios locales o envía paquetes por toda la ciudad con navegación 3D en tiempo real.
           </p>
         </div>
       </div>
 
-      {/* Bottom Action Area */}
-      <div className="pt-4 space-y-3">
+      {/* Primary Action Button */}
+      <div className="pt-6">
         <button
           type="button"
           onClick={onStart}
-          className="w-full h-14 px-6 rounded-full bg-[#078F68] hover:bg-[#064B3C] active:scale-[0.99] text-white font-display text-base font-semibold inline-flex items-center justify-center gap-2.5 shadow-md shadow-[#078F68]/20 transition-all cursor-pointer"
+          className="w-full h-[54px] px-6 rounded-2xl vg-btn-primary font-display text-[15px] font-bold inline-flex items-center justify-between cursor-pointer shadow-[0_10px_30px_-10px_rgba(16,185,129,0.45)]"
         >
           <span>Comenzar</span>
-          <ArrowRight className="w-5 h-5 shrink-0" aria-hidden="true" />
+          <ArrowRight size={18} weight="bold" className="shrink-0" aria-hidden="true" />
         </button>
       </div>
     </div>

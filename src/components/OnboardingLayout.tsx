@@ -1,52 +1,69 @@
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { OnboardingStepNumber } from '../utils/onboarding';
+import { motion, AnimatePresence } from 'motion/react';
+import { ArrowLeft, CubeTransparent } from '@phosphor-icons/react';
+import { OnboardingStepNumber, UserRole } from '../utils/onboarding';
+import { OnboardingSpatialStage } from './OnboardingSpatialStage';
 
 interface OnboardingLayoutProps {
   step: OnboardingStepNumber;
   onBack?: () => void;
+  selectedRole?: UserRole | null;
   children: React.ReactNode;
 }
+
+const STEP_LABELS: Record<OnboardingStepNumber, string> = {
+  1: 'Bienvenida',
+  2: 'Servicios',
+  3: 'Perfil',
+};
 
 export const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
   step,
   onBack,
+  selectedRole = null,
   children,
 }) => {
+  // Step 1 gives the 3D city stage a generous 48% viewport showcase;
+  // Steps 2 & 3 compact the 3D stage to 30% while camera swoops into the street level.
+  const stageHeightClass =
+    step === 1
+      ? 'h-[44dvh] sm:h-[48dvh] min-h-[250px]'
+      : 'h-[26dvh] sm:h-[30dvh] min-h-[168px]';
+
   return (
     <div
       data-testid="onboarding-layout"
-      className="app-viewport flex flex-col justify-between bg-[#FFFFFF] text-[#102F27] select-none"
+      className="app-viewport bg-[#080C0A] flex flex-col justify-between text-[#F2F5F3] select-none relative overflow-hidden"
     >
-      {/* Top Bar of Onboarding: Brand / Back Button + Discreet Progress Indicator */}
-      <header className="shrink-0 px-5 pb-2 onboarding-safe-top">
-        <div className="max-w-md mx-auto flex items-center justify-between min-h-[48px]">
-          <div className="flex items-center gap-2.5">
+      {/* Floating Translucent Top Bar over the Full-Bleed 3D Stage */}
+      <header className="absolute top-0 inset-x-0 z-30 px-5 onboarding-safe-top pointer-events-none">
+        <div className="max-w-md mx-auto flex items-center justify-between min-h-[52px]">
+          <div className="flex items-center gap-2.5 pointer-events-auto">
             {onBack && (
               <button
                 type="button"
                 onClick={onBack}
                 aria-label="Volver al paso anterior"
-                className="w-10 h-10 rounded-full bg-[#EAF8F2] hover:bg-[#DCECE5] text-[#064B3C] flex items-center justify-center transition-colors active:scale-95 cursor-pointer"
+                className="w-11 h-11 rounded-full bg-[#0D1411]/85 backdrop-blur-md border border-white/10 hover:border-white/20 active:bg-[#16221D] text-[#F2F5F3] flex items-center justify-center transition-colors cursor-pointer shadow-lg"
               >
-                <ArrowLeft className="w-5 h-5" aria-hidden="true" />
+                <ArrowLeft size={18} weight="bold" aria-hidden="true" />
               </button>
             )}
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-2xl bg-[#078F68] text-white flex items-center justify-center font-display font-bold text-base shadow-xs">
+            <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#0D1411]/80 backdrop-blur-md border border-white/[0.08]">
+              <div className="w-6 h-6 rounded-md bg-[#22C58B] text-[#050E0A] flex items-center justify-center font-display font-extrabold text-xs tracking-tight">
                 V
               </div>
-              <span className="font-display text-lg font-bold tracking-tight text-[#102F27]">
+              <span className="font-display text-[15px] font-bold tracking-tight text-[#F2F5F3] pr-1">
                 VerdeGo
               </span>
             </div>
           </div>
 
-          {/* Discreet 3-step progress indicator */}
+          {/* Step Progress Indicator */}
           <div
             role="status"
-            aria-label={`Paso ${step} de 3`}
-            className="flex items-center gap-1.5"
+            aria-label={`Paso ${step} de 3: ${STEP_LABELS[step]}`}
+            className="pointer-events-auto flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#0D1411]/80 backdrop-blur-md border border-white/[0.08]"
           >
             {[1, 2, 3].map((idx) => {
               const isCurrent = idx === step;
@@ -54,12 +71,12 @@ export const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
               return (
                 <span
                   key={idx}
-                  className={`h-1.5 rounded-full transition-all duration-200 ${
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
                     isCurrent
-                      ? 'w-7 bg-[#078F68]'
+                      ? 'w-6 bg-[#22C58B]'
                       : isDone
-                      ? 'w-3 bg-[#078F68]/45'
-                      : 'w-3 bg-[#DCECE5]'
+                      ? 'w-2 bg-[#10B981]/60'
+                      : 'w-2 bg-white/15'
                   }`}
                 />
               );
@@ -68,10 +85,39 @@ export const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
         </div>
       </header>
 
-      {/* Main Onboarding Screen Body */}
-      <main className="flex-1 min-h-0 w-full overflow-y-auto overflow-x-hidden px-5 flex flex-col">
-        <div className="max-w-md w-full mx-auto flex-1 flex flex-col justify-between pt-3 onboarding-safe-bottom">
-          {children}
+      {/* FULL-BLEED INTERACTIVE 3D WEBGL URBAN STAGE */}
+      <div
+        className={`relative w-full shrink-0 transition-all duration-500 ease-out ${stageHeightClass}`}
+      >
+        <OnboardingSpatialStage step={step} selectedRole={selectedRole} />
+
+        {/* Subtle Interactive 3D Hint on Step 1 */}
+        {step === 1 && (
+          <div className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0B110E]/85 backdrop-blur-md border border-white/[0.08] text-[11px] text-[#9BA8A2]">
+            <CubeTransparent size={13} className="text-[#22C58B]" />
+            <span>Puno 3D en vivo · Arrastra para rotar</span>
+          </div>
+        )}
+      </div>
+
+      {/* ARCHITECTURAL BOTTOM SHEET (Breaks generic centered card-stacking) */}
+      <main className="relative z-20 flex-1 min-h-0 w-full -mt-4 rounded-t-[32px] bg-[#0B100E] border-t border-white/[0.09] shadow-[0_-20px_50px_rgba(0,0,0,0.85)] overflow-y-auto overflow-x-hidden px-6 flex flex-col">
+        {/* Subtle Architectural Handle Bar */}
+        <div className="w-9 h-1 rounded-full bg-white/12 mx-auto mt-3 shrink-0" aria-hidden="true" />
+
+        <div className="max-w-md w-full mx-auto flex-1 flex flex-col justify-between pt-4 onboarding-safe-bottom">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className="flex-1 flex flex-col justify-between"
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </main>
     </div>

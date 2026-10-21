@@ -4,7 +4,15 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Bike, Info, ArrowRight, Check } from 'lucide-react';
+import { motion } from 'motion/react';
+import {
+  ArrowLeft,
+  Motorcycle,
+  Info,
+  ArrowRight,
+  CheckCircle,
+  IdentificationBadge,
+} from '@phosphor-icons/react';
 import {
   UserRole,
   AppTab,
@@ -316,6 +324,7 @@ export default function App() {
       <OnboardingLayout
         step={state.onboardingStep}
         onBack={state.onboardingStep > 1 ? handlePrevStep : undefined}
+        selectedRole={state.selectedRole}
       >
         {state.onboardingStep === 1 && (
           <WelcomeScreen onStart={handleNextStep} />
@@ -344,109 +353,113 @@ export default function App() {
     return (
       <div
         data-testid="motorizado-auth-screen"
-        className="app-viewport flex flex-col justify-between bg-[#FFFFFF] text-[#102F27] select-none px-5"
+        className="app-viewport vg-dark-canvas flex flex-col justify-between text-[#F2F5F3] select-none px-6 relative overflow-hidden"
       >
-        <header className="shrink-0 onboarding-safe-top">
-          <div className="max-w-md mx-auto flex items-center justify-between min-h-[48px]">
+        <header className="relative z-10 shrink-0 onboarding-safe-top">
+          <div className="max-w-md mx-auto flex items-center justify-between min-h-[52px]">
             <button
               type="button"
               onClick={handlePrevStep}
               aria-label="Volver a elegir perfil"
-              className="w-10 h-10 rounded-full bg-[#EAF8F2] hover:bg-[#DCECE5] text-[#064B3C] flex items-center justify-center transition-colors cursor-pointer"
+              className="w-11 h-11 -ml-2 rounded-xl bg-transparent hover:bg-white/[0.04] active:bg-white/[0.08] text-[#F2F5F3] flex items-center justify-center transition-colors cursor-pointer"
             >
-              <ArrowLeft className="w-5 h-5" aria-hidden="true" />
+              <ArrowLeft size={18} weight="regular" aria-hidden="true" />
             </button>
-            <span className="text-xs font-semibold text-[#078F68]">
-              Simulación de Motorizado (Demo)
-            </span>
-            <div className="w-10" />
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-[#10B981] text-[#06110C] flex items-center justify-center font-display font-extrabold text-xs tracking-tight">
+                V
+              </div>
+              <span className="font-display text-[17px] font-semibold tracking-tight text-[#F2F5F3]">
+                VerdeGo
+              </span>
+            </div>
+            <div className="w-11" />
           </div>
         </header>
 
-        <main className="flex-1 min-h-0 max-w-md w-full mx-auto flex flex-col justify-between py-4 onboarding-safe-bottom">
-          <div className="my-auto space-y-5">
-            <div className="w-16 h-16 rounded-3xl bg-[#EAF8F2] border border-[#DCECE5] text-[#078F68] flex items-center justify-center">
-              <Bike className="w-8 h-8 stroke-[2]" aria-hidden="true" />
-            </div>
-
-            <div className="space-y-2">
-              <h1 className="font-display text-2xl font-bold text-[#102F27] tracking-tight">
-                Acceso de demostración para motorizado
+        <main className="relative z-10 flex-1 min-h-0 max-w-md w-full mx-auto flex flex-col justify-between pt-2 onboarding-safe-bottom">
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="my-auto space-y-7 py-2"
+          >
+            <div className="space-y-2.5 text-left">
+              <h1
+                className="font-display text-[28px] sm:text-[32px] font-bold text-[#F2F5F3] tracking-tight leading-[1.15]"
+                style={{ textWrap: 'balance' }}
+              >
+                Elige tu perfil de motorizado
               </h1>
-              <p className="text-sm text-[#64877C] leading-relaxed">
-                Selecciona un perfil de motorizado de prueba para escoger pedidos
-                en el panel de inicio, revisar sus datos y navegar en 3D.
+              <p className="text-[15px] text-[#8E9893] leading-relaxed">
+                Selecciona una unidad de demostración para recibir pedidos y navegar en 3D.
               </p>
             </div>
 
             <form
               id="motorizado-auth-form"
               onSubmit={handleEnterDemoMotorizado}
-              className="space-y-3 rounded-3xl bg-[#EAF8F2]/60 border border-[#DCECE5] p-5"
+              className="space-y-3"
             >
-              <p className="text-xs font-semibold text-[#102F27]">
-                Elige el motorizado de prueba:
-              </p>
-
-              <div className="space-y-2.5">
-                {DEMO_DRIVERS.map((drv) => {
-                  const isSelected = drv.id === selectedDemoDriver.id;
-                  return (
-                    <button
-                      key={drv.id}
-                      type="button"
-                      onClick={() => setSelectedDemoDriver(drv)}
-                      className={`w-full text-left p-3.5 rounded-2xl border transition-colors flex items-center justify-between gap-3 cursor-pointer ${
-                        isSelected
-                          ? 'bg-[#078F68] text-white border-[#078F68]'
-                          : 'bg-white text-[#102F27] border-[#DCECE5] hover:bg-[#EAF8F2]'
-                      }`}
-                    >
-                      <div>
-                        <p
-                          className={`text-xs font-bold ${
-                            isSelected ? 'text-white' : 'text-[#102F27]'
-                          }`}
-                        >
+              {DEMO_DRIVERS.map((drv) => {
+                const isSelected = drv.id === selectedDemoDriver.id;
+                return (
+                  <button
+                    key={drv.id}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => setSelectedDemoDriver(drv)}
+                    className={`w-full text-left p-5 rounded-2xl transition-colors flex items-center justify-between gap-4 cursor-pointer ${
+                      isSelected
+                        ? 'bg-[#121D18] border border-[#22C58B]/70'
+                        : 'vg-surface-flat hover:bg-[#151B19] hover:border-white/12 text-[#F2F5F3]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div
+                        className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                          isSelected
+                            ? 'bg-[#22C58B] text-[#06110C]'
+                            : 'bg-[#161C1A] text-[#22C58B]'
+                        }`}
+                      >
+                        <Motorcycle
+                          size={22}
+                          weight={isSelected ? 'fill' : 'duotone'}
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-display text-[16px] font-semibold truncate text-[#F2F5F3]">
                           {drv.name}
                         </p>
-                        <p
-                          className={`text-[11px] ${
-                            isSelected ? 'text-[#EAF8F2]' : 'text-[#64877C]'
-                          }`}
-                        >
-                          ID: {drv.id} · Placa: {drv.vehiclePlate}
+                        <p className="text-xs font-mono tabular-nums mt-0.5 text-[#8E9893]">
+                          {drv.vehiclePlate} · {drv.id}
                         </p>
                       </div>
-                      {isSelected && (
-                        <Check className="w-4 h-4 shrink-0" aria-hidden="true" />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="flex items-start gap-2 text-xs text-[#64877C] pt-1">
-                <Info
-                  className="w-4 h-4 text-[#078F68] shrink-0 mt-0.5"
-                  aria-hidden="true"
-                />
-                <span>
-                  Modo de demostración local: al entrar verás en Inicio los
-                  pedidos disponibles de agentes y tiendas para aceptar y navegar.
-                </span>
-              </div>
+                    </div>
+                    {isSelected && (
+                      <CheckCircle
+                        size={20}
+                        weight="fill"
+                        className="shrink-0 text-[#22C58B]"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </form>
-          </div>
+          </motion.div>
 
-          <div className="pt-4 space-y-2.5">
+          <div className="pt-6">
             <button
               type="submit"
               form="motorizado-auth-form"
-              className="w-full h-14 px-6 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white font-display text-base font-semibold inline-flex items-center justify-center gap-2.5 shadow-md shadow-[#078F68]/20 transition-all cursor-pointer"
+              className="w-full h-[52px] px-6 rounded-xl vg-btn-primary font-display text-[15px] font-semibold inline-flex items-center justify-between cursor-pointer"
             >
-              <span>Entrar al panel de inicio de motorizado</span>
-              <ArrowRight className="w-5 h-5" aria-hidden="true" />
+              <span>Ingresar como motorizado</span>
+              <ArrowRight size={18} weight="bold" aria-hidden="true" />
             </button>
           </div>
         </main>

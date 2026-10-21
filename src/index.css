@@ -2,58 +2,171 @@
 
 @layer base {
   :root {
+    /* =====================================================================
+     * LAYER 1: PRIMITIVE TOKENS — CLEAN SPATIAL MINIMALISM
+     * ===================================================================== */
     --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
-    --color-brand: #078F68;
-    --color-brand-dark: #064B3C;
-    --color-brand-soft: #EAF8F2;
-    --color-bg: #FFFFFF;
-    --color-text-primary: #102F27;
-    --color-text-secondary: #64877C;
-    --color-border: #DCECE5;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+    /* Deep Neutral-Warm Carbon Surfaces */
+    --primitive-carbon-950: #0A0D0C;
+    --primitive-carbon-900: #111614;
+    --primitive-carbon-850: #161C1A;
+    --primitive-carbon-800: #1C2421;
+
+    /* Brand Emerald (Reserved for Primary Route & Primary Action) */
+    --primitive-emerald-400: #22C58B;
+    --primitive-emerald-500: #10B981;
+    --primitive-emerald-600: #0D9F6E;
+
+    /* Refined Editorial Neutrals */
+    --primitive-white-soft: #F2F5F3;
+    --primitive-gray-300: #C4CCC8;
+    --primitive-gray-400: #8E9893;
+    --primitive-gray-600: #5A635E;
+
+    /* Semantic Status Colors */
+    --primitive-amber-400: #F59E0B;
+    --primitive-red-400: #EF4444;
+
+    /* =====================================================================
+     * LAYER 2: SEMANTIC TOKENS
+     * ===================================================================== */
+    --vg-bg-canvas: var(--primitive-carbon-950);
+    --vg-bg-surface: var(--primitive-carbon-900);
+    --vg-bg-elevated: var(--primitive-carbon-850);
+
+    --vg-border-subtle: rgba(255, 255, 255, 0.06);
+    --vg-border-default: rgba(255, 255, 255, 0.10);
+    --vg-border-active: rgba(16, 185, 129, 0.55);
+
+    --vg-brand-primary: var(--primitive-emerald-500);
+    --vg-text-primary: var(--primitive-white-soft);
+    --vg-text-secondary: var(--primitive-gray-400);
+    --vg-text-muted: var(--primitive-gray-600);
+
+    /* =====================================================================
+     * LAYER 3: COMPONENT TOKENS
+     * ===================================================================== */
+    --touch-target-min: 44px;
+    --cta-height-primary: 52px;
   }
 
   html,
-  body,
-  #root {
-    width: 100%;
-    height: 100vh;
-    height: 100dvh;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    overscroll-behavior: none;
-    background-color: #FFFFFF;
-    color: #102F27;
+  body {
+    background-color: var(--vg-bg-canvas);
+    color: var(--vg-text-primary);
     font-family: var(--font-sans);
-    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none;
   }
 
-  h1, h2, h3, h4, .font-display {
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
     font-family: var(--font-display);
+    letter-spacing: -0.025em;
   }
 }
 
+/* Mobile-first full viewport shell with dynamic viewport units */
 .app-viewport {
-  width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  max-width: 100vw;
-  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
+/* Safe area padding helpers for mobile bottom navigation & notch */
 .onboarding-safe-top {
-  padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  padding-top: max(1rem, env(safe-area-inset-top));
 }
 
 .onboarding-safe-bottom {
-  padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
 }
 
-.pb-safe-nav {
-  padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
+/* Tabular numbers for prices, distances, timers, and coordinates */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
-.bottom-nav-safe {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+/* =====================================================================
+ * CLEAN SPATIAL MINIMALISM SURFACES
+ * ===================================================================== */
+
+/* Deep Carbon Canvas — Pure, calm, distraction-free */
+.vg-dark-canvas {
+  background-color: #0A0D0C;
+  color: #F2F5F3;
+}
+
+/* Flat Surface for Clean Single-Layer Cards */
+.vg-surface-flat {
+  background-color: #111614;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.vg-surface-elevated {
+  background-color: #161C1A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Restrained Glassmorphism (Used ONLY for floating navigation bars & overlays) */
+.vg-glass-restrained {
+  background: rgba(14, 18, 17, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Primary Action Button: Clean Emerald, Zero Neon Glow */
+.vg-btn-primary,
+.vg-btn-futuristic {
+  background-color: #10B981;
+  color: #06110C;
+  transition: background-color 150ms ease, transform 120ms ease;
+}
+
+.vg-btn-primary:hover,
+.vg-btn-futuristic:hover {
+  background-color: #18C98E;
+}
+
+.vg-btn-primary:active,
+.vg-btn-futuristic:active {
+  background-color: #0D9F6E;
+  transform: scale(0.99);
+}
+
+/* Main App Card Utilities */
+.vg-card {
+  background-color: #111614;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.vg-card-interactive {
+  background-color: #111614;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.vg-card-interactive:hover {
+  background-color: #161C1A;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

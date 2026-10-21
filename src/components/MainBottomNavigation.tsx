@@ -1,74 +1,85 @@
 import React from 'react';
-import { Home, Package, User } from 'lucide-react';
+import { motion } from 'motion/react';
+import { House, Package, UserCircle } from '@phosphor-icons/react';
 import { AppTab } from '../utils/onboarding';
 
 interface MainBottomNavigationProps {
   activeTab: AppTab;
   onSelectTab: (tab: AppTab) => void;
+  ordersBadgeCount?: number;
   pendingOrdersCount?: number;
 }
 
 const NAV_ITEMS: {
   id: AppTab;
   label: string;
-  Icon: React.FC<{ className?: string }>;
+  Icon: React.ElementType;
 }[] = [
-  { id: 'inicio', label: 'Inicio', Icon: Home },
+  { id: 'inicio', label: 'Inicio', Icon: House },
   { id: 'pedidos', label: 'Pedidos', Icon: Package },
-  { id: 'perfil', label: 'Perfil', Icon: User },
+  { id: 'perfil', label: 'Perfil', Icon: UserCircle },
 ];
 
 export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
   activeTab,
   onSelectTab,
-  pendingOrdersCount = 0,
+  ordersBadgeCount,
+  pendingOrdersCount,
 }) => {
+  const badgeCount = pendingOrdersCount ?? ordersBadgeCount ?? 0;
+
   return (
     <nav
-      aria-label="Navegación principal inferior"
-      className="fixed bottom-0 left-0 right-0 w-full z-40 bg-[#FFFFFF]/95 backdrop-blur-md border-t border-[#DCECE5] bottom-nav-safe"
+      aria-label="Navegación principal"
+      className="fixed bottom-0 inset-x-0 z-40 vg-glass-restrained border-t border-white/[0.08] onboarding-safe-bottom"
     >
-      <div className="max-w-lg mx-auto grid grid-cols-3 items-center h-16 px-2">
-        {NAV_ITEMS.map(({ id, label, Icon }) => {
-          const isActive = activeTab === id;
+      <div className="max-w-md mx-auto px-4 pt-1.5 grid grid-cols-3 gap-2">
+        {NAV_ITEMS.map((item) => {
+          const isActive = activeTab === item.id;
+          const IconComponent = item.Icon;
+
           return (
             <button
-              key={id}
+              key={item.id}
               type="button"
-              onClick={() => onSelectTab(id)}
+              onClick={() => onSelectTab(item.id)}
               aria-current={isActive ? 'page' : undefined}
-              className={`relative flex flex-col items-center justify-center h-14 rounded-2xl transition-colors duration-150 select-none cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#078F68] ${
+              className={`relative flex flex-col items-center justify-center min-h-[50px] py-1.5 px-2 rounded-xl transition-colors duration-150 cursor-pointer ${
                 isActive
-                  ? 'text-[#078F68]'
-                  : 'text-[#64877C] hover:text-[#102F27]'
+                  ? 'text-[#22C58B]'
+                  : 'text-[#8A9E95] hover:text-[#F3F7F5]'
               }`}
             >
-              <div
-                className={`relative flex items-center justify-center w-12 h-7 rounded-full transition-colors duration-150 ${
-                  isActive ? 'bg-[#EAF8F2] text-[#078F68]' : ''
-                }`}
-              >
-                <Icon
-                  className={`w-5 h-5 ${
-                    isActive ? 'stroke-[2.4]' : 'stroke-[1.9]'
-                  }`}
+              {isActive && (
+                <motion.span
+                  layoutId="vg-bottom-nav-pill"
+                  transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                  className="absolute inset-x-3 inset-y-1 rounded-xl bg-[#101E18] border border-[#22C58B]/30 -z-10"
+                />
+              )}
+
+              <div className="relative flex items-center justify-center">
+                <IconComponent
+                  size={21}
+                  weight={isActive ? 'fill' : 'duotone'}
                   aria-hidden="true"
                 />
-                {id === 'pedidos' && pendingOrdersCount > 0 && (
+                {item.id === 'pedidos' && badgeCount > 0 && (
                   <span
-                    aria-label={`${pendingOrdersCount} pedidos activos`}
-                    className="absolute -top-0.5 right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-[#078F68] text-white text-[10px] font-bold flex items-center justify-center tabular-nums"
+                    aria-label={`${badgeCount} pedidos activos`}
+                    className="absolute -top-1.5 -right-3.5 min-w-[17px] h-[17px] px-1 rounded-sm bg-[#10B981] text-[#050E0A] text-[10px] font-mono font-bold flex items-center justify-center tabular-nums"
                   >
-                    {pendingOrdersCount}
+                    {badgeCount}
                   </span>
                 )}
               </div>
+
               <span
-                className={`text-[11px] leading-tight mt-1 whitespace-nowrap shrink-0 ${
-                  isActive ? 'font-bold text-[#064B3C]' : 'font-medium'
+                className={`mt-1 text-[11px] tracking-tight leading-none ${
+                  isActive ? 'font-bold text-[#F3F7F5]' : 'font-medium'
                 }`}
               >
-                {label}
+                {item.label}
               </span>
             </button>
           );

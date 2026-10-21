@@ -324,7 +324,8 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
         const coords = res.data.geoJson.geometry.coordinates;
         if (coords.length > 0) {
           const bounds = coords.reduce(
-            (b, c) => b.extend(c as [number, number]),
+            (b: mapboxgl.LngLatBounds, c: [number, number]) =>
+              b.extend(c as [number, number]),
             new mapboxgl.LngLatBounds(
               coords[0] as [number, number],
               coords[0] as [number, number]

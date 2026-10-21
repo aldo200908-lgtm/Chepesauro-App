@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight } from '@phosphor-icons/react';
 import { ROLE_OPTIONS, UserRole } from '../utils/onboarding';
 import { RoleCard } from './RoleCard';
 
@@ -15,26 +15,26 @@ export const ProfileSelectionScreen: React.FC<ProfileSelectionScreenProps> = ({
   onContinue,
 }) => {
   return (
-    <div className="flex-1 flex flex-col justify-between py-2">
-      <div className="space-y-6 pt-2">
-        {/* Heading & Subtitle */}
-        <div className="space-y-2">
+    <div className="flex-1 flex flex-col justify-between py-1">
+      <div className="my-auto space-y-5">
+        {/* Clean Editorial Heading */}
+        <div className="space-y-1.5 text-left">
           <h1
-            className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#102F27] leading-tight"
+            className="font-display text-[26px] sm:text-[30px] font-extrabold tracking-tight text-[#F2F5F3] leading-[1.12]"
             style={{ textWrap: 'balance' }}
           >
             ¿Cómo quieres ingresar?
           </h1>
-          <p className="text-sm sm:text-base text-[#64877C] leading-relaxed">
-            Elige cómo utilizarás la aplicación
+          <p className="text-sm text-[#8E9893] leading-relaxed">
+            Selecciona tu perfil para configurar el mapa 3D.
           </p>
         </div>
 
-        {/* Profile Cards: Soy cliente & Soy motorizado */}
+        {/* Visual Profile Cards */}
         <div
           role="group"
           aria-label="Elige cómo utilizarás la aplicación"
-          className="space-y-4"
+          className="space-y-3"
         >
           <RoleCard
             option={ROLE_OPTIONS.usuario}
@@ -50,20 +50,26 @@ export const ProfileSelectionScreen: React.FC<ProfileSelectionScreenProps> = ({
         </div>
       </div>
 
-      {/* Primary Action Button (Disabled until a profile is selected) */}
-      <div className="pt-4">
+      {/* Primary Action Button */}
+      <div className="pt-5">
         <button
           type="button"
           onClick={onContinue}
           disabled={!selectedRole}
-          className={`w-full h-14 px-6 rounded-full font-display text-base font-semibold inline-flex items-center justify-center gap-2.5 transition-all duration-150 whitespace-nowrap shrink-0 ${
+          className={`w-full h-[54px] px-6 rounded-2xl font-display text-[15px] font-bold inline-flex items-center justify-between transition-all duration-150 whitespace-nowrap shrink-0 ${
             selectedRole
-              ? 'bg-[#078F68] hover:bg-[#064B3C] active:scale-[0.99] text-white shadow-md shadow-[#078F68]/20 cursor-pointer'
-              : 'bg-[#EAF8F2] text-[#64877C]/60 border border-[#DCECE5] cursor-not-allowed'
+              ? 'vg-btn-primary cursor-pointer shadow-[0_10px_30px_-10px_rgba(16,185,129,0.45)]'
+              : 'bg-[#111614] text-[#5A635E] border border-white/[0.05] cursor-not-allowed'
           }`}
         >
-          <span>Continuar</span>
-          <ArrowRight className="w-5 h-5 shrink-0" aria-hidden="true" />
+          <span>
+            {selectedRole === 'usuario'
+              ? 'Continuar como Cliente'
+              : selectedRole === 'motorizado'
+              ? 'Continuar como Motorizado'
+              : 'Selecciona un perfil'}
+          </span>
+          <ArrowRight size={18} weight="bold" className="shrink-0" aria-hidden="true" />
         </button>
       </div>
     </div>

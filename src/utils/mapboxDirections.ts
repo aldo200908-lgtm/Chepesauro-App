@@ -64,10 +64,19 @@ export interface RestrictedZoneDefinition {
   }[];
 }
 
+export interface RouteLineGeoJson {
+  type: 'Feature';
+  properties: Record<string, unknown>;
+  geometry: {
+    type: 'LineString';
+    coordinates: [number, number][];
+  };
+}
+
 export interface RouteDirectionsResult {
-  geoJson: GeoJSON.Feature<GeoJSON.LineString>;
+  geoJson: RouteLineGeoJson;
   /** Tramo corto a pie desde la esquina vehicular hasta el local peatonal (si aplica) */
-  walkingConnectorGeoJson?: GeoJSON.Feature<GeoJSON.LineString>;
+  walkingConnectorGeoJson?: RouteLineGeoJson;
   accessResolution?: VehicularAccessResolution;
   distanceMeters: number;
   durationSeconds: number;
@@ -530,7 +539,7 @@ export async function fetchMapboxDirections(
       );
     }
 
-    const geoJson: GeoJSON.Feature<GeoJSON.LineString> = {
+    const geoJson: RouteLineGeoJson = {
       type: 'Feature',
       properties: {
         distance: primaryRoute.distance,
@@ -539,7 +548,7 @@ export async function fetchMapboxDirections(
       geometry: primaryRoute.geometry,
     };
 
-    const walkingConnectorGeoJson: GeoJSON.Feature<GeoJSON.LineString> | undefined =
+    const walkingConnectorGeoJson: RouteLineGeoJson | undefined =
       destResolution.isSnappedToCorner
         ? {
             type: 'Feature',

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { Drawer } from 'vaul';
+import { ListChecks } from '@phosphor-icons/react';
 import {
   X,
   Navigation,
@@ -1108,45 +1110,48 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
         <button
           type="button"
           onClick={handleToggleAimPointer}
+          aria-pressed={aimPointerActive}
           aria-label="Activar mira para ver la dirección a la que apunto"
           title="Mira de dirección a la que apunto"
-          className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-all cursor-pointer active:scale-95 ${
+          className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-colors cursor-pointer ${
             aimPointerActive
               ? 'bg-[#F0ABFC] text-[#2E054E] ring-2 ring-white'
               : 'bg-white text-[#9333EA] hover:bg-[#F3E8FF]'
           }`}
         >
-          <Crosshair className="w-5 h-5" />
+          <Crosshair className="w-5 h-5" aria-hidden="true" />
         </button>
 
         {/* 3D / 2D Perspective Toggle */}
         <button
           type="button"
           onClick={handleToggle3D}
+          aria-pressed={is3DMode}
           aria-label={is3DMode ? 'Cambiar a vista 2D' : 'Cambiar a 3D'}
           title={is3DMode ? 'Vista 3D activa' : 'Vista 2D'}
-          className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-all cursor-pointer active:scale-95 ${
+          className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-colors cursor-pointer ${
             is3DMode
               ? 'bg-[#064B3C] text-white ring-2 ring-white/50'
               : 'bg-white text-[#102F27] hover:bg-[#EAF8F2]'
           }`}
         >
-          <Layers className="w-5 h-5" />
+          <Layers className="w-5 h-5" aria-hidden="true" />
         </button>
 
         {/* Mark Closed Street / Construction Roadblock Toggle */}
         <button
           type="button"
           onClick={() => setIsMarkingRoadblock((prev) => !prev)}
+          aria-pressed={isMarkingRoadblock}
           aria-label="Marcar calle cerrada u obra en el mapa"
           title="Marcar calle cerrada u obra vial"
-          className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-all cursor-pointer active:scale-95 ${
+          className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-colors cursor-pointer ${
             isMarkingRoadblock
               ? 'bg-red-600 text-white ring-2 ring-white'
               : 'bg-white text-red-600 hover:bg-red-50'
           }`}
         >
-          <Ban className="w-5 h-5" />
+          <Ban className="w-5 h-5" aria-hidden="true" />
         </button>
 
         {/* Clear Custom Roadblocks Button */}
@@ -1156,9 +1161,9 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
             onClick={handleClearAllRoadblocks}
             aria-label="Quitar calles bloqueadas"
             title={`Quitar ${customRoadblocks.length} bloqueo(s) vial(es)`}
-            className="w-11 h-11 rounded-2xl bg-amber-500 text-white hover:bg-amber-600 flex items-center justify-center shadow-lg transition-all cursor-pointer active:scale-95"
+            className="w-11 h-11 rounded-2xl bg-amber-500 text-white hover:bg-amber-600 flex items-center justify-center shadow-lg transition-colors cursor-pointer"
           >
-            <Trash2 className="w-5 h-5" />
+            <Trash2 className="w-5 h-5" aria-hidden="true" />
           </button>
         )}
 
@@ -1174,17 +1179,18 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
               );
             }
           }}
+          aria-pressed={voiceEnabled}
           aria-label={voiceEnabled ? 'Silenciar voz' : 'Activar voz'}
-          className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-all cursor-pointer active:scale-95 ${
+          className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-colors cursor-pointer ${
             voiceEnabled
               ? 'bg-white text-[#078F68]'
               : 'bg-white/80 text-gray-400'
           }`}
         >
           {voiceEnabled ? (
-            <Volume2 className="w-5 h-5" />
+            <Volume2 className="w-5 h-5" aria-hidden="true" />
           ) : (
-            <VolumeX className="w-5 h-5" />
+            <VolumeX className="w-5 h-5" aria-hidden="true" />
           )}
         </button>
 
@@ -1299,16 +1305,97 @@ export const GPSNavigationView: React.FC<GPSNavigationViewProps> = ({
               </div>
             </div>
 
-            {/* Bottom Actions: Exit + Complete Current Stage */}
+            {/* Bottom Actions: Exit + Steps Bottom Sheet (Vaul) + Complete Current Stage */}
             <div className="flex items-center gap-2 pt-1">
               <button
                 type="button"
                 onClick={onExit}
-                className="h-12 px-4 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white font-display text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0"
+                className="h-12 px-3.5 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white font-display text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0"
               >
                 <X className="w-4 h-4" />
                 <span>Salir</span>
               </button>
+
+              <Drawer.Root>
+                <Drawer.Trigger asChild>
+                  <button
+                    type="button"
+                    className="h-12 px-3.5 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-[#F0ABFC] font-display text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 border border-white/10"
+                  >
+                    <ListChecks weight="duotone" className="w-4 h-4" />
+                    <span>Pasos</span>
+                  </button>
+                </Drawer.Trigger>
+                <Drawer.Portal>
+                  <Drawer.Overlay className="fixed inset-0 z-50 bg-black/55 backdrop-blur-[2px]" />
+                  <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mt-24 flex max-h-[80dvh] flex-col rounded-t-3xl bg-[#0A221C] text-white border-t border-white/15 shadow-2xl focus:outline-none">
+                    <div className="mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-white/25" />
+                    <div className="overflow-y-auto px-5 pt-4 pb-6 space-y-4 max-w-lg mx-auto w-full">
+                      <div className="flex items-center justify-between gap-2">
+                        <div>
+                          <Drawer.Title className="font-display text-base font-bold text-white">
+                            Instrucciones giro a giro y vías restringidas
+                          </Drawer.Title>
+                          <Drawer.Description className="text-xs text-[#8BE0C8] tabular-nums">
+                            {routeResult
+                              ? `${routeResult.steps.length} maniobras · ${(
+                                  routeResult.distanceMeters / 1000
+                                ).toFixed(2)} km en total`
+                              : 'Calculando pasos de navegación...'}
+                          </Drawer.Description>
+                        </div>
+                      </div>
+
+                      {/* Restricted Zones Active Notice */}
+                      <div className="rounded-2xl bg-white/8 border border-white/10 p-3 space-y-1 text-xs">
+                        <p className="font-bold text-[#F0ABFC]">
+                          Zonas peatonales y bloqueos evitados automáticamente:
+                        </p>
+                        <p className="text-white/80">
+                          {PUNO_RESTRICTED_ZONES.map((z) => z.name).join(' · ')}
+                          {customRoadblocks.length > 0
+                            ? ` + ${customRoadblocks.length} corte(s) vial(es) manual(es)`
+                            : ''}
+                        </p>
+                      </div>
+
+                      {/* Turn-by-Turn Steps List */}
+                      <div className="divide-y divide-white/10">
+                        {(routeResult?.steps || []).map((st, idx) => {
+                          const isCurrent = idx === currentStepIndex;
+                          return (
+                            <div
+                              key={st.id || `${st.streetName}-${idx}`}
+                              className={`py-2.5 flex items-center justify-between gap-3 text-xs ${
+                                isCurrent ? 'text-[#F0ABFC] font-bold' : 'text-white/85'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <span className="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center text-[11px] font-bold tabular-nums shrink-0">
+                                  {idx + 1}
+                                </span>
+                                <div className="min-w-0">
+                                  <p className="truncate">
+                                    {st.bannerInstruction || st.maneuver.instruction}
+                                  </p>
+                                  {st.streetName && (
+                                    <p className="text-[11px] text-[#8BE0C8] truncate">
+                                      Vía: {st.streetName}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                              <span className="tabular-nums font-semibold shrink-0 text-white/90">
+                                {formatManeuverDistance(st.distanceMeters)}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </Drawer.Content>
+                </Drawer.Portal>
+              </Drawer.Root>
 
               <button
                 type="button"

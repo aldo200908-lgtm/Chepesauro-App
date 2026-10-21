@@ -1,6 +1,8 @@
-import React from 'react';
-import { Store, Package, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
+import { ArrowRight } from '@phosphor-icons/react';
 import { SERVICE_OPTIONS } from '../utils/onboarding';
+import { Store3DRender, Parcel3DRender } from './Onboarding3DVisuals';
 
 interface ServicesIntroScreenProps {
   onContinue: () => void;
@@ -11,84 +13,98 @@ export const ServicesIntroScreen: React.FC<ServicesIntroScreenProps> = ({
   onContinue,
   onSkip,
 }) => {
+  const [activeId, setActiveId] = useState<'comprar' | 'enviar'>('comprar');
+
   return (
-    <div className="flex-1 flex flex-col justify-between py-2">
-      <div className="space-y-6 pt-2">
-        {/* Heading & Description */}
-        <div className="space-y-2">
+    <div className="flex-1 flex flex-col justify-between py-1">
+      <div className="my-auto space-y-5">
+        {/* Editorial Heading */}
+        <div className="space-y-1.5 text-left">
           <h1
-            className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#102F27] leading-tight"
+            className="font-display text-[26px] sm:text-[30px] font-extrabold tracking-tight text-[#F2F5F3] leading-[1.12]"
             style={{ textWrap: 'balance' }}
           >
             ¿Qué necesitas hoy?
           </h1>
-          <p className="text-sm sm:text-base text-[#64877C] leading-relaxed">
+          <p className="text-sm text-[#8E9893] leading-relaxed">
             Todo lo que necesitas, desde una sola aplicación
           </p>
         </div>
 
-        {/* Two Large Visually Differentiated Service Cards */}
-        <div className="space-y-4" role="list" aria-label="Servicios disponibles">
+        {/* 2-Column Spatial Bento Cards with Studio 3D Renders (Breaks stacked gray rows) */}
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+          role="list"
+          aria-label="Servicios disponibles"
+        >
           {SERVICE_OPTIONS.map((service, index) => {
             const isComprar = service.id === 'comprar';
-            const Icon = isComprar ? Store : Package;
+            const isActive = activeId === service.id;
 
             return (
-              <div
+              <motion.div
                 key={service.id}
                 role="listitem"
-                className={`rounded-3xl p-5 sm:p-6 border transition-all ${
-                  index === 0
-                    ? 'bg-[#EAF8F2] border-[#DCECE5]'
-                    : 'bg-[#FFFFFF] border-[#DCECE5] shadow-xs'
+                onMouseEnter={() => setActiveId(service.id)}
+                onClick={() => setActiveId(service.id)}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, delay: index * 0.06 }}
+                className={`group rounded-2xl p-4 transition-all cursor-pointer flex sm:flex-col items-center sm:items-stretch gap-4 sm:gap-3 ${
+                  isActive
+                    ? 'bg-[#121D18] border border-[#22C58B]/50'
+                    : 'bg-[#111614] border border-white/[0.06] hover:border-white/15'
                 }`}
               >
-                <div className="flex items-start gap-4">
-                  <div
-                    className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
-                      index === 0
-                        ? 'bg-[#078F68] text-white'
-                        : 'bg-[#EAF8F2] text-[#078F68] border border-[#DCECE5]'
-                    }`}
-                  >
-                    <Icon className="w-7 h-7 stroke-[2]" aria-hidden="true" />
-                  </div>
+                {/* 3D Volumetric Render Stage */}
+                <div className="w-24 h-20 sm:w-full sm:h-28 rounded-xl bg-[#0B100E] border border-white/[0.04] overflow-hidden shrink-0 flex items-center justify-center relative">
+                  {isComprar ? (
+                    <Store3DRender active={isActive} />
+                  ) : (
+                    <Parcel3DRender active={isActive} />
+                  )}
+                  <span className="hidden sm:inline-block absolute top-2 right-2.5 text-[10px] font-mono text-[#22C58B] tabular-nums">
+                    {isComprar ? 'S/ 6.00' : 'S/ 7.50'}
+                  </span>
+                </div>
 
-                  <div className="space-y-1.5 min-w-0 flex-1">
-                    <span className="text-xs font-semibold text-[#078F68] block">
-                      {service.badge}
-                    </span>
-                    <h2 className="font-display text-lg sm:text-xl font-bold text-[#102F27] tracking-tight">
+                {/* Editorial Copy */}
+                <div className="space-y-1 min-w-0 flex-1 text-left">
+                  <div className="flex items-center justify-between gap-2">
+                    <h2 className="font-display text-[16px] font-bold text-[#F2F5F3] tracking-tight">
                       {service.title}
                     </h2>
-                    <p className="text-sm text-[#64877C] leading-relaxed">
-                      {service.description}
-                    </p>
+                    <span className="sm:hidden text-[11px] font-mono text-[#22C58B] tabular-nums shrink-0">
+                      {isComprar ? 'S/ 6.00' : 'S/ 7.50'}
+                    </span>
                   </div>
+                  <p className="text-xs text-[#8E9893] leading-relaxed">
+                    {service.description}
+                  </p>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
       </div>
 
-      {/* Bottom Action Controls */}
-      <div className="pt-4 space-y-2.5">
+      {/* Bottom Action Area */}
+      <div className="pt-5 space-y-2">
         <button
           type="button"
           onClick={onContinue}
-          className="w-full h-14 px-6 rounded-full bg-[#078F68] hover:bg-[#064B3C] active:scale-[0.99] text-white font-display text-base font-semibold inline-flex items-center justify-center gap-2.5 shadow-md shadow-[#078F68]/20 transition-all cursor-pointer"
+          className="w-full h-[54px] px-6 rounded-2xl vg-btn-primary font-display text-[15px] font-bold inline-flex items-center justify-between cursor-pointer shadow-[0_10px_30px_-10px_rgba(16,185,129,0.45)]"
         >
           <span>Continuar</span>
-          <ArrowRight className="w-5 h-5 shrink-0" aria-hidden="true" />
+          <ArrowRight size={18} weight="bold" className="shrink-0" aria-hidden="true" />
         </button>
 
         <button
           type="button"
           onClick={onSkip}
-          className="w-full h-11 px-6 rounded-full bg-transparent hover:bg-[#EAF8F2] text-[#64877C] hover:text-[#102F27] text-sm font-semibold transition-colors cursor-pointer"
+          className="w-full h-10 px-4 rounded-xl bg-transparent hover:bg-white/[0.04] active:bg-white/[0.07] text-[#8E9893] hover:text-[#F2F5F3] text-xs font-medium transition-colors cursor-pointer"
         >
-          Omitir
+          Omitir introducción
         </button>
       </div>
     </div>

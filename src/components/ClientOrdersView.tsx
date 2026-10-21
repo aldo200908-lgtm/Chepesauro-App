@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import {
   Plus,
   Clock,
-  Bike,
+  Motorcycle,
   XCircle,
-  ChevronDown,
-  ChevronUp,
-  Store,
+  CaretDown,
+  CaretUp,
+  Storefront,
   Package,
-  Navigation,
-} from 'lucide-react';
+  NavigationArrow,
+} from '@phosphor-icons/react';
 import {
   DemoOrder,
   OrderServiceType,
@@ -35,7 +35,6 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
   orders,
   onCreateOrder,
   onCancelOrder,
-  onOpenOrderInMap,
   onStartNavigation,
 }) => {
   const [serviceType, setServiceType] = useState<OrderServiceType>(
@@ -117,28 +116,28 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
       {/* Header & Demo Notice */}
       <div className="space-y-1">
         <div className="flex items-center justify-between gap-2">
-          <h1 className="font-display text-xl font-bold text-[#102F27]">
+          <h1 className="font-display text-xl font-bold text-[#F3F7F5]">
             Pedidos de Cliente
           </h1>
-          <span className="text-xs font-semibold text-[#078F68] tabular-nums">
+          <span className="text-xs font-mono font-semibold text-[#22C58B] tabular-nums">
             {orders.length} registrados
           </span>
         </div>
-        <p className="text-xs text-[#64877C]">
-          Flujo de demostración · Tarifas e importes ficticios en soles (S/)
+        <p className="text-xs text-[#8A9E95]">
+          Flujo de demostración · Tarifas e importes en soles (S/)
         </p>
       </div>
 
       {/* Create Order Form (Encargo Personalizado o Compra en Negocio) */}
       <form
         onSubmit={handleSubmit}
-        className="rounded-3xl bg-[#EAF8F2] border border-[#DCECE5] p-4 space-y-3.5"
+        className="rounded-2xl vg-surface-flat p-4 space-y-3.5"
       >
-        <div className="flex items-center justify-between gap-2">
-          <h2 className="font-display text-sm font-bold text-[#102F27]">
+        <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/[0.06]">
+          <h2 className="font-display text-sm font-bold text-[#F3F7F5]">
             Crear nuevo pedido (Demo)
           </h2>
-          <span className="text-[11px] font-semibold text-[#078F68] tabular-nums">
+          <span className="text-[11px] font-mono text-[#22C58B] tabular-nums">
             Tarifa demo: {formatPenCurrency(demoDeliveryFee)}
           </span>
         </div>
@@ -147,26 +146,28 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
         <div
           role="group"
           aria-label="Tipo de pedido"
-          className="grid grid-cols-2 gap-2 p-1 bg-white rounded-full border border-[#DCECE5]"
+          className="grid grid-cols-2 gap-2 p-1 bg-[#070B09] rounded-xl border border-white/[0.08]"
         >
           <button
             type="button"
+            aria-pressed={serviceType === 'encargo_personalizado'}
             onClick={() => setServiceType('encargo_personalizado')}
-            className={`py-2 px-3 rounded-full text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+            className={`h-10 px-3 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               serviceType === 'encargo_personalizado'
-                ? 'bg-[#078F68] text-white'
-                : 'text-[#64877C] hover:text-[#102F27]'
+                ? 'bg-[#10B981] text-[#050E0A] font-bold'
+                : 'text-[#8A9E95] hover:text-[#F3F7F5]'
             }`}
           >
             Encargo personalizado
           </button>
           <button
             type="button"
+            aria-pressed={serviceType === 'compra_negocio'}
             onClick={() => setServiceType('compra_negocio')}
-            className={`py-2 px-3 rounded-full text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+            className={`h-10 px-3 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               serviceType === 'compra_negocio'
-                ? 'bg-[#078F68] text-white'
-                : 'text-[#64877C] hover:text-[#102F27]'
+                ? 'bg-[#10B981] text-[#050E0A] font-bold'
+                : 'text-[#8A9E95] hover:text-[#F3F7F5]'
             }`}
           >
             Compra en negocio
@@ -178,7 +179,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
             <div>
               <label
                 htmlFor="business-name-input"
-                className="block text-[11px] font-semibold text-[#064B3C] mb-1"
+                className="block text-[11px] font-mono uppercase tracking-wider text-[#8A9E95] mb-1"
               >
                 Nombre del negocio de recogida
               </label>
@@ -188,7 +189,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
                 placeholder="Ej. Bodega y Panadería San Martín"
-                className="w-full h-10 px-3.5 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] placeholder:text-[#64877C] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
+                className="w-full h-11 px-3.5 rounded-xl bg-[#111A16] border border-white/10 text-xs text-[#F3F7F5] placeholder:text-[#566961] focus:outline-none focus:border-[#22C58B]"
               />
             </div>
 
@@ -196,7 +197,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               <div className="col-span-6">
                 <label
                   htmlFor="item-name-input"
-                  className="block text-[11px] font-semibold text-[#064B3C] mb-1"
+                  className="block text-[11px] font-mono uppercase tracking-wider text-[#8A9E95] mb-1"
                 >
                   Producto (Demo)
                 </label>
@@ -205,40 +206,42 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   type="text"
                   value={itemName}
                   onChange={(e) => setItemName(e.target.value)}
-                  className="w-full h-10 px-3 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
+                  className="w-full h-11 px-3 rounded-xl bg-[#111A16] border border-white/10 text-xs text-[#F3F7F5] focus:outline-none focus:border-[#22C58B]"
                 />
               </div>
               <div className="col-span-2">
                 <label
                   htmlFor="item-qty-input"
-                  className="block text-[11px] font-semibold text-[#064B3C] mb-1"
+                  className="block text-[11px] font-mono uppercase tracking-wider text-[#8A9E95] mb-1"
                 >
                   Cant.
                 </label>
                 <input
                   id="item-qty-input"
                   type="number"
+                  inputMode="numeric"
                   min="1"
                   value={itemQty}
                   onChange={(e) => setItemQty(e.target.value)}
-                  className="w-full h-10 px-2.5 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] tabular-nums focus:outline-none focus:ring-2 focus:ring-[#078F68]"
+                  className="w-full h-11 px-2.5 rounded-xl bg-[#111A16] border border-white/10 text-xs text-[#F3F7F5] tabular-nums focus:outline-none focus:border-[#22C58B]"
                 />
               </div>
               <div className="col-span-4">
                 <label
                   htmlFor="item-price-input"
-                  className="block text-[11px] font-semibold text-[#064B3C] mb-1"
+                  className="block text-[11px] font-mono uppercase tracking-wider text-[#8A9E95] mb-1"
                 >
                   Precio (S/)
                 </label>
                 <input
                   id="item-price-input"
                   type="number"
+                  inputMode="decimal"
                   step="0.50"
                   min="0"
                   value={itemPrice}
                   onChange={(e) => setItemPrice(e.target.value)}
-                  className="w-full h-10 px-3 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] tabular-nums focus:outline-none focus:ring-2 focus:ring-[#078F68]"
+                  className="w-full h-11 px-3 rounded-xl bg-[#111A16] border border-white/10 text-xs text-[#F3F7F5] tabular-nums focus:outline-none focus:border-[#22C58B]"
                 />
               </div>
             </div>
@@ -247,7 +250,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
           <div>
             <label
               htmlFor="custom-desc-input"
-              className="block text-[11px] font-semibold text-[#064B3C] mb-1"
+              className="block text-[11px] font-mono uppercase tracking-wider text-[#8A9E95] mb-1"
             >
               Descripción del encargo
             </label>
@@ -257,7 +260,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               value={customDescription}
               onChange={(e) => setCustomDescription(e.target.value)}
               placeholder="Ej. Enviar llaves y sobre con documentos"
-              className="w-full h-10 px-3.5 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] placeholder:text-[#64877C] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
+              className="w-full h-11 px-3.5 rounded-xl bg-[#111A16] border border-white/10 text-xs text-[#F3F7F5] placeholder:text-[#566961] focus:outline-none focus:border-[#22C58B]"
             />
           </div>
         )}
@@ -267,7 +270,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
           <div>
             <label
               htmlFor="pickup-address-input"
-              className="block text-[11px] font-semibold text-[#064B3C] mb-1"
+              className="block text-[11px] font-mono uppercase tracking-wider text-[#8A9E95] mb-1"
             >
               Dirección de recogida
             </label>
@@ -276,15 +279,15 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               type="text"
               value={pickupAddress}
               onChange={(e) => setPickupAddress(e.target.value)}
-              placeholder="Ej. Av. Arequipa 520, Lince"
-              className="w-full h-10 px-3.5 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] placeholder:text-[#64877C] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
+              placeholder="Ej. Jr. Lima 415, Puno"
+              className="w-full h-11 px-3.5 rounded-xl bg-[#111A16] border border-white/10 text-xs text-[#F3F7F5] placeholder:text-[#566961] focus:outline-none focus:border-[#22C58B]"
             />
           </div>
 
           <div>
             <label
               htmlFor="dropoff-address-input"
-              className="block text-[11px] font-semibold text-[#064B3C] mb-1"
+              className="block text-[11px] font-mono uppercase tracking-wider text-[#8A9E95] mb-1"
             >
               Dirección de destino
             </label>
@@ -293,8 +296,8 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               type="text"
               value={dropoffAddress}
               onChange={(e) => setDropoffAddress(e.target.value)}
-              placeholder="Ej. Calle Schell 240, Miraflores"
-              className="w-full h-10 px-3.5 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] placeholder:text-[#64877C] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
+              placeholder="Ej. Av. La Torre 240, Puno"
+              className="w-full h-11 px-3.5 rounded-xl bg-[#111A16] border border-white/10 text-xs text-[#F3F7F5] placeholder:text-[#566961] focus:outline-none focus:border-[#22C58B]"
             />
           </div>
         </div>
@@ -303,7 +306,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
           <div>
             <label
               htmlFor="instructions-input"
-              className="block text-[11px] font-semibold text-[#064B3C] mb-1"
+              className="block text-[11px] font-mono uppercase tracking-wider text-[#8A9E95] mb-1"
             >
               Instrucciones y referencias
             </label>
@@ -313,14 +316,14 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
               placeholder="Ej. Portón negro, tocar timbre 2"
-              className="w-full h-10 px-3.5 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] placeholder:text-[#64877C] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
+              className="w-full h-11 px-3.5 rounded-xl bg-[#111A16] border border-white/10 text-xs text-[#F3F7F5] placeholder:text-[#566961] focus:outline-none focus:border-[#22C58B]"
             />
           </div>
 
           <div>
             <label
               htmlFor="payment-method-select"
-              className="block text-[11px] font-semibold text-[#064B3C] mb-1"
+              className="block text-[11px] font-mono uppercase tracking-wider text-[#8A9E95] mb-1"
             >
               Método de pago (Demo)
             </label>
@@ -330,7 +333,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               onChange={(e) =>
                 setPaymentMethod(e.target.value as DemoPaymentMethod)
               }
-              className="w-full h-10 px-3 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
+              className="w-full h-11 px-3 rounded-xl bg-[#111A16] border border-white/10 text-xs text-[#F3F7F5] focus:outline-none focus:border-[#22C58B]"
             >
               <option value="Yape / Plin (Demo)">Yape / Plin (Demo)</option>
               <option value="Efectivo (Demo)">Efectivo (Demo)</option>
@@ -340,37 +343,34 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
         </div>
 
         {/* Cost Summary Preview */}
-        <div className="pt-2 border-t border-[#DCECE5] flex items-center justify-between text-xs text-[#064B3C] tabular-nums">
+        <div className="pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-xs text-[#8A9E95] tabular-nums">
           <span>
             {serviceType === 'compra_negocio'
               ? `Productos: ${formatPenCurrency(previewProductsCost)} · Envío demo: ${formatPenCurrency(demoDeliveryFee)}`
               : `Tarifa de entrega demo: ${formatPenCurrency(demoDeliveryFee)}`}
           </span>
-          <strong className="font-bold text-[#102F27]">
+          <strong className="font-bold text-[#22C58B]">
             Total: {formatPenCurrency(previewTotal)}
           </strong>
         </div>
 
         {formError && (
-          <p role="alert" className="text-xs font-semibold text-red-600">
+          <p role="alert" className="text-xs font-semibold text-red-400">
             {formError}
           </p>
         )}
 
         {feedbackBanner && (
-          <p
-            role="status"
-            className="text-xs font-semibold text-[#078F68]"
-          >
+          <p role="status" className="text-xs font-semibold text-[#22C58B]">
             {feedbackBanner}
           </p>
         )}
 
         <button
           type="submit"
-          className="w-full h-11 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+          className="w-full h-11 rounded-xl vg-btn-primary text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
         >
-          <Plus className="w-4 h-4" aria-hidden="true" />
+          <Plus weight="bold" className="w-4 h-4" aria-hidden="true" />
           <span>Registrar pedido de demostración</span>
         </button>
       </form>
@@ -380,19 +380,20 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
         {orders.map((order) => {
           const isCancellable = canClientCancelOrder(order.status);
           const isHistoryOpen = expandedHistoryId === order.id;
-          const TypeIcon = order.type === 'compra_negocio' ? Store : Package;
+          const TypeIcon =
+            order.type === 'compra_negocio' ? Storefront : Package;
 
           return (
             <div
               key={order.id}
               role="listitem"
-              className="rounded-3xl bg-white border border-[#DCECE5] p-4 space-y-3"
+              className="rounded-2xl vg-surface-flat p-4 space-y-3"
             >
               {/* Order Header: ID, Type & Status */}
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <div className="text-xs font-semibold text-[#078F68] flex flex-wrap items-center gap-1.5 tabular-nums">
-                    <span>{order.id}</span>
+                  <div className="text-xs font-mono text-[#8A9E95] flex flex-wrap items-center gap-1.5 tabular-nums">
+                    <span className="text-[#22C58B] font-bold">{order.id}</span>
                     <span aria-hidden="true">·</span>
                     <span>
                       {order.type === 'compra_negocio'
@@ -403,8 +404,8 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                     <span
                       className={
                         order.status === 'cancelado'
-                          ? 'text-red-600 font-bold'
-                          : 'text-[#064B3C] font-bold'
+                          ? 'text-red-400 font-bold'
+                          : 'text-[#F3F7F5] font-bold'
                       }
                     >
                       {ORDER_STATUS_LABELS[order.status]}
@@ -413,10 +414,11 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
 
                   <div className="flex items-center gap-2 mt-1">
                     <TypeIcon
-                      className="w-4 h-4 text-[#078F68] shrink-0"
+                      weight="duotone"
+                      className="w-4 h-4 text-[#22C58B] shrink-0"
                       aria-hidden="true"
                     />
-                    <h3 className="font-display text-sm font-bold text-[#102F27] truncate">
+                    <h3 className="font-display text-sm font-bold text-[#F3F7F5] truncate">
                       {order.type === 'compra_negocio'
                         ? order.businessName
                         : order.customDescription}
@@ -424,7 +426,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   </div>
                 </div>
 
-                <span className="font-display text-sm font-bold text-[#078F68] tabular-nums shrink-0">
+                <span className="font-display text-sm font-bold text-[#22C58B] tabular-nums shrink-0">
                   {formatPenCurrency(order.totalAmount)}
                 </span>
               </div>
@@ -433,7 +435,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               {order.type === 'compra_negocio' &&
                 order.items &&
                 order.items.length > 0 && (
-                  <div className="text-xs text-[#64877C] pt-1 border-t border-[#DCECE5]/70 space-y-0.5 tabular-nums">
+                  <div className="text-xs text-[#C8D6D0] pt-1 border-t border-white/[0.06] space-y-0.5 tabular-nums">
                     {order.items.map((item, idx) => (
                       <p key={idx}>
                         {item.quantity}x {item.name} ({formatPenCurrency(item.unitPrice)})
@@ -443,21 +445,21 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                 )}
 
               {/* Pickup, Dropoff & Instructions */}
-              <div className="text-xs text-[#64877C] space-y-1">
+              <div className="text-xs text-[#8A9E95] space-y-1">
                 <p>
-                  <strong className="font-semibold text-[#102F27]">
+                  <strong className="font-semibold text-[#C8D6D0]">
                     Recogida:
                   </strong>{' '}
                   {order.pickup.address} ({order.pickup.referencePoint})
                 </p>
                 <p>
-                  <strong className="font-semibold text-[#102F27]">
+                  <strong className="font-semibold text-[#C8D6D0]">
                     Destino:
                   </strong>{' '}
                   {order.dropoff.address} ({order.dropoff.referencePoint})
                 </p>
                 <p>
-                  <strong className="font-semibold text-[#102F27]">
+                  <strong className="font-semibold text-[#C8D6D0]">
                     Instrucciones:
                   </strong>{' '}
                   {order.instructions}
@@ -465,11 +467,12 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
               </div>
 
               {/* Assigned Driver & Cost Breakdown */}
-              <div className="pt-2.5 border-t border-[#DCECE5] space-y-1.5 text-xs">
-                <div className="flex items-center justify-between text-[#102F27]">
+              <div className="pt-2.5 border-t border-white/[0.06] space-y-1.5 text-xs">
+                <div className="flex items-center justify-between text-[#F3F7F5]">
                   <span className="inline-flex items-center gap-1.5 font-medium">
-                    <Bike
-                      className="w-3.5 h-3.5 text-[#078F68] shrink-0"
+                    <Motorcycle
+                      weight="duotone"
+                      className="w-3.5 h-3.5 text-[#22C58B] shrink-0"
                       aria-hidden="true"
                     />
                     <span>
@@ -480,7 +483,7 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                   </span>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#64877C] tabular-nums">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-[#8A9E95] tabular-nums">
                   <span>
                     {order.productsCost > 0
                       ? `Productos: ${formatPenCurrency(order.productsCost)} · `
@@ -488,40 +491,40 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                     Envío demo: {formatPenCurrency(order.demoDeliveryFee)} · Pago:{' '}
                     {order.paymentMethod}
                   </span>
-                  <strong className="text-[#102F27]">
+                  <strong className="text-[#F3F7F5]">
                     Total: {formatPenCurrency(order.totalAmount)}
                   </strong>
                 </div>
               </div>
 
               {/* Actions: History Toggle, Map & Valid Cancellation */}
-              <div className="pt-2 border-t border-[#DCECE5] flex flex-wrap items-center justify-between gap-2">
+              <div className="pt-2 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={() =>
                     setExpandedHistoryId(isHistoryOpen ? null : order.id)
                   }
-                  className="h-8 px-3 rounded-full bg-[#EAF8F2] hover:bg-[#DCECE5] text-[#064B3C] text-xs font-semibold inline-flex items-center gap-1 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                  className="h-9 px-3 rounded-lg bg-[#111A16] hover:bg-[#16221D] border border-white/[0.08] text-[#C8D6D0] text-xs font-semibold inline-flex items-center gap-1 transition-colors cursor-pointer whitespace-nowrap shrink-0"
                 >
-                  <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                  <Clock weight="duotone" className="w-3.5 h-3.5 text-[#22C58B]" aria-hidden="true" />
                   <span>Historial ({order.statusHistory.length})</span>
                   {isHistoryOpen ? (
-                    <ChevronUp className="w-3.5 h-3.5" aria-hidden="true" />
+                    <CaretUp weight="bold" className="w-3.5 h-3.5" aria-hidden="true" />
                   ) : (
-                    <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" />
+                    <CaretDown weight="bold" className="w-3.5 h-3.5" aria-hidden="true" />
                   )}
                 </button>
 
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                   {onStartNavigation &&
                     order.status !== 'cancelado' &&
                     order.status !== 'entregado' && (
                       <button
                         type="button"
                         onClick={() => onStartNavigation(order.id)}
-                        className="h-8 px-3 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white text-xs font-bold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 shadow-xs cursor-pointer"
+                        className="h-9 px-3 rounded-lg vg-btn-primary text-xs font-bold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                       >
-                        <Navigation className="w-3 h-3" aria-hidden="true" />
+                        <NavigationArrow weight="fill" className="w-3 h-3" aria-hidden="true" />
                         <span>Seguimiento 3D</span>
                       </button>
                     )}
@@ -530,9 +533,9 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
                     <button
                       type="button"
                       onClick={() => onCancelOrder(order.id)}
-                      className="h-8 px-3 rounded-full bg-red-50 hover:bg-red-100 text-red-700 text-xs font-semibold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                      className="h-9 px-3 rounded-lg bg-red-950/40 hover:bg-red-950/70 border border-red-500/30 text-red-300 text-xs font-semibold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                     >
-                      <XCircle className="w-3.5 h-3.5" aria-hidden="true" />
+                      <XCircle weight="duotone" className="w-3.5 h-3.5" aria-hidden="true" />
                       <span>Cancelar pedido</span>
                     </button>
                   )}
@@ -541,23 +544,23 @@ export const ClientOrdersView: React.FC<ClientOrdersViewProps> = ({
 
               {/* Status History Log */}
               {isHistoryOpen && (
-                <div className="pt-2.5 border-t border-[#DCECE5] space-y-2">
-                  <p className="text-[11px] font-bold text-[#064B3C]">
+                <div className="pt-2.5 border-t border-white/[0.06] space-y-2">
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-[#22C58B]">
                     Historial de cambios de estado
                   </p>
-                  <ol className="space-y-1.5 text-[11px] text-[#64877C]">
+                  <ol className="space-y-1.5 text-[11px] text-[#8A9E95]">
                     {order.statusHistory.map((entry, idx) => (
                       <li
                         key={`${entry.status}-${idx}`}
                         className="flex items-start justify-between gap-2"
                       >
                         <div>
-                          <strong className="text-[#102F27] font-semibold">
+                          <strong className="text-[#F3F7F5] font-semibold">
                             {ORDER_STATUS_LABELS[entry.status]}:
                           </strong>{' '}
                           <span>{entry.note}</span>
                         </div>
-                        <span className="tabular-nums shrink-0 text-[10px]">
+                        <span className="font-mono tabular-nums shrink-0 text-[10px]">
                           {new Date(entry.timestamp).toLocaleTimeString('es-PE', {
                             hour: '2-digit',
                             minute: '2-digit',
