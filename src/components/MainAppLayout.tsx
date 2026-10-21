@@ -119,26 +119,26 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
   return (
     <div
       data-testid="main-app-layout"
-      className="app-viewport vg-dark-canvas flex flex-col text-[#F3F7F5] select-none"
+      className="app-viewport vg-dark-canvas flex flex-col text-[#F7F1EA] select-none"
     >
       {/* FIXED TOP APP HEADER — RESTRAINED DARK GLASS ARCHITECTURE */}
       <header className="shrink-0 z-30 vg-glass-restrained border-b border-white/[0.08] px-4 pt-3 pb-3">
         <div className="max-w-lg mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-[#10B981] text-[#050E0A] flex items-center justify-center font-display font-extrabold text-sm shrink-0">
+            <div className="w-8 h-8 rounded-full bg-[#C8995F] text-[#2A1608] flex items-center justify-center font-display font-extrabold text-sm shrink-0">
               V
             </div>
 
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <span className="font-display text-base font-bold tracking-tight text-[#F3F7F5] whitespace-nowrap shrink-0">
+                <span className="font-display text-base font-bold tracking-tight text-[#F7F1EA] whitespace-nowrap shrink-0">
                   VerdeGo
                 </span>
-                <span className="hidden sm:inline text-[11px] font-mono uppercase tracking-wider text-[#22C58B] whitespace-nowrap shrink-0">
+                <span className="hidden sm:inline text-[11px] font-semibold text-[#D4A574] whitespace-nowrap shrink-0">
                   · {state.selectedRole === 'motorizado' ? 'Motorizado' : 'Cliente'}
                 </span>
               </div>
-              <p className="text-[11px] text-[#8A9E95] truncate">
+              <p className="text-[11px] text-[#B3A090] truncate">
                 {headerSubtitle[state.activeTab]}
               </p>
             </div>
@@ -152,13 +152,13 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                   state.selectedRole === 'motorizado' ? 'usuario' : 'motorizado'
                 )
               }
-              className="px-3.5 py-2 rounded-xl bg-[#111A16] hover:bg-[#16221D] border border-white/10 text-[#F3F7F5] text-xs font-semibold transition-colors whitespace-nowrap shrink-0 min-h-[44px] inline-flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-2 rounded-full bg-[#2E1A0E] hover:bg-[#3B2212] border border-white/10 text-[#F7F1EA] text-xs font-semibold transition-all duration-200 active:scale-[0.97] whitespace-nowrap shrink-0 min-h-[44px] inline-flex items-center gap-1.5 cursor-pointer"
             >
               {state.selectedRole === 'motorizado' ? (
                 <>
                   <ShoppingBagOpen
                     weight="duotone"
-                    className="w-3.5 h-3.5 text-[#22C58B]"
+                    className="w-3.5 h-3.5 text-[#D4A574]"
                   />
                   <span>Modo Cliente</span>
                 </>
@@ -166,7 +166,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                 <>
                   <Motorcycle
                     weight="duotone"
-                    className="w-3.5 h-3.5 text-[#22C58B]"
+                    className="w-3.5 h-3.5 text-[#D4A574]"
                   />
                   <span>Modo Motorizado</span>
                 </>
@@ -185,19 +185,19 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
             {state.activeTab === 'inicio' && (
               <motion.div
                 key={`inicio-${state.selectedRole}`}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.18, ease: 'easeOut' }}
+                initial={{ opacity: 0, y: 16, scale: 0.985 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.99 }}
+                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
               >
                 {state.selectedRole === 'motorizado' ? (
                   /* PANEL DE INICIO PARA MOTORIZADO: ESCOGER PEDIDOS Y PASAR A DATOS + NAVEGACIÓN 3D */
                   <div className="space-y-5">
                     {/* Driver Header & Quick Switcher */}
-                    <div className="rounded-2xl vg-surface-flat p-4 space-y-3.5">
+                    <div className="vg-card-hero p-5 space-y-3.5">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-11 h-11 rounded-xl bg-[#10B981] text-[#050E0A] flex items-center justify-center shrink-0">
+                          <div className="w-11 h-11 rounded-full bg-[#C8995F] text-[#2A1608] flex items-center justify-center shrink-0">
                             <Motorcycle
                               weight="fill"
                               className="w-6 h-6"
@@ -205,13 +205,13 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                             />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-[11px] font-mono uppercase tracking-wider text-[#22C58B]">
+                            <p className="text-[11px] font-semibold text-[#D4A574]">
                               Unidad activa · Puno
                             </p>
-                            <h1 className="font-display text-lg font-bold text-[#F3F7F5] truncate">
+                            <h1 className="font-display text-lg font-bold text-[#F7F1EA] truncate">
                               {state.activeDriver.name}
                             </h1>
-                            <p className="text-xs font-mono text-[#8A9E95] tabular-nums">
+                            <p className="text-xs font-mono text-[#B3A090] tabular-nums">
                               Placa: {state.activeDriver.vehiclePlate} · ID:{' '}
                               {state.activeDriver.id}
                             </p>
@@ -219,10 +219,10 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                         </div>
 
                         <div className="text-right shrink-0 pl-3 border-l border-white/[0.06]">
-                          <span className="block text-[10px] font-mono uppercase tracking-wider text-[#8A9E95]">
+                          <span className="block text-[10px] font-semibold text-[#B3A090]">
                             Disponibles
                           </span>
-                          <span className="font-display text-xl font-extrabold text-[#22C58B] tabular-nums">
+                          <span className="font-display text-xl font-extrabold text-[#D4A574] tabular-nums">
                             {availableOrders.length}
                           </span>
                         </div>
@@ -237,10 +237,10 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                               type="button"
                               aria-pressed={isCurrent}
                               onClick={() => onSelectDemoDriver(drv)}
-                              className={`h-11 px-3 rounded-xl text-xs font-semibold transition-colors cursor-pointer truncate ${
+                              className={`h-11 px-3 rounded-full text-xs font-semibold transition-all duration-200 active:scale-[0.97] cursor-pointer truncate ${
                                 isCurrent
-                                  ? 'bg-[#101E18] text-[#22C58B] border border-[#22C58B]'
-                                  : 'bg-[#111A16] text-[#8A9E95] border border-white/[0.06] hover:text-[#F3F7F5]'
+                                  ? 'bg-[#3A2614] text-[#D4A574] border border-[#D4A574]'
+                                  : 'bg-[#2E1A0E] text-[#B3A090] border border-white/[0.06] hover:text-[#F7F1EA]'
                               }`}
                             >
                               {drv.name.replace(' (Demo)', '')} ({drv.id})
@@ -254,10 +254,10 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                     <section className="space-y-3">
                       <div className="flex items-baseline justify-between">
                         <div>
-                          <h2 className="font-display text-base font-bold text-[#F3F7F5]">
+                          <h2 className="font-display text-base font-bold text-[#F7F1EA]">
                             Escoger pedido disponible ({availableOrders.length})
                           </h2>
-                          <p className="text-xs text-[#8A9E95]">
+                          <p className="text-xs text-[#B3A090]">
                             Acepta un pedido de agente o tienda para revisar sus
                             datos e iniciar el GPS 3D
                           </p>
@@ -265,24 +265,24 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                       </div>
 
                       {availableOrders.length === 0 ? (
-                        <div className="rounded-2xl vg-surface-flat p-6 text-center space-y-3">
-                          <div className="w-11 h-11 rounded-xl bg-[#111A16] border border-white/10 text-[#22C58B] flex items-center justify-center mx-auto">
+                        <div className="rounded-[28px] vg-surface-flat p-6 text-center space-y-3">
+                          <div className="w-11 h-11 rounded-full bg-[#2E1A0E] border border-white/10 text-[#D4A574] flex items-center justify-center mx-auto">
                             <CheckCircle weight="duotone" className="w-6 h-6" />
                           </div>
-                          <p className="text-sm font-bold text-[#F3F7F5]">
+                          <p className="text-sm font-bold text-[#F7F1EA]">
                             Bolsa de pedidos al día
                           </p>
-                          <p className="text-xs text-[#8A9E95]">
+                          <p className="text-xs text-[#B3A090]">
                             Todos los pedidos de demostración han sido aceptados.
                           </p>
                           <button
                             type="button"
                             onClick={onResetDemoOrders}
-                            className="h-11 px-4 rounded-xl bg-[#111A16] hover:bg-[#16221D] border border-white/10 text-[#F3F7F5] text-xs font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                            className="h-11 px-4 rounded-full bg-[#2E1A0E] hover:bg-[#3B2212] border border-white/10 text-[#F7F1EA] text-xs font-semibold inline-flex items-center gap-1.5 transition-all duration-200 active:scale-[0.97] cursor-pointer"
                           >
                             <ArrowCounterClockwise
                               weight="bold"
-                              className="w-3.5 h-3.5 text-[#22C58B]"
+                              className="w-3.5 h-3.5 text-[#D4A574]"
                             />
                             <span>Cargar nuevos pedidos demo</span>
                           </button>
@@ -311,19 +311,19 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                             return (
                               <motion.div
                                 key={order.id}
-                                initial={{ opacity: 0, y: 6 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                initial={{ opacity: 0, y: 22, scale: 0.97 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
                                 transition={{
-                                  duration: 0.16,
-                                  delay: idx * 0.04,
-                                  ease: 'easeOut',
+                                  duration: 0.5,
+                                  delay: 0.08 + idx * 0.07,
+                                  ease: [0.22, 1, 0.36, 1],
                                 }}
-                                className="vg-card-interactive rounded-2xl p-4 space-y-3.5"
+                                className="vg-card-interactive rounded-[28px] p-4 space-y-3.5"
                               >
                                 {/* Card Header: Origin Store/Agent & Price */}
                                 <div className="flex items-start justify-between gap-3">
                                   <div className="flex items-start gap-3 min-w-0">
-                                    <div className="w-10 h-10 rounded-xl bg-[#111A16] border border-white/[0.08] text-[#22C58B] flex items-center justify-center shrink-0 mt-0.5">
+                                    <div className="w-10 h-10 rounded-full bg-[#2E1A0E] border border-white/[0.08] text-[#D4A574] flex items-center justify-center shrink-0 mt-0.5">
                                       {isStore ? (
                                         <Storefront
                                           weight="duotone"
@@ -337,8 +337,8 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                                       )}
                                     </div>
                                     <div className="min-w-0">
-                                      <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#8A9E95] tabular-nums">
-                                        <span className="font-bold text-[#22C58B]">
+                                      <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#B3A090] tabular-nums">
+                                        <span className="font-bold text-[#D4A574]">
                                           {order.id}
                                         </span>
                                         <span aria-hidden="true">·</span>
@@ -350,17 +350,17 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                                         <span aria-hidden="true">·</span>
                                         <span>~{distanceKm} km</span>
                                       </div>
-                                      <h3 className="font-display text-[15px] font-bold text-[#F3F7F5] truncate mt-0.5">
+                                      <h3 className="font-display text-[15px] font-bold text-[#F7F1EA] truncate mt-0.5">
                                         {originTitle}
                                       </h3>
                                     </div>
                                   </div>
 
                                   <div className="text-right shrink-0">
-                                    <p className="font-display text-base font-extrabold text-[#22C58B] tabular-nums">
+                                    <p className="font-display text-base font-extrabold text-[#D4A574] tabular-nums">
                                       {formatPenCurrency(order.totalAmount)}
                                     </p>
-                                    <p className="text-[11px] font-mono text-[#8A9E95] tabular-nums">
+                                    <p className="text-[11px] font-mono text-[#B3A090] tabular-nums">
                                       Envío:{' '}
                                       {formatPenCurrency(order.demoDeliveryFee)}
                                     </p>
@@ -368,17 +368,17 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                                 </div>
 
                                 {/* Origin -> Destination Route Box */}
-                                <div className="rounded-xl bg-[#111A16] border border-white/[0.06] p-3 space-y-2 text-xs">
+                                <div className="rounded-xl bg-[#2E1A0E] border border-white/[0.06] p-3 space-y-2 text-xs">
                                   <div className="flex items-start gap-2">
                                     <MapPinLine
                                       weight="duotone"
-                                      className="w-4 h-4 text-[#22C58B] shrink-0 mt-0.5"
+                                      className="w-4 h-4 text-[#D4A574] shrink-0 mt-0.5"
                                     />
                                     <div className="min-w-0">
-                                      <span className="font-semibold text-[#8A9E95]">
+                                      <span className="font-semibold text-[#B3A090]">
                                         De (Recogida):{' '}
                                       </span>
-                                      <span className="text-[#F3F7F5]">
+                                      <span className="text-[#F7F1EA]">
                                         {order.pickup.address}
                                       </span>
                                     </div>
@@ -390,10 +390,10 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                                       className="w-4 h-4 text-[#F59E0B] shrink-0 mt-0.5"
                                     />
                                     <div className="min-w-0">
-                                      <span className="font-semibold text-[#8A9E95]">
+                                      <span className="font-semibold text-[#B3A090]">
                                         A (Entrega):{' '}
                                       </span>
-                                      <span className="text-[#F3F7F5]">
+                                      <span className="text-[#F7F1EA]">
                                         {order.dropoff.address}
                                       </span>
                                     </div>
@@ -401,7 +401,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                                 </div>
 
                                 {/* Brief Content Summary */}
-                                <p className="text-xs text-[#8A9E95] truncate">
+                                <p className="text-xs text-[#B3A090] truncate">
                                   {isStore && order.items
                                     ? `Pedido: ${order.items
                                         .map((i) => `${i.quantity}x ${i.name}`)
@@ -414,11 +414,11 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                                   <button
                                     type="button"
                                     onClick={() => setQuickPreviewOrder(order)}
-                                    className="h-11 px-3.5 rounded-xl bg-[#111A16] hover:bg-[#16221D] border border-white/10 text-[#C8D6D0] font-display text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-colors shrink-0 cursor-pointer"
+                                    className="h-11 px-3.5 rounded-full bg-[#2E1A0E] hover:bg-[#3B2212] border border-white/10 text-[#D9C9B8] font-display text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-[0.97] shrink-0 cursor-pointer"
                                   >
                                     <Eye
                                       weight="duotone"
-                                      className="w-4 h-4 text-[#22C58B]"
+                                      className="w-4 h-4 text-[#D4A574]"
                                     />
                                     <span>Vista rápida</span>
                                   </button>
@@ -426,7 +426,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                                   <button
                                     type="button"
                                     onClick={() => onAcceptOrder(order.id)}
-                                    className="flex-1 h-11 px-4 rounded-xl vg-btn-primary font-display text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer"
+                                    className="flex-1 h-11 px-4 rounded-full vg-btn-primary font-display text-xs font-bold inline-flex items-center justify-center gap-2 cursor-pointer"
                                   >
                                     <span>Aceptar pedido y revisar datos</span>
                                     <ArrowRight
@@ -445,43 +445,43 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                     {/* SECTION B: MIS PEDIDOS ACEPTADOS / EN CURSO */}
                     {myDriverOrders.length > 0 && (
                       <section className="space-y-3 pt-1">
-                        <h2 className="font-display text-base font-bold text-[#F3F7F5]">
+                        <h2 className="font-display text-base font-bold text-[#F7F1EA]">
                           Tus entregas activas ({myDriverOrders.length})
                         </h2>
                         <div className="space-y-3">
                           {myDriverOrders.map((order) => (
                             <div
                               key={order.id}
-                              className="rounded-2xl bg-[#101E18] border border-[#22C58B]/50 p-4 space-y-3"
+                              className="rounded-2xl bg-[#3A2614] border border-[#D4A574]/50 p-4 space-y-3"
                             >
                               <div className="flex items-start justify-between gap-2">
                                 <div className="min-w-0">
-                                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#22C58B] tabular-nums">
+                                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#D4A574] tabular-nums">
                                     <span>{order.id}</span>
                                     <span aria-hidden="true">·</span>
                                     <span>
                                       {ORDER_STATUS_LABELS[order.status]}
                                     </span>
                                   </div>
-                                  <h3 className="font-display text-sm font-bold text-[#F3F7F5] truncate mt-0.5">
+                                  <h3 className="font-display text-sm font-bold text-[#F7F1EA] truncate mt-0.5">
                                     {order.businessName ||
                                       order.customDescription}
                                   </h3>
                                 </div>
-                                <span className="font-display text-sm font-extrabold text-[#22C58B] tabular-nums shrink-0">
+                                <span className="font-display text-sm font-extrabold text-[#D4A574] tabular-nums shrink-0">
                                   {formatPenCurrency(order.totalAmount)}
                                 </span>
                               </div>
 
-                              <div className="text-xs text-[#C8D6D0] space-y-1">
+                              <div className="text-xs text-[#D9C9B8] space-y-1">
                                 <p className="truncate">
-                                  <strong className="text-[#8A9E95]">
+                                  <strong className="text-[#B3A090]">
                                     De:
                                   </strong>{' '}
                                   {order.pickup.address}
                                 </p>
                                 <p className="truncate">
-                                  <strong className="text-[#8A9E95]">A:</strong>{' '}
+                                  <strong className="text-[#B3A090]">A:</strong>{' '}
                                   {order.dropoff.address}
                                 </p>
                               </div>
@@ -490,11 +490,11 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                                 <button
                                   type="button"
                                   onClick={() => onReviewOrder(order.id)}
-                                  className="h-11 px-3 rounded-xl bg-[#0C1310] border border-white/10 hover:bg-[#111A16] text-[#F3F7F5] text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                                  className="h-11 px-3 rounded-full bg-[#1F1109] border border-white/10 hover:bg-[#2E1A0E] text-[#F7F1EA] text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-[0.97] cursor-pointer"
                                 >
                                   <FileText
                                     weight="duotone"
-                                    className="w-4 h-4 text-[#22C58B]"
+                                    className="w-4 h-4 text-[#D4A574]"
                                     aria-hidden="true"
                                   />
                                   <span>Ver datos</span>
@@ -511,7 +511,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                                         : 'pickup'
                                     )
                                   }
-                                  className="h-11 px-3 rounded-xl vg-btn-primary text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+                                  className="h-11 px-3 rounded-full vg-btn-primary text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer"
                                 >
                                   <NavigationArrow
                                     weight="fill"
@@ -530,9 +530,9 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                 ) : (
                   /* PANEL DE INICIO PARA CLIENTE */
                   <div className="space-y-4">
-                    <div className="rounded-2xl vg-surface-flat p-5 space-y-3.5">
+                    <div className="rounded-[28px] vg-surface-flat p-5 space-y-3.5">
                       <div className="flex items-center gap-3.5">
-                        <div className="w-12 h-12 rounded-xl bg-[#10B981] text-[#050E0A] flex items-center justify-center shrink-0">
+                        <div className="w-12 h-12 rounded-full bg-[#C8995F] text-[#2A1608] flex items-center justify-center shrink-0">
                           <ShoppingBagOpen
                             weight="fill"
                             className="w-6 h-6"
@@ -540,7 +540,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                           />
                         </div>
                         <div className="min-w-0">
-                          <div className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-[#22C58B]">
+                          <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#D4A574]">
                             <CheckCircle
                               weight="fill"
                               className="w-3.5 h-3.5"
@@ -548,13 +548,13 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                             />
                             <span>Entorno de Cliente Activo</span>
                           </div>
-                          <h1 className="font-display text-xl font-bold text-[#F3F7F5]">
+                          <h1 className="font-display text-xl font-bold text-[#F7F1EA]">
                             Panel de Cliente
                           </h1>
                         </div>
                       </div>
 
-                      <p className="text-xs sm:text-sm text-[#8A9E95] leading-relaxed">
+                      <p className="text-xs sm:text-sm text-[#B3A090] leading-relaxed">
                         {activeRoleOption.summaryText}
                       </p>
 
@@ -562,7 +562,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                         <button
                           type="button"
                           onClick={() => onSelectTab('pedidos')}
-                          className="w-full h-11 px-4 rounded-xl vg-btn-primary text-xs font-bold inline-flex items-center justify-between cursor-pointer whitespace-nowrap"
+                          className="w-full h-11 px-4 rounded-full vg-btn-primary text-xs font-bold inline-flex items-center justify-between cursor-pointer whitespace-nowrap"
                         >
                           <span>Ver y crear mis pedidos</span>
                           <ArrowRight
@@ -576,7 +576,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
 
                     {/* Services Quick Access */}
                     <div className="space-y-2.5">
-                      <h2 className="font-display text-sm font-bold text-[#F3F7F5]">
+                      <h2 className="font-display text-sm font-bold text-[#F7F1EA]">
                         Operaciones disponibles
                       </h2>
                       <div className="grid grid-cols-1 gap-2.5">
@@ -588,10 +588,10 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                               key={service.id}
                               type="button"
                               onClick={() => onSelectTab('pedidos')}
-                              className="vg-card-interactive w-full text-left rounded-2xl p-4 flex items-center justify-between gap-3 cursor-pointer"
+                              className="vg-card-interactive w-full text-left rounded-[28px] p-4 flex items-center justify-between gap-3 cursor-pointer"
                             >
                               <div className="flex items-center gap-3.5 min-w-0">
-                                <div className="w-11 h-11 rounded-xl bg-[#111A16] border border-white/[0.08] text-[#22C58B] flex items-center justify-center shrink-0">
+                                <div className="w-11 h-11 rounded-full bg-[#2E1A0E] border border-white/[0.08] text-[#D4A574] flex items-center justify-center shrink-0">
                                   <Icon
                                     weight="duotone"
                                     className="w-5 h-5"
@@ -599,17 +599,17 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                                   />
                                 </div>
                                 <div className="min-w-0">
-                                  <p className="font-display text-sm font-bold text-[#F3F7F5] truncate">
+                                  <p className="font-display text-sm font-bold text-[#F7F1EA] truncate">
                                     {service.title}
                                   </p>
-                                  <p className="text-xs text-[#8A9E95] truncate">
+                                  <p className="text-xs text-[#B3A090] truncate">
                                     {service.description}
                                   </p>
                                 </div>
                               </div>
                               <ArrowRight
                                 weight="bold"
-                                className="w-4 h-4 text-[#22C58B] shrink-0"
+                                className="w-4 h-4 text-[#D4A574] shrink-0"
                                 aria-hidden="true"
                               />
                             </button>
@@ -626,10 +626,10 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
             {state.activeTab === 'pedidos' && (
               <motion.div
                 key={`pedidos-${state.selectedRole}`}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.18, ease: 'easeOut' }}
+                initial={{ opacity: 0, y: 16, scale: 0.985 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.99 }}
+                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
               >
                 {state.selectedRole === 'motorizado' ? (
                   <DriverOrdersView
@@ -699,25 +699,25 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
             {state.activeTab === 'perfil' && (
               <motion.div
                 key="perfil"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.18, ease: 'easeOut' }}
+                initial={{ opacity: 0, y: 16, scale: 0.985 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.99 }}
+                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
                 className="space-y-4"
               >
                 <div>
-                  <h1 className="font-display text-xl font-bold text-[#F3F7F5]">
+                  <h1 className="font-display text-xl font-bold text-[#F7F1EA]">
                     Mi Perfil (Modo Demo)
                   </h1>
-                  <p className="text-xs text-[#8A9E95]">
+                  <p className="text-xs text-[#B3A090]">
                     Alterna entre la vista de Cliente y de Motorizado para
                     probar el flujo completo
                   </p>
                 </div>
 
-                <div className="rounded-2xl vg-surface-flat p-5 space-y-4">
+                <div className="rounded-[28px] vg-surface-flat p-5 space-y-4">
                   <div className="flex items-center gap-3.5">
-                    <div className="w-12 h-12 rounded-xl bg-[#10B981] text-[#050E0A] flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-[#C8995F] text-[#2A1608] flex items-center justify-center shrink-0">
                       {state.selectedRole === 'motorizado' ? (
                         <Motorcycle
                           weight="fill"
@@ -733,13 +733,13 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                       )}
                     </div>
                     <div>
-                      <p className="text-[11px] font-mono uppercase tracking-wider text-[#22C58B]">
+                      <p className="text-[11px] font-semibold text-[#D4A574]">
                         Vista activa
                       </p>
-                      <h2 className="font-display text-lg font-bold text-[#F3F7F5]">
+                      <h2 className="font-display text-lg font-bold text-[#F7F1EA]">
                         {activeRoleOption.title}
                       </h2>
-                      <p className="text-xs text-[#8A9E95]">
+                      <p className="text-xs text-[#B3A090]">
                         {activeRoleOption.description}
                       </p>
                     </div>
@@ -749,10 +749,10 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                     <button
                       type="button"
                       onClick={() => onSelectRole('usuario')}
-                      className={`h-11 px-4 rounded-xl text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      className={`h-11 px-4 rounded-full text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-[0.97] whitespace-nowrap shrink-0 cursor-pointer ${
                         state.selectedRole === 'usuario'
-                          ? 'bg-[#101E18] text-[#22C58B] border border-[#22C58B]'
-                          : 'bg-[#111A16] text-[#8A9E95] border border-white/[0.06] hover:text-[#F3F7F5]'
+                          ? 'bg-[#3A2614] text-[#D4A574] border border-[#D4A574]'
+                          : 'bg-[#2E1A0E] text-[#B3A090] border border-white/[0.06] hover:text-[#F7F1EA]'
                       }`}
                     >
                       <span>Soy cliente</span>
@@ -761,10 +761,10 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                     <button
                       type="button"
                       onClick={() => onSelectRole('motorizado')}
-                      className={`h-11 px-4 rounded-xl text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      className={`h-11 px-4 rounded-full text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-[0.97] whitespace-nowrap shrink-0 cursor-pointer ${
                         state.selectedRole === 'motorizado'
-                          ? 'bg-[#101E18] text-[#22C58B] border border-[#22C58B]'
-                          : 'bg-[#111A16] text-[#8A9E95] border border-white/[0.06] hover:text-[#F3F7F5]'
+                          ? 'bg-[#3A2614] text-[#D4A574] border border-[#D4A574]'
+                          : 'bg-[#2E1A0E] text-[#B3A090] border border-white/[0.06] hover:text-[#F7F1EA]'
                       }`}
                     >
                       <span>Soy motorizado</span>
@@ -772,11 +772,11 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                   </div>
                 </div>
 
-                <div className="rounded-2xl vg-surface-flat p-5 space-y-3">
-                  <h3 className="font-display text-sm font-bold text-[#F3F7F5]">
+                <div className="rounded-[28px] vg-surface-flat p-5 space-y-3">
+                  <h3 className="font-display text-sm font-bold text-[#F7F1EA]">
                     Instalar como aplicación Android
                   </h3>
-                  <p className="text-xs text-[#8A9E95] leading-relaxed">
+                  <p className="text-xs text-[#B3A090] leading-relaxed">
                     Instala VerdeGo en la pantalla de inicio de tu celular para
                     abrirla a pantalla completa sin la barra del navegador.
                   </p>
@@ -787,11 +787,11 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                   <button
                     type="button"
                     onClick={onResetDemoOrders}
-                    className="w-full h-11 px-4 rounded-xl bg-[#111A16] hover:bg-[#16221D] border border-white/10 text-[#F3F7F5] text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    className="w-full h-11 px-4 rounded-full bg-[#2E1A0E] hover:bg-[#3B2212] border border-white/10 text-[#F7F1EA] text-xs font-semibold inline-flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.97] cursor-pointer"
                   >
                     <ArrowCounterClockwise
                       weight="bold"
-                      className="w-4 h-4 text-[#22C58B]"
+                      className="w-4 h-4 text-[#D4A574]"
                       aria-hidden="true"
                     />
                     <span>Restaurar pedidos demo</span>
@@ -800,7 +800,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                   <button
                     type="button"
                     onClick={onLogout}
-                    className="w-full h-11 px-4 rounded-xl bg-[#0C1310] border border-white/10 hover:bg-[#111A16] text-[#8A9E95] hover:text-[#F3F7F5] text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    className="w-full h-11 px-4 rounded-full bg-[#1F1109] border border-white/10 hover:bg-[#2E1A0E] text-[#B3A090] hover:text-[#F7F1EA] text-xs font-semibold inline-flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.97] cursor-pointer"
                   >
                     <SignOut
                       weight="bold"
@@ -825,18 +825,18 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
       >
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 z-50 bg-black/65 backdrop-blur-[2px]" />
-          <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mt-24 flex max-h-[85dvh] flex-col rounded-t-3xl bg-[#0C1310] border-t border-white/12 text-[#F3F7F5] shadow-2xl focus:outline-none">
+          <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mt-24 flex max-h-[85dvh] flex-col rounded-t-[36px] bg-[#1F1109] border-t border-white/12 text-[#F7F1EA] shadow-2xl focus:outline-none">
             <div className="mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-white/20" />
 
             {quickPreviewOrder && (
               <div className="overflow-y-auto px-5 pt-4 pb-6 space-y-4 max-w-lg mx-auto w-full onboarding-safe-bottom">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <Drawer.Title className="font-display text-lg font-bold text-[#F3F7F5]">
+                    <Drawer.Title className="font-display text-lg font-bold text-[#F7F1EA]">
                       {quickPreviewOrder.businessName ||
                         'Detalle rápido del pedido'}
                     </Drawer.Title>
-                    <Drawer.Description className="text-xs font-mono text-[#8A9E95] tabular-nums">
+                    <Drawer.Description className="text-xs font-mono text-[#B3A090] tabular-nums">
                       Orden {quickPreviewOrder.id} ·{' '}
                       {quickPreviewOrder.type === 'compra_negocio'
                         ? 'Compra en tienda / restaurante'
@@ -848,27 +848,27 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                     type="button"
                     onClick={() => setQuickPreviewOrder(null)}
                     aria-label="Cerrar vista rápida"
-                    className="w-9 h-9 rounded-xl bg-[#111A16] hover:bg-[#16221D] border border-white/10 text-[#8A9E95] hover:text-[#F3F7F5] flex items-center justify-center cursor-pointer"
+                    className="w-9 h-9 rounded-full bg-[#2E1A0E] hover:bg-[#3B2212] border border-white/10 text-[#B3A090] hover:text-[#F7F1EA] flex items-center justify-center cursor-pointer"
                   >
                     <X weight="bold" className="w-4 h-4" />
                   </button>
                 </div>
 
                 {/* 2-Stage Route Summary */}
-                <div className="rounded-2xl bg-[#111A16] border border-white/[0.08] p-3.5 space-y-3 text-xs">
+                <div className="rounded-2xl bg-[#2E1A0E] border border-white/[0.08] p-3.5 space-y-3 text-xs">
                   <div className="flex items-start gap-2.5">
-                    <div className="w-6 h-6 rounded-md bg-[#10B981] text-[#050E0A] font-mono text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                    <div className="w-6 h-6 rounded-full bg-[#C8995F] text-[#2A1608] font-mono text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                       1
                     </div>
                     <div className="min-w-0">
-                      <p className="font-mono text-[11px] uppercase tracking-wider text-[#22C58B]">
+                      <p className="font-mono text-[11px] uppercase tracking-wider text-[#D4A574]">
                         Etapa 1 · Recogida en origen
                       </p>
-                      <p className="text-[#F3F7F5] font-medium mt-0.5">
+                      <p className="text-[#F7F1EA] font-medium mt-0.5">
                         {quickPreviewOrder.pickup.address}
                       </p>
                       {quickPreviewOrder.pickup.referencePoint && (
-                        <p className="text-[#8A9E95]">
+                        <p className="text-[#B3A090]">
                           Ref: {quickPreviewOrder.pickup.referencePoint}
                         </p>
                       )}
@@ -876,18 +876,18 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                   </div>
 
                   <div className="flex items-start gap-2.5 pt-2.5 border-t border-white/[0.06]">
-                    <div className="w-6 h-6 rounded-md bg-[#F59E0B] text-[#050E0A] font-mono text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                    <div className="w-6 h-6 rounded-full bg-[#F59E0B] text-[#2A1608] font-mono text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                       2
                     </div>
                     <div className="min-w-0">
                       <p className="font-mono text-[11px] uppercase tracking-wider text-[#F59E0B]">
                         Etapa 2 · Entrega al cliente
                       </p>
-                      <p className="text-[#F3F7F5] font-medium mt-0.5">
+                      <p className="text-[#F7F1EA] font-medium mt-0.5">
                         {quickPreviewOrder.dropoff.address}
                       </p>
                       {quickPreviewOrder.dropoff.referencePoint && (
-                        <p className="text-[#8A9E95]">
+                        <p className="text-[#B3A090]">
                           Ref: {quickPreviewOrder.dropoff.referencePoint}
                         </p>
                       )}
@@ -896,7 +896,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                           quickPreviewOrder.dropoff.coordinates,
                           quickPreviewOrder.pickup.coordinates
                         ).isSnappedToCorner && (
-                          <p className="text-[11px] font-semibold text-[#22C58B] flex items-center gap-1 pt-1">
+                          <p className="text-[11px] font-semibold text-[#D4A574] flex items-center gap-1 pt-1">
                             <Footprints weight="duotone" className="w-3.5 h-3.5" />
                             <span>
                               Destino en zona peatonal: parada en esquina
@@ -909,26 +909,26 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                 </div>
 
                 {/* Items / Package & Payment Breakdown */}
-                <div className="rounded-2xl bg-[#111A16] border border-white/[0.08] p-3.5 space-y-2 text-xs">
-                  <div className="flex items-center justify-between text-[#8A9E95]">
+                <div className="rounded-2xl bg-[#2E1A0E] border border-white/[0.08] p-3.5 space-y-2 text-xs">
+                  <div className="flex items-center justify-between text-[#B3A090]">
                     <span>Método de pago</span>
-                    <span className="inline-flex items-center gap-1 font-semibold text-[#F3F7F5]">
+                    <span className="inline-flex items-center gap-1 font-semibold text-[#F7F1EA]">
                       <CreditCard
                         weight="duotone"
-                        className="w-3.5 h-3.5 text-[#22C58B]"
+                        className="w-3.5 h-3.5 text-[#D4A574]"
                       />
                       {quickPreviewOrder.paymentMethod}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[#8A9E95]">
+                  <div className="flex items-center justify-between text-[#B3A090]">
                     <span>Ganancia de entrega (motorizado)</span>
-                    <span className="font-mono font-bold text-[#22C58B] tabular-nums">
+                    <span className="font-mono font-bold text-[#D4A574] tabular-nums">
                       {formatPenCurrency(quickPreviewOrder.demoDeliveryFee)}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between pt-2 border-t border-white/[0.06] text-sm font-bold text-[#F3F7F5]">
+                  <div className="flex items-center justify-between pt-2 border-t border-white/[0.06] text-sm font-bold text-[#F7F1EA]">
                     <span>Importe total del pedido</span>
-                    <span className="font-display text-base text-[#22C58B] tabular-nums">
+                    <span className="font-display text-base text-[#D4A574] tabular-nums">
                       {formatPenCurrency(quickPreviewOrder.totalAmount)}
                     </span>
                   </div>
@@ -941,7 +941,7 @@ export const MainAppLayout: React.FC<MainAppLayoutProps> = ({
                     setQuickPreviewOrder(null);
                     onAcceptOrder(id);
                   }}
-                  className="w-full h-12 px-5 rounded-xl vg-btn-primary font-display text-sm font-bold inline-flex items-center justify-between cursor-pointer"
+                  className="w-full h-12 px-5 rounded-full vg-btn-primary font-display text-sm font-bold inline-flex items-center justify-between cursor-pointer"
                 >
                   <span>Aceptar pedido y abrir hoja completa</span>
                   <ArrowRight weight="bold" className="w-4 h-4" />
