@@ -1,7 +1,7 @@
 # Graph Report - Chepesauro-App  (2026-10-21)
 
 ## Corpus Check
-- 36 files · ~124,535 words
+- 36 files · ~124,583 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: .example 1, (none) 1, .lock 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `82559217`
+- Built from commit: `b07f578f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
