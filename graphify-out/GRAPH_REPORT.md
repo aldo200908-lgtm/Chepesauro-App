@@ -1,7 +1,7 @@
 # Graph Report - Chepesauro-App  (2026-10-21)
 
 ## Corpus Check
-- 38 files · ~125,482 words
+- 38 files · ~129,382 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: .example 1, (none) 1, .lock 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `02241a09`
+- Built from commit: `4ebc6d04`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -63,24 +63,24 @@
 ## Communities (16 total, 2 thin omitted)
 
 ### Community 0 - "ordersStore.ts"
-Cohesion: 0.11
-Nodes (36): motion, @phosphor-icons/react, ClientOrdersView(), ClientOrdersViewProps, DriverOrderReviewScreen(), DriverOrderReviewScreenProps, DriverOrdersView(), DriverOrdersViewProps (+28 more)
+Cohesion: 0.12
+Nodes (33): motion, ClientOrdersView(), ClientOrdersViewProps, DriverOrderReviewScreenProps, DriverOrdersView(), DriverOrdersViewProps, GPSNavigationViewProps, MainAppLayout() (+25 more)
 
 ### Community 1 - "GPSNavigationView.tsx"
 Cohesion: 0.12
-Nodes (34): mapbox-gl, GPSNavigationView(), ManeuverIcon(), MapboxViewProps, MapMarkerPoint, PUNO_COORDINATES, buildMapboxExcludeParam(), calculateBearing() (+26 more)
+Nodes (36): lucide-react, mapbox-gl, DriverOrderReviewScreen(), GPSNavigationView(), ManeuverIcon(), MapboxViewProps, MapMarkerPoint, PUNO_COORDINATES (+28 more)
 
 ### Community 2 - "App.tsx"
-Cohesion: 0.12
-Nodes (33): three, App(), OnboardingLayout(), OnboardingLayoutProps, STEP_LABELS, OnboardingSpatialStage(), OnboardingSpatialStageProps, ProfileSelectionScreen() (+25 more)
+Cohesion: 0.15
+Nodes (31): App(), OnboardingLayout(), OnboardingLayoutProps, STEP_LABELS, OnboardingSpatialStage(), OnboardingSpatialStageProps, ProfileSelectionScreen(), ProfileSelectionScreenProps (+23 more)
 
 ### Community 3 - "package.json"
-Cohesion: 0.07
-Nodes (28): name, private, scripts, build, clean, dev, lint, preview (+20 more)
+Cohesion: 0.06
+Nodes (29): name, private, scripts, build, clean, dev, lint, preview (+21 more)
 
 ### Community 4 - "react"
-Cohesion: 0.18
-Nodes (14): lucide-react, react, ClientRole3DRender(), DriverRole3DRender(), Parcel3DRender(), Store3DRender(), PWAInstallButtonProps, RoleCard() (+6 more)
+Cohesion: 0.16
+Nodes (16): @phosphor-icons/react, react, ClientRole3DRender(), DriverRole3DRender(), Parcel3DRender(), Store3DRender(), PWAInstallButton(), PWAInstallButtonProps (+8 more)
 
 ### Community 5 - "Design System Master File"
 Cohesion: 0.12
@@ -131,12 +131,12 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `@google/genai`, `@types/three`, `dotenv` to the rest of the system?**
   _14 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ordersStore.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.11295681063122924 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11923076923076924 - nodes in this community are weakly interconnected._
 - **Why does `dependencies` connect `dependencies` to `package.json`?**
   _High betweenness centrality (0.072) - this node is a cross-community bridge._
 - **Should `GPSNavigationView.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.12439024390243902 - nodes in this community are weakly interconnected._
-- **Why does `@phosphor-icons/react` connect `ordersStore.ts` to `GPSNavigationView.tsx`, `App.tsx`, `package.json`, `react`, `ClientHomeScreen.tsx`?**
+  _Cohesion score 0.11738648947951273 - nodes in this community are weakly interconnected._
+- **Why does `@phosphor-icons/react` connect `react` to `ordersStore.ts`, `GPSNavigationView.tsx`, `App.tsx`, `package.json`, `ClientHomeScreen.tsx`?**
   _High betweenness centrality (0.062) - this node is a cross-community bridge._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.12292358803986711 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.14793741109530584 - nodes in this community are weakly interconnected._
