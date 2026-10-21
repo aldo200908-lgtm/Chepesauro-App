@@ -20,6 +20,8 @@ const NAV_ITEMS: {
   { id: 'perfil', label: 'Perfil', Icon: UserCircle },
 ];
 
+const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
   activeTab,
   onSelectTab,
@@ -31,9 +33,15 @@ export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
   return (
     <nav
       aria-label="Navegación principal"
-      className="fixed bottom-0 inset-x-0 z-40 vg-glass-restrained border-t border-white/[0.08] onboarding-safe-bottom"
+      className="fixed bottom-0 inset-x-0 z-40 px-4 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none"
     >
-      <div className="max-w-md mx-auto px-4 pt-1.5 grid grid-cols-3 gap-2">
+      {/* Barra flotante: esquinas amplias, vidrio café y sombra suave */}
+      <motion.div
+        initial={{ opacity: 0, y: 28 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1, ease: EASE_OUT }}
+        className="pointer-events-auto max-w-md mx-auto vg-glass-restrained rounded-[28px] px-2 py-1.5 grid grid-cols-3 gap-1 shadow-[0_18px_40px_-14px_rgba(0,0,0,0.65)]"
+      >
         {NAV_ITEMS.map((item) => {
           const isActive = activeTab === item.id;
           const IconComponent = item.Icon;
@@ -44,39 +52,48 @@ export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
               type="button"
               onClick={() => onSelectTab(item.id)}
               aria-current={isActive ? 'page' : undefined}
-              className={`relative flex flex-col items-center justify-center min-h-[50px] py-1.5 px-2 rounded-xl transition-colors duration-150 cursor-pointer ${
+              className={`relative flex flex-col items-center justify-center min-h-[52px] py-1.5 px-2 rounded-full transition-all duration-200 active:scale-[0.94] cursor-pointer ${
                 isActive
-                  ? 'text-[#22C58B]'
-                  : 'text-[#8A9E95] hover:text-[#F3F7F5]'
+                  ? 'text-[#D4A574]'
+                  : 'text-[#B3A090] hover:text-[#F7F1EA]'
               }`}
             >
+              {/* Píldora que se desliza entre pestañas */}
               {isActive && (
                 <motion.span
                   layoutId="vg-bottom-nav-pill"
-                  transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-                  className="absolute inset-x-3 inset-y-1 rounded-xl bg-[#101E18] border border-[#22C58B]/30 -z-10"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  className="absolute inset-0 rounded-full bg-[#3A2614] border border-[#D4A574]/25 -z-10"
                 />
               )}
 
-              <div className="relative flex items-center justify-center">
+              <motion.div
+                className="relative flex items-center justify-center"
+                animate={{ y: isActive ? -1 : 0, scale: isActive ? 1.1 : 1 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 22 }}
+              >
                 <IconComponent
-                  size={21}
+                  size={22}
                   weight={isActive ? 'fill' : 'duotone'}
                   aria-hidden="true"
                 />
                 {item.id === 'pedidos' && badgeCount > 0 && (
-                  <span
+                  <motion.span
+                    key={badgeCount}
+                    initial={{ scale: 0.4 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 600, damping: 16 }}
                     aria-label={`${badgeCount} pedidos activos`}
-                    className="absolute -top-1.5 -right-3.5 min-w-[17px] h-[17px] px-1 rounded-sm bg-[#10B981] text-[#050E0A] text-[10px] font-mono font-bold flex items-center justify-center tabular-nums"
+                    className="absolute -top-2 -right-4 min-w-[18px] h-[18px] px-1 rounded-full bg-[#C8995F] text-[#2A1608] text-[10px] font-mono font-bold flex items-center justify-center tabular-nums"
                   >
                     {badgeCount}
-                  </span>
+                  </motion.span>
                 )}
-              </div>
+              </motion.div>
 
               <span
                 className={`mt-1 text-[11px] tracking-tight leading-none ${
-                  isActive ? 'font-bold text-[#F3F7F5]' : 'font-medium'
+                  isActive ? 'font-bold text-[#F7F1EA]' : 'font-medium'
                 }`}
               >
                 {item.label}
@@ -84,7 +101,7 @@ export const MainBottomNavigation: React.FC<MainBottomNavigationProps> = ({
             </button>
           );
         })}
-      </div>
+      </motion.div>
     </nav>
   );
 };
