@@ -1,17 +1,17 @@
 # Graph Report - Chepesauro-App  (2026-10-21)
 
 ## Corpus Check
-- 36 files · ~124,493 words
+- 36 files · ~124,535 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: .example 1, (none) 1, .lock 1)
 
 ## Summary
-- 283 nodes · 585 edges · 15 communities (14 shown, 1 thin omitted)
+- 283 nodes · 586 edges · 15 communities (14 shown, 1 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a41d1516`
+- Built from commit: `82559217`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -126,16 +126,16 @@ Nodes (9): three, OnboardingLayout(), OnboardingLayoutProps, STEP_LABELS, Onboar
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `react` connect `react` to `ordersStore.ts`, `GPSNavigationView.tsx`, `App.tsx`, `package.json`, `OnboardingLayout.tsx`?**
-  _High betweenness centrality (0.108) - this node is a cross-community bridge._
+  _High betweenness centrality (0.107) - this node is a cross-community bridge._
 - **What connects `@google/genai`, `@types/three`, `dotenv` to the rest of the system?**
   _14 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ordersStore.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.10993657505285412 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1109936575052854 - nodes in this community are weakly interconnected._
 - **Why does `dependencies` connect `dependencies` to `package.json`?**
   _High betweenness centrality (0.075) - this node is a cross-community bridge._
 - **Should `GPSNavigationView.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.12439024390243902 - nodes in this community are weakly interconnected._
 - **Why does `@phosphor-icons/react` connect `ordersStore.ts` to `GPSNavigationView.tsx`, `App.tsx`, `package.json`, `react`, `OnboardingLayout.tsx`?**
-  _High betweenness centrality (0.062) - this node is a cross-community bridge._
+  _High betweenness centrality (0.060) - this node is a cross-community bridge._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.06881720430107527 - nodes in this community are weakly interconnected._
