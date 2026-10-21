@@ -3,54 +3,84 @@
 @layer base {
   :root {
     /* =====================================================================
-     * LAYER 1: PRIMITIVE TOKENS — CLEAN SPATIAL MINIMALISM
+     * LAYER 1: PRIMITIVE TOKENS — ESPRESSO & CARAMEL
      * ===================================================================== */
     --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 
-    /* Deep Neutral-Warm Carbon Surfaces */
-    --primitive-carbon-950: #0A0D0C;
-    --primitive-carbon-900: #111614;
-    --primitive-carbon-850: #161C1A;
-    --primitive-carbon-800: #1C2421;
+    /* Espresso surfaces (dark roast, warm — never pure black) */
+    --primitive-espresso-950: #1A0E07;
+    --primitive-espresso-900: #24140A;
+    --primitive-espresso-850: #2E1A0E;
+    --primitive-espresso-800: #3B2212;
+    --primitive-roast-600: #6A4328;
 
-    /* Brand Emerald (Reserved for Primary Route & Primary Action) */
-    --primitive-emerald-400: #22C58B;
-    --primitive-emerald-500: #10B981;
-    --primitive-emerald-600: #0D9F6E;
+    /* Caramel — reserved for primary action, selected state, price */
+    --primitive-caramel-300: #E0BC91;
+    --primitive-caramel-400: #D4A574;
+    --primitive-caramel-500: #C8995F;
+    --primitive-caramel-600: #B0824B;
 
-    /* Refined Editorial Neutrals */
-    --primitive-white-soft: #F2F5F3;
-    --primitive-gray-300: #C4CCC8;
-    --primitive-gray-400: #8E9893;
-    --primitive-gray-600: #5A635E;
+    /* Crema neutrals */
+    --primitive-cream: #F7F1EA;
+    --primitive-tan-300: #D9C9B8;
+    --primitive-tan-400: #B3A090;
+    --primitive-tan-600: #8A7766;
 
-    /* Semantic Status Colors */
+    /* Semantic status colors */
     --primitive-amber-400: #F59E0B;
     --primitive-red-400: #EF4444;
 
     /* =====================================================================
-     * LAYER 2: SEMANTIC TOKENS
+     * LAYER 2: SEMANTIC TOKENS (nombres --vg-* sin cambios)
      * ===================================================================== */
-    --vg-bg-canvas: var(--primitive-carbon-950);
-    --vg-bg-surface: var(--primitive-carbon-900);
-    --vg-bg-elevated: var(--primitive-carbon-850);
+    --vg-bg-canvas: var(--primitive-espresso-950);
+    --vg-bg-surface: var(--primitive-espresso-900);
+    --vg-bg-elevated: var(--primitive-espresso-850);
 
-    --vg-border-subtle: rgba(255, 255, 255, 0.06);
-    --vg-border-default: rgba(255, 255, 255, 0.10);
-    --vg-border-active: rgba(16, 185, 129, 0.55);
+    --vg-border-subtle: rgba(247, 241, 234, 0.07);
+    --vg-border-default: rgba(247, 241, 234, 0.12);
+    --vg-border-active: rgba(200, 153, 95, 0.65);
 
-    --vg-brand-primary: var(--primitive-emerald-500);
-    --vg-text-primary: var(--primitive-white-soft);
-    --vg-text-secondary: var(--primitive-gray-400);
-    --vg-text-muted: var(--primitive-gray-600);
+    --vg-brand-primary: var(--primitive-caramel-500);
+    --vg-text-primary: var(--primitive-cream);
+    --vg-text-secondary: var(--primitive-tan-400);
+    --vg-text-muted: var(--primitive-tan-600);
+    --vg-on-brand: #2A1608;
 
     /* =====================================================================
      * LAYER 3: COMPONENT TOKENS
      * ===================================================================== */
     --touch-target-min: 44px;
     --cta-height-primary: 52px;
+
+    --radius-card: 28px;
+    --radius-sheet: 36px;
+    --radius-pill: 999px;
+
+    --gradient-roast: linear-gradient(165deg, #6A4328 0%, #3B2212 55%, #26150B 100%);
+    --shadow-card: 0 18px 40px -16px rgba(0, 0, 0, 0.55);
+
+    /* Motion */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* =====================================================================
+     * LEGACY ALIASES — evitan romper componentes que aún usen los nombres
+     * viejos. Se pueden borrar cuando ya no haya referencias.
+     * ===================================================================== */
+    --primitive-carbon-950: var(--primitive-espresso-950);
+    --primitive-carbon-900: var(--primitive-espresso-900);
+    --primitive-carbon-850: var(--primitive-espresso-850);
+    --primitive-carbon-800: var(--primitive-espresso-800);
+    --primitive-emerald-400: var(--primitive-caramel-400);
+    --primitive-emerald-500: var(--primitive-caramel-500);
+    --primitive-emerald-600: var(--primitive-caramel-600);
+    --primitive-white-soft: var(--primitive-cream);
+    --primitive-gray-300: var(--primitive-tan-300);
+    --primitive-gray-400: var(--primitive-tan-400);
+    --primitive-gray-600: var(--primitive-tan-600);
   }
 
   html,
@@ -70,7 +100,14 @@
   h4,
   .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.025em;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  /* Foco visible para teclado */
+  :focus-visible {
+    outline: 2px solid var(--primitive-caramel-400);
+    outline-offset: 3px;
   }
 }
 
@@ -95,68 +132,244 @@
 }
 
 /* =====================================================================
- * CLEAN SPATIAL MINIMALISM SURFACES
+ * SURFACES
  * ===================================================================== */
 
-/* Deep Carbon Canvas — Pure, calm, distraction-free */
+/* Canvas oscuro con un velo cálido muy sutil arriba (como el fondo de la referencia) */
 .vg-dark-canvas {
-  background-color: #0A0D0C;
-  color: #F2F5F3;
+  background-color: var(--primitive-espresso-950);
+  background-image: radial-gradient(120% 60% at 50% 0%, rgba(106, 67, 40, 0.35) 0%, transparent 70%);
+  color: var(--primitive-cream);
 }
 
-/* Flat Surface for Clean Single-Layer Cards */
 .vg-surface-flat {
-  background-color: #111614;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background-color: var(--primitive-espresso-900);
+  border: 1px solid var(--vg-border-subtle);
 }
 
 .vg-surface-elevated {
-  background-color: #161C1A;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: var(--primitive-espresso-850);
+  border: 1px solid var(--vg-border-default);
+  box-shadow: var(--shadow-card);
 }
 
-/* Restrained Glassmorphism (Used ONLY for floating navigation bars & overlays) */
+/* Glass: solo para barras flotantes y overlays */
 .vg-glass-restrained {
-  background: rgba(14, 18, 17, 0.82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(36, 20, 10, 0.78);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--vg-border-default);
 }
 
-/* Primary Action Button: Clean Emerald, Zero Neon Glow */
+/* =====================================================================
+ * BUTTONS
+ * ===================================================================== */
+
 .vg-btn-primary,
 .vg-btn-futuristic {
-  background-color: #10B981;
-  color: #06110C;
-  transition: background-color 150ms ease, transform 120ms ease;
+  background-color: var(--primitive-caramel-500);
+  color: var(--vg-on-brand);
+  font-weight: 700;
+  transition:
+    background-color 180ms var(--ease-out),
+    transform 220ms var(--ease-spring),
+    box-shadow 220ms var(--ease-out);
+  box-shadow: 0 10px 24px -12px rgba(200, 153, 95, 0.6);
 }
 
 .vg-btn-primary:hover,
 .vg-btn-futuristic:hover {
-  background-color: #18C98E;
+  background-color: var(--primitive-caramel-400);
+  box-shadow: 0 14px 28px -12px rgba(212, 165, 116, 0.7);
 }
 
 .vg-btn-primary:active,
 .vg-btn-futuristic:active {
-  background-color: #0D9F6E;
-  transform: scale(0.99);
+  background-color: var(--primitive-caramel-600);
+  transform: scale(0.97);
 }
 
-/* Main App Card Utilities */
+/* =====================================================================
+ * CARDS
+ * ===================================================================== */
+
 .vg-card {
-  background-color: #111614;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background-color: var(--primitive-espresso-900);
+  border: 1px solid var(--vg-border-subtle);
 }
 
 .vg-card-interactive {
-  background-color: #111614;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: border-color 150ms ease, background-color 150ms ease;
+  background-color: var(--primitive-espresso-900);
+  border: 1px solid var(--vg-border-subtle);
+  transition:
+    border-color 200ms var(--ease-out),
+    background-color 200ms var(--ease-out),
+    transform 260ms var(--ease-out),
+    box-shadow 260ms var(--ease-out);
 }
 
 .vg-card-interactive:hover {
-  background-color: #161C1A;
-  border-color: rgba(255, 255, 255, 0.12);
+  background-color: var(--primitive-espresso-850);
+  border-color: var(--vg-border-active);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+
+.vg-card-interactive:active {
+  transform: translateY(0) scale(0.985);
+}
+
+/* Tarjeta principal: degradado café, esquinas amplias (la "tarjeta de producto") */
+.vg-card-hero {
+  background: var(--gradient-roast);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  color: var(--primitive-cream);
+  position: relative;
+}
+
+/* =====================================================================
+ * CHIPS, PILLS & ROUND ACTION
+ * ===================================================================== */
+
+.vg-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 36px;
+  padding: 0 1rem;
+  border-radius: var(--radius-pill);
+  background-color: rgba(247, 241, 234, 0.09);
+  color: var(--primitive-tan-300);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  transition:
+    background-color 220ms var(--ease-out),
+    color 220ms var(--ease-out),
+    transform 260ms var(--ease-spring);
+}
+
+.vg-chip:active {
+  transform: scale(0.94);
+}
+
+.vg-chip.is-active,
+.vg-chip[aria-pressed="true"],
+.vg-chip[aria-selected="true"] {
+  background-color: var(--primitive-caramel-500);
+  color: var(--vg-on-brand);
+}
+
+/* Etiqueta de calificación (★ 4.3) */
+.vg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background-color: rgba(247, 241, 234, 0.16);
+  color: var(--primitive-cream);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+/* Botón redondo "+" */
+.vg-fab {
+  display: inline-grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--primitive-cream);
+  color: var(--primitive-espresso-800);
+  box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.6);
+  transition: transform 260ms var(--ease-spring), background-color 180ms var(--ease-out);
+}
+
+.vg-fab:hover {
+  background-color: #FFFFFF;
+}
+
+.vg-fab:active {
+  transform: scale(0.9);
+}
+
+.vg-fab > svg {
+  transition: transform 320ms var(--ease-spring);
+}
+
+.vg-fab:hover > svg {
+  transform: rotate(90deg);
+}
+
+/* =====================================================================
+ * MOTION — solo transform/opacity (fluido, sin reflow)
+ * ===================================================================== */
+
+/* Momento principal: entrada escalonada de una lista o pantalla.
+   Usar en UN contenedor por pantalla: <div class="vg-stagger"> */
+@keyframes vg-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.vg-stagger > * {
+  opacity: 0;
+  animation: vg-rise 560ms var(--ease-out) forwards;
+}
+
+.vg-stagger > *:nth-child(1) { animation-delay: 40ms; }
+.vg-stagger > *:nth-child(2) { animation-delay: 110ms; }
+.vg-stagger > *:nth-child(3) { animation-delay: 180ms; }
+.vg-stagger > *:nth-child(4) { animation-delay: 250ms; }
+.vg-stagger > *:nth-child(5) { animation-delay: 320ms; }
+.vg-stagger > *:nth-child(n+6) { animation-delay: 390ms; }
+
+/* Confirmación al agregar un producto (añadir la clase al hacer clic) */
+@keyframes vg-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+.vg-pop {
+  animation: vg-pop 420ms var(--ease-spring);
+}
+
+/* Flotación suave para la imagen protagonista (la taza que sobresale de la tarjeta) */
+@keyframes vg-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1.5deg); }
+}
+
+.vg-float {
+  animation: vg-float 6s ease-in-out infinite;
+  filter: drop-shadow(0 18px 18px rgba(0, 0, 0, 0.45));
+}
+
+/* Esqueleto de carga */
+@keyframes vg-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.vg-shimmer {
+  background: linear-gradient(
+    100deg,
+    rgba(247, 241, 234, 0.05) 30%,
+    rgba(247, 241, 234, 0.14) 50%,
+    rgba(247, 241, 234, 0.05) 70%
+  );
+  background-size: 200% 100%;
+  animation: vg-shimmer 1.6s linear infinite;
+  border-radius: var(--radius-pill);
 }
 
 /* Respect prefers-reduced-motion */
@@ -169,4 +382,8 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
+
+  .vg-stagger > * {
+    opacity: 1;
+  }
+  }
