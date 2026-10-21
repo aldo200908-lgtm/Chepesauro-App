@@ -20,12 +20,12 @@ export const ProfileSelectionScreen: React.FC<ProfileSelectionScreenProps> = ({
         {/* Clean Editorial Heading */}
         <div className="space-y-1.5 text-left">
           <h1
-            className="font-display text-[26px] sm:text-[30px] font-extrabold tracking-tight text-[#F2F5F3] leading-[1.12]"
+            className="font-display text-[26px] sm:text-[30px] font-extrabold tracking-tight text-[#F7F1EA] leading-[1.12]"
             style={{ textWrap: 'balance' }}
           >
             ¿Cómo quieres ingresar?
           </h1>
-          <p className="text-sm text-[#8E9893] leading-relaxed">
+          <p className="text-sm text-[#B3A090] leading-relaxed">
             Selecciona tu perfil para configurar el mapa 3D.
           </p>
         </div>
@@ -56,10 +56,10 @@ export const ProfileSelectionScreen: React.FC<ProfileSelectionScreenProps> = ({
           type="button"
           onClick={onContinue}
           disabled={!selectedRole}
-          className={`w-full h-[54px] px-6 rounded-2xl font-display text-[15px] font-bold inline-flex items-center justify-between transition-all duration-150 whitespace-nowrap shrink-0 ${
+          className={`group w-full h-[54px] px-6 rounded-full font-display text-[15px] font-bold inline-flex items-center justify-between transition-all duration-200 whitespace-nowrap shrink-0 ${
             selectedRole
-              ? 'vg-btn-primary cursor-pointer shadow-[0_10px_30px_-10px_rgba(16,185,129,0.45)]'
-              : 'bg-[#111614] text-[#5A635E] border border-white/[0.05] cursor-not-allowed'
+              ? 'vg-btn-primary cursor-pointer shadow-[0_14px_32px_-12px_rgba(200,153,95,0.55)]'
+              : 'bg-[#24140A] text-[#8A7766] border border-white/[0.05] cursor-not-allowed'
           }`}
         >
           <span>
@@ -69,7 +69,7 @@ export const ProfileSelectionScreen: React.FC<ProfileSelectionScreenProps> = ({
               ? 'Continuar como Motorizado'
               : 'Selecciona un perfil'}
           </span>
-          <ArrowRight size={18} weight="bold" className="shrink-0" aria-hidden="true" />
+          <ArrowRight size={18} weight="bold" className="shrink-0 transition-transform duration-300 group-enabled:group-hover:translate-x-1" aria-hidden="true" />
         </button>
       </div>
     </div>

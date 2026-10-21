@@ -157,10 +157,10 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
           // Atmospheric horizon fog in VerdeGo emerald palette
           try {
             map.setFog({
-              color: 'rgb(234, 248, 242)', // #EAF8F2
-              'high-color': 'rgb(215, 236, 229)',
+              color: 'rgb(246, 235, 221)', // #F6EBDD
+              'high-color': 'rgb(234, 219, 203)',
               'horizon-blend': 0.1,
-              'space-color': 'rgb(6, 75, 60)', // #064B3C
+              'space-color': 'rgb(90, 58, 28)', // #5A3A1C
             });
           } catch {
             // Fog not supported on older WebGL contexts
@@ -298,7 +298,7 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
             'line-cap': 'round',
           },
           paint: {
-            'line-color': '#064B3C',
+            'line-color': '#3B2212',
             'line-width': 7,
             'line-opacity': 0.45,
           },
@@ -314,7 +314,7 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
             'line-cap': 'round',
           },
           paint: {
-            'line-color': '#078F68',
+            'line-color': '#D4A574',
             'line-width': 4.5,
             'line-opacity': 0.95,
           },
@@ -363,11 +363,11 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
       // 1. Pickup Pin (Marker A)
       const pickupEl = document.createElement('div');
       pickupEl.className =
-        'w-8 h-8 rounded-full bg-[#064B3C] border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold ring-2 ring-[#078F68]/40';
+        'w-8 h-8 rounded-full bg-[#5A3A1C] border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold ring-2 ring-[#8A5A2B]/40';
       pickupEl.innerHTML = 'A';
 
       const pickupPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-        `<div class="p-1.5 font-sans"><span class="text-[10px] font-bold uppercase tracking-wider text-[#064B3C]">Recogida</span><p class="text-xs font-semibold text-[#102F27] mt-0.5">${
+        `<div class="p-1.5 font-sans"><span class="text-[10px] font-bold uppercase tracking-wider text-[#5A3A1C]">Recogida</span><p class="text-xs font-semibold text-[#2A1608] mt-0.5">${
           useVerifiedPunoSample
             ? VERIFIED_PUNO_SAMPLE_POINTS.catedralPuno.name
             : activeOrder?.pickup.address || 'Punto de recogida'
@@ -384,11 +384,11 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
       // 2. Dropoff Pin (Marker B)
       const dropoffEl = document.createElement('div');
       dropoffEl.className =
-        'w-8 h-8 rounded-full bg-[#078F68] border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold ring-2 ring-[#078F68]/40';
+        'w-8 h-8 rounded-full bg-[#8A5A2B] border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold ring-2 ring-[#8A5A2B]/40';
       dropoffEl.innerHTML = 'B';
 
       const dropoffPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-        `<div class="p-1.5 font-sans"><span class="text-[10px] font-bold uppercase tracking-wider text-[#078F68]">Destino</span><p class="text-xs font-semibold text-[#102F27] mt-0.5">${
+        `<div class="p-1.5 font-sans"><span class="text-[10px] font-bold uppercase tracking-wider text-[#8A5A2B]">Destino</span><p class="text-xs font-semibold text-[#2A1608] mt-0.5">${
           useVerifiedPunoSample
             ? VERIFIED_PUNO_SAMPLE_POINTS.puertoLacustre.name
             : activeOrder?.dropoff.address || 'Punto de destino'
@@ -415,7 +415,7 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
       customMarkers.forEach((markerPoint) => {
         const el = document.createElement('div');
         el.className =
-          'w-6 h-6 rounded-full bg-[#078F68] border-2 border-white shadow-md flex items-center justify-center text-white text-[10px] font-bold';
+          'w-6 h-6 rounded-full bg-[#8A5A2B] border-2 border-white shadow-md flex items-center justify-center text-white text-[10px] font-bold';
         el.innerHTML = '•';
 
         const marker = new mapboxgl.Marker({ element: el })
@@ -523,42 +523,42 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
     return (
       <div
         data-testid="mapbox-config-screen"
-        className={`rounded-3xl bg-[#EAF8F2] border border-[#DCECE5] p-5 sm:p-6 space-y-4 ${className}`}
+        className={`rounded-3xl bg-[#F6EBDD] border border-[#EADBCB] p-5 sm:p-6 space-y-4 ${className}`}
       >
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-[#078F68] text-white flex items-center justify-center shrink-0 shadow-xs">
+          <div className="w-12 h-12 rounded-full bg-[#8A5A2B] text-white flex items-center justify-center shrink-0 shadow-xs">
             <Key className="w-6 h-6" aria-hidden="true" />
           </div>
           <div>
-            <span className="text-xs font-semibold text-[#078F68]">
+            <span className="text-xs font-semibold text-[#8A5A2B]">
               Configuración de Mapbox
             </span>
-            <h2 className="font-display text-lg font-bold text-[#102F27]">
+            <h2 className="font-display text-lg font-bold text-[#2A1608]">
               Token de acceso requerido
             </h2>
           </div>
         </div>
 
-        <p className="text-xs sm:text-sm text-[#64877C] leading-relaxed">
+        <p className="text-xs sm:text-sm text-[#7A6757] leading-relaxed">
           Para visualizar el mapa 3D de Mapbox en <strong>Puno, Perú</strong> con
           edificios, relieve y cálculo de rutas viales, agrega tu token público
           en la variable de entorno de Vite o pruébalo directamente aquí.
         </p>
 
         {/* Step-by-step guidance */}
-        <div className="rounded-2xl bg-white border border-[#DCECE5] p-4 space-y-2.5 text-xs text-[#102F27]">
-          <p className="font-bold text-[#064B3C] flex items-center gap-1.5">
-            <Info className="w-4 h-4 text-[#078F68]" aria-hidden="true" />
+        <div className="rounded-2xl bg-white border border-[#EADBCB] p-4 space-y-2.5 text-xs text-[#2A1608]">
+          <p className="font-bold text-[#5A3A1C] flex items-center gap-1.5">
+            <Info className="w-4 h-4 text-[#8A5A2B]" aria-hidden="true" />
             <span>Pasos para obtener tu token gratis:</span>
           </p>
-          <ol className="list-decimal list-inside space-y-1.5 text-[#64877C] pl-1">
+          <ol className="list-decimal list-inside space-y-1.5 text-[#7A6757] pl-1">
             <li>
               Crea una cuenta gratuita en{' '}
               <a
                 href="https://account.mapbox.com/"
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#078F68] font-semibold underline inline-flex items-center gap-0.5"
+                className="text-[#8A5A2B] font-semibold underline inline-flex items-center gap-0.5"
               >
                 account.mapbox.com
                 <ExternalLink className="w-3 h-3" aria-hidden="true" />
@@ -566,18 +566,18 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
             </li>
             <li>
               Copia tu <strong>Default Public Token</strong> (comienza con{' '}
-              <code className="bg-[#EAF8F2] px-1 py-0.5 rounded text-[#064B3C]">
+              <code className="bg-[#F6EBDD] px-1 py-0.5 rounded text-[#5A3A1C]">
                 pk.eyJ...
               </code>
               ).
             </li>
             <li>
               Añádelo a tu archivo{' '}
-              <code className="bg-[#EAF8F2] px-1 py-0.5 rounded text-[#064B3C]">
+              <code className="bg-[#F6EBDD] px-1 py-0.5 rounded text-[#5A3A1C]">
                 .env
               </code>
               :
-              <pre className="mt-1.5 p-2 rounded-xl bg-[#102F27] text-[#EAF8F2] font-mono text-[11px] overflow-x-auto">
+              <pre className="mt-1.5 p-2 rounded-xl bg-[#2A1608] text-[#F6EBDD] font-mono text-[11px] overflow-x-auto">
                 VITE_MAPBOX_ACCESS_TOKEN="pk.eyJ1..."
               </pre>
             </li>
@@ -588,7 +588,7 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
         <form onSubmit={handleSaveInputToken} className="space-y-2.5 pt-1">
           <label
             htmlFor="quick-mapbox-token"
-            className="block text-xs font-semibold text-[#064B3C]"
+            className="block text-xs font-semibold text-[#5A3A1C]"
           >
             O ingresa tu token público aquí para probarlo ahora mismo:
           </label>
@@ -599,12 +599,12 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
               value={inputToken}
               onChange={(e) => setInputToken(e.target.value)}
               placeholder="pk.eyJ1..."
-              className="flex-1 h-11 px-3.5 rounded-2xl bg-white border border-[#DCECE5] text-xs text-[#102F27] placeholder:text-[#64877C] focus:outline-none focus:ring-2 focus:ring-[#078F68]"
+              className="flex-1 h-11 px-3.5 rounded-2xl bg-white border border-[#EADBCB] text-xs text-[#2A1608] placeholder:text-[#7A6757] focus:outline-none focus:ring-2 focus:ring-[#8A5A2B]"
             />
             <button
               type="submit"
               disabled={!inputToken.trim()}
-              className="h-11 px-5 rounded-full bg-[#078F68] hover:bg-[#064B3C] disabled:opacity-50 text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0"
+              className="h-11 px-5 rounded-full bg-[#8A5A2B] hover:bg-[#5A3A1C] disabled:opacity-50 text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-[0.97] cursor-pointer shrink-0"
             >
               <span>Activar mapa 3D</span>
             </button>
@@ -618,21 +618,21 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
   return (
     <div className={`space-y-3.5 ${className}`}>
       {/* Map Card Container */}
-      <div className="relative w-full h-[360px] sm:h-[420px] rounded-3xl bg-[#EAF8F2] border border-[#DCECE5] overflow-hidden shadow-xs">
+      <div className="relative w-full h-[360px] sm:h-[420px] rounded-3xl bg-[#F6EBDD] border border-[#EADBCB] overflow-hidden shadow-xs">
         {/* Mapbox Canvas Mount Point */}
         <div ref={mapContainerRef} className="w-full h-full" />
 
         {/* Error overlay if invalid token / initialization failure */}
         {mapError && (
           <div className="absolute inset-0 z-30 bg-[#FFFFFF]/92 backdrop-blur-xs flex flex-col items-center justify-center p-5 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
               <AlertTriangle className="w-6 h-6" aria-hidden="true" />
             </div>
             <div className="space-y-1 max-w-sm">
-              <h3 className="font-display text-sm font-bold text-[#102F27]">
+              <h3 className="font-display text-sm font-bold text-[#2A1608]">
                 Error al cargar el mapa
               </h3>
-              <p className="text-xs text-[#64877C] leading-relaxed">
+              <p className="text-xs text-[#7A6757] leading-relaxed">
                 {mapError}
               </p>
             </div>
@@ -648,7 +648,7 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
                   // Ignore
                 }
               }}
-              className="h-9 px-4 rounded-full bg-[#078F68] text-white text-xs font-semibold inline-flex items-center gap-1.5 hover:bg-[#064B3C] transition-colors cursor-pointer"
+              className="h-9 px-4 rounded-full bg-[#8A5A2B] text-white text-xs font-semibold inline-flex items-center gap-1.5 hover:bg-[#5A3A1C] transition-all duration-200 active:scale-[0.97] cursor-pointer"
             >
               <Key className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Configurar nuevo token</span>
@@ -658,33 +658,33 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
 
         {/* Top Badges Overlay */}
         <div className="absolute top-3 left-3 right-3 z-10 flex items-center justify-between gap-2 pointer-events-none">
-          <div className="pointer-events-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-xs border border-[#DCECE5] shadow-xs text-xs font-semibold text-[#102F27]">
-            <MapPin className="w-3.5 h-3.5 text-[#078F68]" aria-hidden="true" />
+          <div className="pointer-events-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-xs border border-[#EADBCB] shadow-xs text-xs font-semibold text-[#2A1608]">
+            <MapPin className="w-3.5 h-3.5 text-[#8A5A2B]" aria-hidden="true" />
             <span className="truncate">Puno, Perú · Modelo 3D</span>
           </div>
 
           <button
             type="button"
             onClick={() => setShowTokenModal(!showTokenModal)}
-            className="pointer-events-auto inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/95 backdrop-blur-xs border border-[#DCECE5] shadow-xs text-[11px] font-semibold text-[#064B3C] hover:bg-[#EAF8F2] transition-colors cursor-pointer"
+            className="pointer-events-auto inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/95 backdrop-blur-xs border border-[#EADBCB] shadow-xs text-[11px] font-semibold text-[#5A3A1C] hover:bg-[#F6EBDD] transition-all duration-200 active:scale-[0.97] cursor-pointer"
             title="Opciones de Token de Mapbox"
           >
-            <Key className="w-3 h-3 text-[#078F68]" aria-hidden="true" />
+            <Key className="w-3 h-3 text-[#8A5A2B]" aria-hidden="true" />
             <span className="hidden sm:inline">Token</span>
           </button>
         </div>
 
         {/* Token update floating modal */}
         {showTokenModal && (
-          <div className="absolute top-12 right-3 z-20 w-72 rounded-2xl bg-white border border-[#DCECE5] p-3.5 shadow-lg space-y-2">
+          <div className="absolute top-12 right-3 z-20 w-72 rounded-2xl bg-white border border-[#EADBCB] p-3.5 shadow-lg space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[#102F27]">
+              <span className="text-xs font-bold text-[#2A1608]">
                 Cambiar token de Mapbox
               </span>
               <button
                 type="button"
                 onClick={() => setShowTokenModal(false)}
-                className="text-xs text-[#64877C] hover:text-[#102F27] cursor-pointer"
+                className="text-xs text-[#7A6757] hover:text-[#2A1608] cursor-pointer"
               >
                 ✕
               </button>
@@ -695,12 +695,12 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
                 value={inputToken}
                 onChange={(e) => setInputToken(e.target.value)}
                 placeholder="Nuevo token pk.eyJ..."
-                className="w-full h-8 px-2.5 rounded-xl border border-[#DCECE5] text-xs text-[#102F27]"
+                className="w-full h-8 px-2.5 rounded-xl border border-[#EADBCB] text-xs text-[#2A1608]"
               />
               <button
                 type="submit"
                 disabled={!inputToken.trim()}
-                className="w-full h-8 rounded-full bg-[#078F68] hover:bg-[#064B3C] text-white text-xs font-semibold cursor-pointer"
+                className="w-full h-8 rounded-full bg-[#8A5A2B] hover:bg-[#5A3A1C] text-white text-xs font-semibold cursor-pointer"
               >
                 Actualizar
               </button>
@@ -710,8 +710,8 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
 
         {/* Route Loading / Status Floating Indicator */}
         {routeLoading && (
-          <div className="absolute top-12 left-3 z-10 pointer-events-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-xs border border-[#DCECE5] shadow-xs text-[11px] font-semibold text-[#064B3C]">
-            <Loader2 className="w-3.5 h-3.5 animate-spin text-[#078F68]" />
+          <div className="absolute top-12 left-3 z-10 pointer-events-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-xs border border-[#EADBCB] shadow-xs text-[11px] font-semibold text-[#5A3A1C]">
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-[#8A5A2B]" />
             <span>Consultando Mapbox Directions API...</span>
           </div>
         )}
@@ -734,8 +734,8 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
             }
             className={`w-10 h-10 rounded-2xl flex items-center justify-center shadow-md transition-all cursor-pointer ${
               is3DActive
-                ? 'bg-[#078F68] text-white ring-2 ring-white'
-                : 'bg-white text-[#102F27] border border-[#DCECE5] hover:bg-[#EAF8F2]'
+                ? 'bg-[#8A5A2B] text-white ring-2 ring-white'
+                : 'bg-white text-[#2A1608] border border-[#EADBCB] hover:bg-[#F6EBDD]'
             }`}
           >
             <Layers className="w-5 h-5" aria-hidden="true" />
@@ -747,9 +747,9 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
             onClick={handleResetCamera}
             aria-label="Volver a la vista inicial de Puno"
             title="Volver a la vista inicial"
-            className="w-10 h-10 rounded-2xl bg-white text-[#102F27] border border-[#DCECE5] hover:bg-[#EAF8F2] flex items-center justify-center shadow-md transition-colors cursor-pointer"
+            className="w-10 h-10 rounded-2xl bg-white text-[#2A1608] border border-[#EADBCB] hover:bg-[#F6EBDD] flex items-center justify-center shadow-md transition-all duration-200 active:scale-[0.97] cursor-pointer"
           >
-            <RotateCcw className="w-4 h-4 text-[#078F68]" aria-hidden="true" />
+            <RotateCcw className="w-4 h-4 text-[#8A5A2B]" aria-hidden="true" />
           </button>
 
           {/* Reset North / Compass */}
@@ -758,9 +758,9 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
             onClick={handleResetBearing}
             aria-label="Orientar al norte"
             title="Orientar al norte"
-            className="w-10 h-10 rounded-2xl bg-white text-[#102F27] border border-[#DCECE5] hover:bg-[#EAF8F2] flex items-center justify-center shadow-md transition-colors cursor-pointer"
+            className="w-10 h-10 rounded-2xl bg-white text-[#2A1608] border border-[#EADBCB] hover:bg-[#F6EBDD] flex items-center justify-center shadow-md transition-all duration-200 active:scale-[0.97] cursor-pointer"
           >
-            <Compass className="w-4 h-4 text-[#064B3C]" aria-hidden="true" />
+            <Compass className="w-4 h-4 text-[#5A3A1C]" aria-hidden="true" />
           </button>
 
           {/* Zoom In */}
@@ -769,9 +769,9 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
             onClick={handleZoomIn}
             aria-label="Acercar mapa"
             title="Acercar mapa"
-            className="w-10 h-10 rounded-2xl bg-white text-[#102F27] border border-[#DCECE5] hover:bg-[#EAF8F2] flex items-center justify-center shadow-md transition-colors cursor-pointer"
+            className="w-10 h-10 rounded-2xl bg-white text-[#2A1608] border border-[#EADBCB] hover:bg-[#F6EBDD] flex items-center justify-center shadow-md transition-all duration-200 active:scale-[0.97] cursor-pointer"
           >
-            <Plus className="w-4 h-4 text-[#102F27]" aria-hidden="true" />
+            <Plus className="w-4 h-4 text-[#2A1608]" aria-hidden="true" />
           </button>
 
           {/* Zoom Out */}
@@ -780,16 +780,16 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
             onClick={handleZoomOut}
             aria-label="Alejar mapa"
             title="Alejar mapa"
-            className="w-10 h-10 rounded-2xl bg-white text-[#102F27] border border-[#DCECE5] hover:bg-[#EAF8F2] flex items-center justify-center shadow-md transition-colors cursor-pointer"
+            className="w-10 h-10 rounded-2xl bg-white text-[#2A1608] border border-[#EADBCB] hover:bg-[#F6EBDD] flex items-center justify-center shadow-md transition-all duration-200 active:scale-[0.97] cursor-pointer"
           >
-            <Minus className="w-4 h-4 text-[#102F27]" aria-hidden="true" />
+            <Minus className="w-4 h-4 text-[#2A1608]" aria-hidden="true" />
           </button>
         </div>
 
         {/* Bottom Status Pill */}
         <div className="absolute bottom-3 left-3 z-10 pointer-events-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-xs border border-[#DCECE5] shadow-xs text-[11px] font-semibold text-[#064B3C]">
-            <Eye className="w-3.5 h-3.5 text-[#078F68]" aria-hidden="true" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-xs border border-[#EADBCB] shadow-xs text-[11px] font-semibold text-[#5A3A1C]">
+            <Eye className="w-3.5 h-3.5 text-[#8A5A2B]" aria-hidden="true" />
             <span>{is3DActive ? 'Inclinación 3D (60°)' : 'Plano 2D (0°)'}</span>
           </div>
         </div>
@@ -820,11 +820,11 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
       )}
 
       {/* GEOGRAPHIC DATA STATUS & ORDER CARD */}
-      <div className="rounded-3xl bg-white border border-[#DCECE5] p-4 space-y-3">
+      <div className="rounded-3xl bg-white border border-[#EADBCB] p-4 space-y-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Navigation className="w-4 h-4 text-[#078F68] shrink-0" />
-            <h3 className="font-display text-sm font-bold text-[#102F27]">
+            <Navigation className="w-4 h-4 text-[#8A5A2B] shrink-0" />
+            <h3 className="font-display text-sm font-bold text-[#2A1608]">
               {useVerifiedPunoSample
                 ? 'Ruta de prueba verificada (Puno, Perú)'
                 : activeOrder
@@ -837,10 +837,10 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
           <button
             type="button"
             onClick={() => setUseVerifiedPunoSample(!useVerifiedPunoSample)}
-            className={`px-3 py-1.5 rounded-full text-[11px] font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-full text-[11px] font-semibold inline-flex items-center gap-1.5 transition-all duration-200 active:scale-[0.97] cursor-pointer ${
               useVerifiedPunoSample
-                ? 'bg-[#078F68] text-white shadow-xs'
-                : 'bg-[#EAF8F2] hover:bg-[#DCECE5] text-[#064B3C]'
+                ? 'bg-[#8A5A2B] text-white shadow-xs'
+                : 'bg-[#F6EBDD] hover:bg-[#EADBCB] text-[#5A3A1C]'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -855,23 +855,23 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
         {/* Case 1: Verified Route Active (Mapbox Directions API Succeeded) */}
         {canCalculateRoute ? (
           <div className="space-y-2.5">
-            <div className="rounded-2xl bg-[#EAF8F2]/70 border border-[#DCECE5] p-3 text-xs space-y-1.5">
-              <div className="flex items-center justify-between text-[#064B3C] font-semibold">
+            <div className="rounded-2xl bg-[#F6EBDD]/70 border border-[#EADBCB] p-3 text-xs space-y-1.5">
+              <div className="flex items-center justify-between text-[#5A3A1C] font-semibold">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#078F68]" />
+                  <span className="w-2 h-2 rounded-full bg-[#8A5A2B]" />
                   <span>Ruta calculada con Mapbox Directions API</span>
                 </span>
                 {routeData && (
-                  <span className="font-bold tabular-nums text-[#078F68]">
+                  <span className="font-bold tabular-nums text-[#8A5A2B]">
                     {(routeData.distanceMeters / 1000).toFixed(1)} km ·{' '}
                     {Math.ceil(routeData.durationSeconds / 60)} min
                   </span>
                 )}
               </div>
 
-              <div className="space-y-1 text-[#102F27] pt-1">
+              <div className="space-y-1 text-[#2A1608] pt-1">
                 <div className="flex items-start gap-1.5">
-                  <span className="font-bold text-[#064B3C] text-[11px] shrink-0 w-4">
+                  <span className="font-bold text-[#5A3A1C] text-[11px] shrink-0 w-4">
                     [A]
                   </span>
                   <p className="truncate">
@@ -885,7 +885,7 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
                 </div>
 
                 <div className="flex items-start gap-1.5">
-                  <span className="font-bold text-[#078F68] text-[11px] shrink-0 w-4">
+                  <span className="font-bold text-[#8A5A2B] text-[11px] shrink-0 w-4">
                     [B]
                   </span>
                   <p className="truncate">
@@ -899,27 +899,27 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
                 </div>
               </div>
             </div>
-            <p className="text-[11px] text-[#64877C] leading-relaxed">
+            <p className="text-[11px] text-[#7A6757] leading-relaxed">
               La línea verde sobre el mapa sigue la red vial transitable real
               calculada por los servidores de Mapbox.
             </p>
           </div>
         ) : (
           /* Case 2: Absence of verified coordinates (Preserving geographic integrity) */
-          <div className="rounded-2xl bg-[#EAF8F2]/50 border border-[#DCECE5] p-3.5 space-y-2 text-xs">
-            <div className="flex items-start gap-2.5 text-[#102F27]">
+          <div className="rounded-2xl bg-[#F6EBDD]/50 border border-[#EADBCB] p-3.5 space-y-2 text-xs">
+            <div className="flex items-start gap-2.5 text-[#2A1608]">
               <div className="w-7 h-7 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
                 <MapPinOff className="w-4 h-4" />
               </div>
               <div className="space-y-1">
-                <p className="font-bold text-[#064B3C]">
+                <p className="font-bold text-[#5A3A1C]">
                   Direcciones registradas como texto descriptivo (sin coordenadas)
                 </p>
-                <p className="text-[11px] text-[#64877C] leading-relaxed">
+                <p className="text-[11px] text-[#7A6757] leading-relaxed">
                   El pedido seleccionado cuenta con direcciones textuales de
                   demostración:
                 </p>
-                <ul className="text-[11px] text-[#102F27] space-y-0.5 pl-1">
+                <ul className="text-[11px] text-[#2A1608] space-y-0.5 pl-1">
                   <li>
                     <strong>Recogida:</strong> {activeOrder?.pickup.address}
                   </li>
@@ -930,7 +930,7 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
               </div>
             </div>
 
-            <div className="pt-2 border-t border-[#DCECE5] text-[11px] text-[#64877C] flex items-center justify-between gap-2">
+            <div className="pt-2 border-t border-[#EADBCB] text-[11px] text-[#7A6757] flex items-center justify-between gap-2">
               <span>
                 Para proteger la veracidad del mapa, <strong>no se inventan</strong>{' '}
                 coordenadas ni líneas ficticias.
@@ -938,7 +938,7 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
               <button
                 type="button"
                 onClick={() => setUseVerifiedPunoSample(true)}
-                className="text-[#078F68] font-bold underline shrink-0 cursor-pointer"
+                className="text-[#8A5A2B] font-bold underline shrink-0 cursor-pointer"
               >
                 Probar en Puno
               </button>
@@ -951,7 +951,7 @@ export const MapboxView: React.FC<MapboxViewProps> = ({
             <button
               type="button"
               onClick={() => onStartNavigation(activeOrder)}
-              className="w-full h-12 rounded-2xl bg-[#0091FF] hover:bg-[#0077D4] active:scale-98 text-white font-display text-xs font-bold inline-flex items-center justify-center gap-2 shadow-lg shadow-[#0091FF]/25 transition-all cursor-pointer"
+              className="w-full h-12 rounded-full bg-[#8A5A2B] hover:bg-[#5A3A1C] active:scale-98 text-white font-display text-xs font-bold inline-flex items-center justify-center gap-2 shadow-lg shadow-[#8A5A2B]/25 transition-all cursor-pointer"
             >
               <Navigation className="w-4 h-4" />
               <span>Iniciar navegación GPS 3D en pantalla completa</span>
